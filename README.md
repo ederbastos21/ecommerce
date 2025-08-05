@@ -2,14 +2,13 @@
 
 ## Requisitos
 - Java 21
-- Maven (rode ```bash mvn -v ``` para verificar se existe no sistema)
+- Maven
 
 ## Como rodar
 
 1. Clone o repositório:
 ```bash
-git clone <url-do-repositorio>
-cd <nome-do-projeto>
+git clone <git@github.com:ederbastos21/ecommerce.git  ou  https://github.com/ederbastos21/ecommerce.git>
 ```
 
 <br>
