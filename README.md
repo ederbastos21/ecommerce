@@ -1,56 +1,57 @@
-# Ecommerce Spring Boot Mysql App
+# Ecommerce Spring Boot - MySQL Edition
 
-## Requisitos
-- Java 21 (microsoft openJDK 21.0.8)
-- Maven
+## Pré-requisitos
+- Java 21 (Microsoft Open JDK 21.0.8)
+- Maven 3.9+
 - Docker
 
-## Como rodar
+# Como executar
 
-### 1. Clone o repositório:
+## 1. Clone o repositório
 ```bash
-git clone <git@github.com:ederbastos21/ecommerce.git>
+git clone git@github.com:ederbastos21/ecommerce.git
+cd ecommerce
 ```
 
-### 2. Execute a instalação e build do projeto:
+## 2. Build do projeto:
 
-No Linux/macOS:
-
+#### Linux/macOS:
     ./mvnw clean install
 
-No Windows:
-
+#### Windows:
     mvnw.cmd clean install
 
-
-### 3. Inicialize o banco de dados Mysql com o Docker
+## 3. Inicialize o banco de dados MySQL com o Docker
 ```
-cd <pasta-root-do-projeto-ecommerce>
+cd pasta-root-do-projeto-ecommerce
 docker compose up -d
 ```
-Verifique se as imagens e containers foram corretamente criadas com:
+### Verificando o banco de dados
+
+- Listar containers ativos:
 ```
-docker images (vê imagens)
-docker ps (vê containers ativos)
-docker ps -a (vê todos os containers)
+docker ps
 ```
-Caso as imagens e containers estejam corretos, verifique se o mysql está funcionando:
+
+- Acesse o MySQL via terminal:
 ```
-docker exec -it <container_id_or_name> mysql -uroot -p (permite executar comandos sql diretamente pelo terminal)
-*inserir senha 1234*
-*exit no terminal para sair*
+docker exec -it mysql-ecommerce mysql -uroot -p1234
 ```
-### 4. Rode a aplicação:
 
-No Linux/macOS:
+(Senha padrão: 1234)
 
-    ./mvnw spring-boot:run
+## 4. Executar a aplicação
 
-No Windows:
+- Linux/macOS
+```
+./mvnw spring-boot:run
+```
 
-    mvnw.cmd spring-boot:run
+- Windows
+```
+mvnw.cmd spring-boot:run
+```
 
-
-### 5. Acesse a aplicação no navegador:
+## 5. Acesse o sistema
 
 http://localhost:8080
