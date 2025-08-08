@@ -15,10 +15,10 @@ cd ecommerce
 
 ## 2. Build do projeto:
 
-#### Linux/macOS:
+#### Linux/macOS (ou Windows via PS):
     ./mvnw clean install
 
-#### Windows:
+#### Windows (via CMD):
     mvnw.cmd clean install
 
 ## 3. Inicialize o banco de dados MySQL com o Docker
@@ -42,12 +42,12 @@ docker exec -it mysql-ecommerce mysql -uroot -p1234
 
 ## 4. Executar a aplicação
 
-- Linux/macOS
+- Linux/macOS (ou Windows via PS)
 ```
 ./mvnw spring-boot:run
 ```
 
-- Windows
+- Windows (via CMD)
 ```
 mvnw.cmd spring-boot:run
 ```
