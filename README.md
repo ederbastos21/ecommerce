@@ -55,3 +55,35 @@ mvnw.cmd spring-boot:run
 ## 5. Acesse o sistema
 
 http://localhost:8080
+
+## 6. Comandos úteis SQL
+
+- Primeiro comando (mostrar banco de dados):
+```
+show databases;
+```
+
+- Segundo comando (entrar/usar o banco de dados):
+```
+use <nome_do_banco>
+```
+
+- Terceiro comando (mostrar as tabelas do banco de dados em uso):
+```
+show tables;
+```
+
+- Quarto comando (mostrar as colunas da tabela):
+```
+show columns from <nome_tabela>;
+```
+
+- Quinto comando (inserir dados):
+```
+insert into <nome_tabela> (<coluna1>,<coluna2>) values(<valor1>,<valor2>);
+```
+
+- Sexto comando (mostrar dados da tabela):
+```
+select * from <nome_tabela>;
+```
