@@ -1,0 +1,266 @@
+Arquitetura resumida
+Fluxo normal:
+
+scss
+Copy
+Edit
+Browser (form/JS)
+  → Controller (HTTP)
+    → Service (regras, transações)
+      → Repository (acesso ao BD via JPA)
+        → MySQL
+
+Entidades (persistência) = dados.
+Repositories = porta de entrada/saída do BD (interfaces JPA).
+Services = regras/validações/transações/orquestração.
+Controllers = entrada HTTP / views (Thymeleaf).
+DTOs = contratos entre view e service, nunca exponha entidades diretamente.
+
+-----------------------------------------------------------------------
+
+1) Entity — só dados e relacionamentos
+
+Deve conter apenas atributos, getters/setters, e anotações JPA.
+
+Sem lógica de negócio (não coloque criarConta() aqui).
+
+Exemplo mínimo Usuario:
+
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String nome;
+  private String email;
+  private String cpf;
+  private Integer idade;
+  private Boolean ehVendedor;
+  private String enderecoDestinatario;
+
+  // relacionamentos, construtores, getters/setters
+}
+
+-----------------------------------------------------------------------
+
+2) Repository — interface que fala com o banco
+
+No Spring Data JPA você declara a interface; o Spring gera a implementação.
+
+Use para consultas CRUD e queries customizadas (JPQL, derived query).
+
+Exemplo UsuarioRepository:
+
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByEmail(String email);
+}
+Papel concreto: salvar, buscar, consultas específicas. O Service chama o Repository.
+
+-----------------------------------------------------------------------
+
+3) Service — regras e transações (interface + impl)
+
+Defina interface + implementação. Injete repositórios na implementação.
+
+Coloque @Transactional nos métodos que mudam estado.
+
+Validações complexas, orquestração entre vários repositórios, conversões DTO↔Entity, chamadas a gateways (pagamento), emitir eventos.
+
+Exemplo mínimo:
+
+public interface UsuarioService {
+    Usuario criarConta(UsuarioDTO dto);
+    void deletarConta(Long id);
+}
+
+@Service
+public class UsuarioServiceImpl implements UsuarioService {
+    private final UsuarioRepository usuarioRepository;
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    @Override
+    @Transactional
+    public Usuario criarConta(UsuarioDTO dto) {
+        if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email já usado");
+        }
+        Usuario u = new Usuario(...);
+        return usuarioRepository.save(u);
+    }
+
+    @Override
+    @Transactional
+    public void deletarConta(Long id) {
+        usuarioRepository.deleteById(id);
+    }
+}
+Nota direta: não mova lógica de persistência diretamente para Controller.
+
+-----------------------------------------------------------------------
+
+4) Controller — recebe HTTP, delega ao Service, retorna view/redirect
+
+Validação leve (Bean Validation), binding de formulários, tratamento de erros leves e redirecionamentos para templates Thymeleaf.
+
+Exemplo mínimo (Thymeleaf SSR):
+
+
+@Controller
+@RequestMapping("/usuarios")
+public class UsuarioController {
+    private final UsuarioService usuarioService;
+    public UsuarioController(UsuarioService usuarioService) { this.usuarioService = usuarioService; }
+
+    @PostMapping
+    public String criarConta(@Valid @ModelAttribute UsuarioForm form, BindingResult br, Model model) {
+        if (br.hasErrors()) return "usuarios/novo";
+        usuarioService.criarConta(form.toDTO());
+        return "redirect:/login";
+    }
+}
+
+-----------------------------------------------------------------------
+
+5) DTOs / Forms — não exponha Entity para a view
+
+Exemplo UsuarioDTO / UsuarioForm simples. Use para receber dados do formulário e para resposta.
+
+-----------------------------------------------------------------------
+
+6) Fluxo completo — “criar conta” (passo a passo)
+
+Form HTML envia POST /usuarios com campos.
+
+UsuarioController recebe UsuarioForm, faz validação (Bean Validation).
+
+Controller chama usuarioService.criarConta(usuarioDTO).
+
+UsuarioServiceImpl valida regras (e.g., email único), cria Usuario e chama usuarioRepository.save(u).
+
+Repository persiste via JPA no MySQL.
+
+Controller redireciona para login ou mostra sucesso.
+
+Onde os dados vão para o BD? → quando usuarioRepository.save() é executado dentro do Service (dentro de @Transactional).
+
+-----------------------------------------------------------------------
+
+7) Carrinho — sessão vs persistente (prós e contras)
+
+Sessão (HttpSession): rápido, simples, adequado para MVP. Perde dados se session expirar. Não escalável sem sticky sessions ou external session store (Redis).
+
+Persistente (DB): salvo em tabela carrinhos/carrinho_itens. Recomendado se você quer carrinho “salvo” entre sessões, histórico ou sincronização multi-device.
+
+Implementação simples (sessão):
+
+CarrinhoService mantém um DTO em session scope ou controller acessa HttpSession e chama Service para manipular.
+
+Se escolher persistente, trate concorrência (quantidade/estoque) em transações.
+
+-----------------------------------------------------------------------
+
+8) Boas práticas que você está propenso a errar (seja duro com isso)
+
+Não coloque lógica no Controller ou na Entity. Vai virar bagunça.
+
+Não exponha Entities nas views/JSON. Usar DTOs evita lazy-loading e acoplamento.
+
+Não use @Autowired de campo; prefira injeção por construtor. Testabilidade.
+
+Cuide de transações e concorrência. Compra simultânea pode vender mais que o estoque.
+
+Senhas: nunca salvar plain text. Use BCrypt.
+
+Consulta N+1: configure fetch joins quando necessário (@EntityGraph, JPQL join fetch).
+
+Não cometa “Service God Object” (uma classe com tudo). Separe por responsabilidade.
+
+Validação: use Bean Validation (@NotNull, @Email) + validações de negócio no Service.
+
+Tratamento de erros: mapear exceções para respostas amigáveis (ControllerAdvice).
+
+-----------------------------------------------------------------------
+
+9) Exemplos rápidos (síntese para fixar sintaxe)
+
+PRODUTO ENTITY:
+
+@Entity
+public class Produto {
+  @Id @GeneratedValue
+  private Long id;
+  private String nome;
+  private BigDecimal preco;
+}
+
+----------
+
+PRODUTO REPOSITORY:
+
+public interface ProdutoRepository extends JpaRepository<Produto, Long> {}
+
+----------
+
+PRODUTO SERVICE INTERFACE + IMPL (REDUZIDOS)
+
+public interface ProdutoService {
+    List<Produto> listar();
+}
+
+@Service
+public class ProdutoServiceImpl implements ProdutoService {
+    private final ProdutoRepository repo;
+    public ProdutoServiceImpl(ProdutoRepository repo) { this.repo = repo; }
+    public List<Produto> listar() { return repo.findAll(); }
+}
+
+----------
+
+PRODUTO CONTROLLER (SSR)
+
+@Controller
+public class ProdutoController {
+    private final ProdutoService produtoService;
+    public ProdutoController(ProdutoService produtoService) { this.produtoService = produtoService; }
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("products", produtoService.listar());
+        return "index";
+    }
+}
+
+-----------------------------------------------------------------------
+
+10) Checklist mínimo para implementação correta
+
+ Entidades claras, tipos corretos (Long ids, LocalDateTime quando precisar tempo).
+
+ DTOs para input/output.
+
+ Repositories estendendo JpaRepository.
+
+ Services definidos por interface e implementação; métodos @Transactional quando mutarem estado.
+
+ Controllers finos: validam e delegam.
+
+ Testes unitários em services (mock repositories) + testes de integração para endpoints críticos.
+
+ Proteção: BCrypt para senhas, CSRF habilitado, rotas admin seguras.
+
+ Tratar estoque em transação ao confirmar pedido.
+
+-----------------------------------------------------------------------
+
+11) Erros comuns (resumido — corrija já)
+
+Controller acessando múltiplos repositories e executando regras: mova para Service.
+
+Não validar email único no Service: permitirá registros duplicados.
+
+Salvar carrinho apenas na sessão em app que precisa persistência: decida.
+
+Usar FetchType.EAGER indiscriminadamente → N+1 e performance ruim. Use LAZY e join fetch quando preciso.
