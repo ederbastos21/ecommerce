@@ -18,14 +18,22 @@ public class UserController {
         public String showRegisterForm(){
         return "register";
     }
-    @GetMapping("/success")
+    @GetMapping("/successRegister")
         public String showSuccessPage(){
-        return "success";
+        return "successRegister";
+    }
+    @GetMapping("/login")
+        public String showLoginPage(){
+        return"login";
+    }
+    @PostMapping ("/login")
+        public String proccessLoginPage(){
+        return"redirect:success";
     }
     @PostMapping("/register")
     public String processRegisterForm(@ModelAttribute User user, Model model){
         User processedUser = userService.saveUser(user);
         model.addAttribute("user",processedUser);
-        return "success";
+        return "successRegister";
     }
 }
