@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -14,22 +15,32 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
-    @GetMapping("/register")
-        public String showRegisterForm(){
-        return "register";
-    }
-    @GetMapping("/successRegister")
-        public String showSuccessPage(){
-        return "successRegister";
-    }
+
+    /*LOGIN*/
+
     @GetMapping("/login")
         public String showLoginPage(){
         return"login";
     }
+
     @PostMapping ("/login")
-        public String proccessLoginPage(){
-        return"redirect:success";
+    public String processLoginPage(@RequestParam String email, @RequestParam String password, Model model){
+        User user = userService.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)){
+            model.addAttribute("user", user);
+            return "successLogin";
+        }
+        model.addAttribute("error");
+        return "login";
     }
+
+    /*REGISTER*/
+
+    @GetMapping("/register")
+    public String showRegisterForm(){
+        return "register";
+    }
+
     @PostMapping("/register")
     public String processRegisterForm(@ModelAttribute User user, Model model){
         User processedUser = userService.saveUser(user);

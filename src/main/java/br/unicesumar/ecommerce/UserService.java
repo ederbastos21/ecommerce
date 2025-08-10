@@ -12,6 +12,9 @@ public class UserService {
     }
 
     public User saveUser(User user){
+        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email já cadastrado");
+        }
         user.setName(user.getName());
         user.setAge(user.getAge());
         user.setCpf(user.getCpf());
@@ -19,5 +22,9 @@ public class UserService {
         user.setAddress(user.getAddress());
         user.setPassword(user.getPassword());
         return userRepository.save(user);
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
