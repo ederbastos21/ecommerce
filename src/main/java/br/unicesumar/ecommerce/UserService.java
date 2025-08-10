@@ -17,6 +17,7 @@ public class UserService {
         user.setCpf(user.getCpf());
         user.setEmail(user.getEmail());
         user.setAddress(user.getAddress());
+        user.setPassword(user.getPassword());
         return userRepository.save(user);
     }
 }
