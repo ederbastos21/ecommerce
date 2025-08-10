@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/auth.css}" />
+    <title>Login - Sua Loja</title>
 </head>
 <body>
-    <form action="/login" method="post">
-        <input type="text" name="email" placeholder="Email">
-        <input type="text" name="password" placeholder="Senha">
-        <button type="submit">Enviar</button>
+<div class="auth-container">
+    <div class="auth-header">
+        <div class="store-logo">
+            <div class="store-logo-icon">S</div>
+            <div class="store-name">Sua Loja</div>
+        </div>
+        <h2 class="auth-title">Entre na sua conta</h2>
+    </div>
+
+    <form class="auth-form" action="/login" method="post">
+        <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" type="email" name="email" id="email" placeholder="Digite seu email" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="password">Senha</label>
+            <input class="form-input" type="password" name="password" id="password" placeholder="Digite sua senha" required>
+        </div>
+
+        <button class="submit-btn" type="submit">Entrar</button>
     </form>
+
+    <div class="auth-footer">
+        <div class="auth-links">
+            <a href="/register" class="auth-link primary-link">Não tem conta? Cadastre-se</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>
