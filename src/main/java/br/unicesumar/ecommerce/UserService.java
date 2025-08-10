@@ -4,12 +4,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    public User processUser(User user){
+
+    private final UserRepository userRepository;
+
+    public UserService (UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
+    public User saveUser(User user){
         user.setName(user.getName());
         user.setAge(user.getAge());
         user.setCpf(user.getCpf());
         user.setEmail(user.getEmail());
         user.setAddress(user.getAddress());
-        return user;
+        return userRepository.save(user);
     }
 }
