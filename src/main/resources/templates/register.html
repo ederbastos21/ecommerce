@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar-se</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}" />
 </head>
 <body>
-    <form action="/register" method="post">
-        <input type="text" name="name" placeholder="nome:">
-        <input type="number" name="age" placeholder="idade:">
-        <input type="text" name="cpf" placeholder="cpf">
-        <input type="email" name="email" placeholder="email">
-        <input type="text" name="address" placeholder="address">
-        <button type="submit">Registrar-se</button>
+<div class="header-container">
+    <div class="header-content">
+        <div class="store-logo">
+            <div class="store-logo-icon">E</div>
+            <div class="store-name">E-Shop</div>
+        </div>
+    </div>
+</div>
+<div class="register-container">
+    <h1 class="register-title">Criar Conta</h1>
+
+    <form class="register-form" action="/register" method="post">
+        <input class="form-input" type="text" name="name" placeholder="Nome completo" required>
+        <input class="form-input" type="number" name="age" placeholder="Idade" required>
+        <input class="form-input" type="text" name="cpf" placeholder="CPF" required>
+        <input class="form-input" type="email" name="email" placeholder="E-mail" required>
+        <input class="form-input" type="text" name="address" placeholder="Endereço" required>
+        <button class="register-button" type="submit">Registrar-se</button>
     </form>
+
+    <div class="back-link">
+        <a href="/">← Voltar para a loja</a>
+    </div>
+</div>
 </body>
 </html>
