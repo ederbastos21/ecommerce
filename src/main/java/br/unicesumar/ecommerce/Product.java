@@ -20,6 +20,9 @@ public class Product {
     private String category;
     private int availableQuantity;
 
+    public Product() {
+    }
+
     public Product(Long id, String name, BigDecimal price, int discount, BigDecimal shippingValue, String description, String category, int availableQuantity) {
         this.id = id;
         this.name = name;

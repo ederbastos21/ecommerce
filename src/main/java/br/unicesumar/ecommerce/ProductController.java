@@ -19,6 +19,6 @@ public class ProductController {
     public String index(Model model) {
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
-        return "index"; // nome do template Thymeleaf
+        return "index";
     }
 }
