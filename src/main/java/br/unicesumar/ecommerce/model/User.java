@@ -1,4 +1,4 @@
-package br.unicesumar.ecommerce;
+package br.unicesumar.ecommerce.model;
 
 import jakarta.persistence.*;
 

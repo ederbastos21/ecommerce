@@ -1,5 +1,7 @@
-package br.unicesumar.ecommerce;
+package br.unicesumar.ecommerce.service;
 
+import br.unicesumar.ecommerce.model.User;
+import br.unicesumar.ecommerce.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

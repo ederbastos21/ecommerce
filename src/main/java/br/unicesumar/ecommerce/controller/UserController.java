@@ -1,5 +1,7 @@
-package br.unicesumar.ecommerce;
+package br.unicesumar.ecommerce.controller;
 
+import br.unicesumar.ecommerce.model.User;
+import br.unicesumar.ecommerce.service.UserService;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
