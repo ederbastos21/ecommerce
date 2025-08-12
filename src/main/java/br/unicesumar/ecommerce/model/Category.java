@@ -1,7 +1,7 @@
 package br.unicesumar.ecommerce.model;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -17,8 +17,9 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Category> children = new ArrayList<>();
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Category> children = new HashSet<>();
 
     // Getters e Setters
     public Long getId() { return id; }
@@ -30,8 +31,6 @@ public class Category {
     public Category getParent() { return parent; }
     public void setParent(Category parent) { this.parent = parent; }
 
-    public List<Category> getChildren() { return children; }
-    public void setChildren(List<Category> children) { this.children = children; }
+    public Set<Category> getChildren() { return children; }
+    public void setChildren(Set<Category> children) { this.children = children; }
 }
-
-

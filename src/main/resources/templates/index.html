@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-commerce Store</title>
     <link rel="stylesheet" th:href="@{/css/index.css}" />
 </head>
@@ -16,21 +16,34 @@
             <span class="store-name">Store</span>
         </div>
 
+        <!-- Botão Departamentos com menu cascata -->
+        <div class="departments-menu-container">
+            <button class="departments-button" id="departments-button" aria-haspopup="true" aria-expanded="false" aria-controls="departments-menu">
+                <span class="hamburger-icon">
+                    <span></span><span></span><span></span>
+                </span>
+                Departamentos
+            </button>
+
+            <nav class="departments-menu" id="departments-menu" role="menu" aria-label="Departamentos">
+                <ul class="menu-level"
+                    th:insert="~{::categoryList(categories=${categories})}">
+                </ul>
+            </nav>
+        </div>
+
         <!-- Search Bar -->
         <div class="search-container">
-            <input type="text" class="search-input" id="product-search-input" placeholder="Search for products...">
+            <input type="text" class="search-input" id="product-search-input" placeholder="Search for products..." />
             <button class="search-button" id="product-search-btn">🔍</button>
         </div>
 
         <!-- Header Actions -->
         <div class="header-actions">
-            <!-- Auth Links -->
             <div class="auth-links">
                 <a href="/login" class="auth-link" id="user-login-link">Login</a>
                 <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
             </div>
-
-            <!-- Shopping Cart -->
             <div class="cart-container">
                 <a href="#" class="cart-icon" id="shopping-cart-link">🛒</a>
                 <span class="cart-count" id="cart-items-count">0</span>
@@ -50,53 +63,16 @@
 
 <!-- Main Content -->
 <main class="main-content">
-    <!-- Category Filter -->
-    <section class="category-section">
-        <h2 class="category-title">Categories</h2>
-        <div class="category-filter-container">
-            <button class="category-scroll-btn" id="category-scroll-left" onclick="scrollCategories('left')">‹</button>
-
-            <div class="category-list-container">
-                <div class="category-list" id="category-filter-list">
-                    <a href="#" class="category-item active" data-category="all">All Products</a>
-                    <a href="#" class="category-item" data-category="electronics">Electronics</a>
-                    <a href="#" class="category-item" data-category="clothing">Clothing</a>
-                    <a href="#" class="category-item" data-category="books">Books</a>
-                    <a href="#" class="category-item" data-category="home">Home & Garden</a>
-                    <a href="#" class="category-item" data-category="sports">Sports</a>
-                    <a href="#" class="category-item" data-category="toys">Toys</a>
-                    <a href="#" class="category-item" data-category="beauty">Beauty</a>
-                    <a href="#" class="category-item" data-category="automotive">Automotive</a>
-                    <a href="#" class="category-item active" data-category="all">All Products</a>
-                    <a href="#" class="category-item" data-category="electronics">Electronics</a>
-                    <a href="#" class="category-item" data-category="clothing">Clothing</a>
-                    <a href="#" class="category-item" data-category="books">Books</a>
-                    <a href="#" class="category-item" data-category="home">Home & Garden</a>
-                    <a href="#" class="category-item" data-category="sports">Sports</a>
-                    <a href="#" class="category-item" data-category="toys">Toys</a>
-                    <a href="#" class="category-item" data-category="beauty">Beauty</a>
-                    <a href="#" class="category-item" data-category="automotive">Automotive</a>
-                </div>
-            </div>
-
-            <button class="category-scroll-btn" id="category-scroll-right" onclick="scrollCategories('right')">›</button>
-        </div>
-    </section>
-
-    <!-- Products Section -->
     <section class="products-section">
         <h1 class="products-title">Products</h1>
         <div class="products-grid" id="products-display-grid">
-            <!-- Products will be populated by Thymeleaf -->
             <div class="product-card" th:each="product : ${products}" th:data-product-id="${product.id}">
                 <div class="product-image-placeholder">
                     <span>Product Image</span>
                 </div>
                 <div class="product-name" th:text="${product.name}">Product Name</div>
                 <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
-                <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">
-                    Add to Cart
-                </button>
+                <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
             </div>
         </div>
     </section>
@@ -106,16 +82,14 @@
 <footer class="footer-container">
     <div class="footer-content">
         <div class="footer-info">
-            <div class="contact-info">
-                <h3>Contact Information</h3>
-                <div class="contact-item">
-                    <span class="contact-label">Phone:</span>
-                    <span id="store-contact-phone">+1 (555) 123-4567</span>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-label">Email:</span>
-                    <span id="store-contact-email">contact@store.com</span>
-                </div>
+            <h3>Contact Information</h3>
+            <div class="contact-item">
+                <span class="contact-label">Phone:</span>
+                <span id="store-contact-phone">+1 (555) 123-4567</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <span id="store-contact-email">contact@store.com</span>
             </div>
         </div>
         <div class="footer-bottom">
@@ -123,6 +97,20 @@
         </div>
     </div>
 </footer>
+
+<!-- Fragmento recursivo Thymeleaf para o menu -->
+<th:block th:fragment="categoryList (categories)">
+    <li th:each="cat : ${categories}">
+        <span th:text="${cat.name}"
+              th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''">
+        </span>
+        <ul class="submenu"
+            th:if="${cat.children != null and cat.children.size() > 0}"
+            th:insert="~{::categoryList(categories=${cat.children})}">
+        </ul>
+    </li>
+</th:block>
+
 <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

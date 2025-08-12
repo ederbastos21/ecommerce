@@ -420,3 +420,122 @@ body {
         gap: 15px;
     }
 }
+
+.departments-menu-container {
+    position: relative;
+    margin-left: 10px;
+    user-select: none;
+}
+
+.departments-button {
+    background: transparent;
+    border: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.departments-button:hover,
+.departments-button:focus {
+    background-color: #e9ecef;
+    outline: none;
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 18px;
+    height: 14px;
+}
+
+.hamburger-icon span {
+    display: block;
+    height: 2px;
+    background-color: #333;
+    border-radius: 1px;
+}
+
+.departments-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    min-width: 220px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 1100;
+}
+
+/* Mostrar menu ao passar mouse no botão e no menu */
+.departments-menu-container:hover > .departments-menu,
+.departments-menu-container:focus-within > .departments-menu {
+    display: block;
+}
+
+/* Menu e submenu */
+.menu-level,
+.submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-level > li,
+.submenu > li {
+    position: relative;
+}
+
+.menu-level > li > span,
+.submenu > li > span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    user-select: none;
+    background: white;
+    transition: background-color 0.2s;
+}
+
+.menu-level > li > span:hover,
+.submenu > li > span:hover {
+    background-color: #f1f1f1;
+}
+
+/* Submenu cascata */
+.submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 1200;
+}
+
+/* Mostrar submenu ao hover */
+li:hover > .submenu {
+    display: block;
+}
+
+/* Ícone '>' para itens com filhos */
+.menu-level > li > span.has-children::after,
+.submenu > li > span.has-children::after {
+    content: ">";
+    font-weight: bold;
+    color: #888;
+    margin-left: 8px;
+    user-select: none;
+    font-size: 14px;
+}
