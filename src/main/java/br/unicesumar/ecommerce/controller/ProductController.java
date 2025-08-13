@@ -12,10 +12,4 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-
-    @GetMapping("/products")
-    public String listProducts(Model model) {
-        model.addAttribute("products", productService.getAll());
-        return "products"; // cria products.html ou muda para o nome que quiser
-    }
 }

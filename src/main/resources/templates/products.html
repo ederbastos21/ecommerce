@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products - Store</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
+</head>
+<body>
+<header class="header-container">
+    <div class="header-content">
+        <div class="store-logo">
+            <div class="store-logo-icon">S</div>
+            <span class="store-name">Store</span>
+        </div>
+
+        <div class="departments-menu-container">
+            <button class="departments-button" id="departments-button" aria-haspopup="true" aria-expanded="false" aria-controls="departments-menu">
+                <span class="hamburger-icon">
+                    <span></span><span></span><span></span>
+                </span>
+                Departamentos
+            </button>
+
+            <nav class="departments-menu" id="departments-menu" role="menu" aria-label="Departamentos">
+                <ul class="menu-level"
+                    th:insert="~{::categoryList(categories=${categories})}">
+                </ul>
+            </nav>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="product-search-input" placeholder="Search for products..." />
+            <button class="search-button" id="product-search-btn">🔍</button>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <a href="/login" class="auth-link" id="user-login-link">Login</a>
+                <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
+            </div>
+            <div class="cart-container">
+                <a href="#" class="cart-icon" id="shopping-cart-link">🛒</a>
+                <span class="cart-count" id="cart-items-count">0</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <section class="products-section">
+        <h1 class="products-title">Products</h1>
+
+        <!-- Filtros -->
+        <div class="filters-container">
+            <form method="get" action="#" id="filter-form">
+                <label>
+                    Sort by:
+                    <select name="sort" id="sort-select" onchange="this.form.submit()">
+                        <option value="">-- Select --</option>
+                        <option value="priceDesc" th:selected="${sort == 'priceDesc'}">Highest Price</option>
+                        <option value="priceAsc" th:selected="${sort == 'priceAsc'}">Lowest Price</option>
+                        <option value="relevance" th:selected="${sort == 'relevance'}">Relevance</option>
+                    </select>
+                </label>
+            </form>
+        </div>
+
+        <div class="products-grid" id="products-display-grid">
+            <div class="product-card" th:each="product : ${products}" th:data-product-id="${product.id}">
+                <div class="product-image-placeholder">
+                    <span>Product Image</span>
+                </div>
+                <div class="product-name" th:text="${product.name}">Product Name</div>
+                <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
+                <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer-container">
+    <div class="footer-content">
+        <div class="footer-info">
+            <h3>Contact Information</h3>
+            <div class="contact-item">
+                <span class="contact-label">Phone:</span>
+                <span id="store-contact-phone">+1 (555) 123-4567</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <span id="store-contact-email">contact@store.com</span>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p id="copyright-notice">&copy; 2024 Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Fragmento recursivo Thymeleaf para o menu -->
+<th:block th:fragment="categoryList (categories)">
+    <li th:each="cat : ${categories}">
+        <span th:text="${cat.name}"
+              th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''">
+        </span>
+        <ul class="submenu"
+            th:if="${cat.children != null and cat.children.size() > 0}"
+            th:insert="~{::categoryList(categories=${cat.children})}">
+        </ul>
+    </li>
+</th:block>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class IndexController {
+public class IndexPageController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    public IndexController(CategoryService categoryService, ProductService productService) {
+    public IndexPageController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
         this.productService = productService;
     }
