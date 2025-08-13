@@ -19,11 +19,12 @@ public class Product {
     private String description;
     private String category;
     private int availableQuantity;
+    private int ammountSold;
 
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, int discount, BigDecimal shippingValue, String description, String category, int availableQuantity) {
+    public Product(Long id, String name, BigDecimal price, int discount, BigDecimal shippingValue, String description, String category, int availableQuantity, int ammountSold) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -32,6 +33,7 @@ public class Product {
         this.description = description;
         this.category = category;
         this.availableQuantity = availableQuantity;
+        this.ammountSold = ammountSold;
     }
 
     public Long getId() {
@@ -96,5 +98,12 @@ public class Product {
 
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
+    }
+
+    public int getAmmountSold(){
+        return ammountSold;
+    }
+    public void setAmmountSold(int ammountSold){
+        this.ammountSold = ammountSold;
     }
 }
