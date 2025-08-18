@@ -14,15 +14,13 @@ public class UserService {
     }
 
     public User saveUser(User user){
-        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email já cadastrado");
-        }
         user.setName(user.getName());
         user.setAge(user.getAge());
         user.setCpf(user.getCpf());
         user.setEmail(user.getEmail());
         user.setAddress(user.getAddress());
         user.setPassword(user.getPassword());
+        user.setRole(user.getRole());
         return userRepository.save(user);
     }
 
