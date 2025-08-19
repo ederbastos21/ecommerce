@@ -41,13 +41,22 @@
         <!-- Header Actions -->
         <div class="header-actions">
             <div class="auth-links">
-                <a href="/login" class="auth-link" id="user-login-link">Login</a>
-                <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+
+                    <!-- Exemplo de renderização dinâmica por role -->
+                    <span th:if="${session.loggedUser.role == 'admin'}">
+            | <a href="/admin" class="auth-link">Admin Panel</a>
+        </span>
+                </div>
+
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link" id="user-login-link">Login</a>
+                    <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
+                </div>
             </div>
-            <div class="cart-container">
-                <a href="#" class="cart-icon" id="shopping-cart-link">🛒</a>
-                <span class="cart-count" id="cart-items-count">0</span>
-            </div>
+
         </div>
     </div>
 </header>

@@ -1,5 +1,7 @@
 package br.unicesumar.ecommerce.controller;
+import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.service.CategoryService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import br.unicesumar.ecommerce.service.ProductService;
 import org.springframework.ui.Model;
@@ -17,11 +19,20 @@ public class IndexPageController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(HttpSession session, Model model) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+
+        if (loggedUser != null) {
+            model.addAttribute("loggedUser", loggedUser);
+            model.addAttribute("role", loggedUser.getRole());
+        }
+
         model.addAttribute("categories", categoryService.getRootCategories());
         model.addAttribute("products", productService.getAll());
+
         return "index";
     }
+
 }
 
 
