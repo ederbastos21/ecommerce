@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Admin Panel</title>
-    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
 </head>
 <body>
-
 <header class="header-container">
     <div class="header-content">
         <div class="store-logo">
@@ -23,16 +22,27 @@
 
 <main class="main-content">
     <section class="admin-section">
-        <h1 class="products-title">Manage Users</h1>
+        <h1 class="products-title">Admin Panel</h1>
         <div class="admin-container">
+            <!-- Sidebar para selecionar tabela -->
             <div class="table-sidebar">
                 <ul>
-                    <li class="active">Users</li>
-                    <!-- Futuras tabelas podem ser adicionadas aqui -->
+                    <li th:classappend="${activeTable == 'users'} ? 'active'" th:href="@{/admin/users}">
+                        <a th:href="@{/admin/users}" class="auth-link">Users</a>
+                    </li>
+                    <li th:classappend="${activeTable == 'products'} ? 'active'" th:href="@{/admin/products}">
+                        <a th:href="@{/admin/products}" class="auth-link">Products</a>
+                    </li>
+                    <li th:classappend="${activeTable == 'categories'} ? 'active'" th:href="@{/admin/categories}">
+                        <a th:href="@{/admin/categories}" class="auth-link">Categories</a>
+                    </li>
                 </ul>
             </div>
+
+            <!-- Conteúdo da tabela -->
             <div class="table-content">
-                <table>
+                <!-- Users Table -->
+                <table th:if="${activeTable == 'users'}">
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -49,16 +59,93 @@
                         <td th:text="${user.email}"></td>
                         <td th:text="${user.role}"></td>
                         <td>
-                            <button class="edit-btn">Edit</button>
-                            <button class="delete-btn">Delete</button>
+                            <a th:href="@{'/admin/users/edit/' + ${user.id}}">
+                                <button class="edit-btn">Edit</button>
+                            </a>
+                            <a th:href="@{'/admin/users/delete/' + ${user.id}}">
+                                <button class="delete-btn">Delete</button>
+                            </a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
+                <!-- Products Table -->
+                <table th:if="${activeTable == 'products'}">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Shipping</th>
+                        <th>Available Qty</th>
+                        <th>Sold Qty</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.id}"></td>
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.price}"></td>
+                        <td th:text="${product.discount}"></td>
+                        <td th:text="${product.shippingValue}"></td>
+                        <td th:text="${product.availableQuantity}"></td>
+                        <td th:text="${product.ammountSold}"></td>
+                        <td>
+                            <a th:href="@{'/admin/products/edit/' + ${product.id}}">
+                                <button class="edit-btn">Edit</button>
+                            </a>
+                            <a th:href="@{'/admin/products/delete/' + ${product.id}}">
+                                <button class="delete-btn">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Categories Table -->
+                <table th:if="${activeTable == 'categories'}">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Parent ID</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cat : ${categories}">
+                        <td th:text="${cat.id}"></td>
+                        <td th:text="${cat.name}"></td>
+                        <td th:text="${cat.parent != null} ? ${cat.parent.id} : 'None'"></td>
+                        <td>
+                            <a th:href="@{'/admin/categories/edit/' + ${cat.id}}">
+                                <button class="edit-btn">Edit</button>
+                            </a>
+                            <a th:href="@{'/admin/categories/delete/' + ${cat.id}}">
+                                <button class="delete-btn">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <br/>
+                <!-- Botão adicionar -->
+                <a th:if="${activeTable == 'users'}" th:href="@{/admin/users/new}">
+                    <button class="edit-btn">Add User</button>
+                </a>
+                <a th:if="${activeTable == 'products'}" th:href="@{/admin/products/new}">
+                    <button class="edit-btn">Add Product</button>
+                </a>
+                <a th:if="${activeTable == 'categories'}" th:href="@{/admin/categories/new}">
+                    <button class="edit-btn">Add Category</button>
+                </a>
             </div>
         </div>
     </section>
 </main>
-
 </body>
 </html>

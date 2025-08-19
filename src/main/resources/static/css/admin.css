@@ -151,3 +151,93 @@ tbody td {
 .delete-btn:hover {
     background-color: #c82333;
 }
+
+/* Formulários CRUD */
+.admin-form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.admin-form-container h2 {
+    margin-bottom: 20px;
+    color: #007bff;
+    font-size: 22px;
+}
+
+.admin-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-form-container label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+.admin-form-container input,
+.admin-form-container select,
+.admin-form-container textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.admin-form-container input:focus,
+.admin-form-container select:focus,
+.admin-form-container textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.admin-form-container textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.admin-form-container .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-form-container .save-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-form-container .save-btn:hover {
+    background-color: #218838;
+}
+
+.admin-form-container .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-form-container .cancel-btn:hover {
+    background-color: #c82333;
+}
+

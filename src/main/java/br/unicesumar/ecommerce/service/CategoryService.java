@@ -15,5 +15,17 @@ public class CategoryService {
     public List<Category> getRootCategories() {
         return categoryRepository.findByParentIsNull();
     }
+    public List<Category> getAll() {
+        return categoryRepository.findAll();
+    }
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+    public Category getById(Long id) {
+        return categoryRepository.findById(id).orElseThrow();
+    }
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }
 

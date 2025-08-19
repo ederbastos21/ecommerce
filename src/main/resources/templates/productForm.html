@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Product Form</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+<body>
+<div class="admin-form-container">
+    <h2 th:text="${product.id != null} ? 'Edit Product' : 'New Product'"></h2>
+    <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name" required/>
+
+        <label for="price">Price</label>
+        <input type="number" th:field="*{price}" step="0.01" id="price" required/>
+
+        <label for="discount">Discount</label>
+        <input type="number" th:field="*{discount}" id="discount"/>
+
+        <label for="shippingValue">Shipping Value</label>
+        <input type="number" th:field="*{shippingValue}" step="0.01" id="shippingValue"/>
+
+        <label for="availableQuantity">Available Quantity</label>
+        <input type="number" th:field="*{availableQuantity}" id="availableQuantity"/>
+
+        <label for="ammountSold">Sold Quantity</label>
+        <input type="number" th:field="*{ammountSold}" id="ammountSold"/>
+
+        <label for="category">Category</label>
+        <input type="text" th:field="*{category}" id="category"/>
+
+        <label for="description">Description</label>
+        <textarea th:field="*{description}" id="description"></textarea>
+
+        <div class="form-buttons">
+            <button type="submit" class="save-btn">Save</button>
+            <a th:href="@{/admin/products}" class="cancel-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

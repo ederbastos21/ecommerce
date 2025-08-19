@@ -30,9 +30,14 @@ public class UserService {
     public User findByEmail(String email){
         return userRepository.findByEmail(email).orElse(null);
     }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 
 }
