@@ -7,116 +7,80 @@
     <link rel="stylesheet" th:href="@{/css/index.css}" />
 </head>
 <body>
-<!-- Header -->
+
 <header class="header-container">
     <div class="header-content">
-        <!-- Store Logo -->
         <div class="store-logo">
             <div class="store-logo-icon">S</div>
             <span class="store-name">Store</span>
         </div>
 
-        <!-- Botão Departamentos com menu cascata -->
         <div class="departments-menu-container">
-            <button class="departments-button" id="departments-button" aria-haspopup="true" aria-expanded="false" aria-controls="departments-menu">
-                <span class="hamburger-icon">
-                    <span></span><span></span><span></span>
-                </span>
+            <button class="departments-button" aria-haspopup="true" aria-expanded="false">
+                <span class="hamburger-icon"><span></span><span></span><span></span></span>
                 Departamentos
             </button>
-
-            <nav class="departments-menu" id="departments-menu" role="menu" aria-label="Departamentos">
-                <ul class="menu-level"
-                    th:insert="~{::categoryList(categories=${categories})}">
-                </ul>
+            <nav class="departments-menu">
+                <ul th:insert="~{::categoryList(categories=${categories})}"></ul>
             </nav>
         </div>
 
-        <!-- Search Bar -->
         <div class="search-container">
-            <input type="text" class="search-input" id="product-search-input" placeholder="Search for products..." />
-            <button class="search-button" id="product-search-btn">🔍</button>
+            <input type="text" class="search-input" placeholder="Search for products..." />
+            <button class="search-button">🔍</button>
         </div>
 
-        <!-- Header Actions -->
         <div class="header-actions">
             <div class="auth-links">
                 <div th:if="${session.loggedUser != null}">
                     <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
                     <a href="/logout" class="auth-link">Logout</a>
-
-                    <!-- Exemplo de renderização dinâmica por role -->
-                    <span th:if="${session.loggedUser.role == 'admin'}">
-            | <a href="/admin" class="auth-link">Admin Panel</a>
-        </span>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Admin Resources</a>
+                    </span>
                 </div>
-
                 <div th:unless="${session.loggedUser != null}">
-                    <a href="/login" class="auth-link" id="user-login-link">Login</a>
-                    <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Register</a>
                 </div>
             </div>
-
         </div>
     </div>
 </header>
 
-<!-- Advertisement Section -->
-<section class="ad-section">
-    <div class="ad-content">
-        <div class="ad-placeholder" id="main-advertisement-banner">
-            Advertisement space - Coming Soon
-        </div>
-    </div>
-</section>
-
-<!-- Main Content -->
 <main class="main-content">
     <section class="products-section">
         <h1 class="products-title">Products</h1>
-        <div class="products-grid" id="products-display-grid">
-            <div class="product-card" th:each="product : ${products}" th:data-product-id="${product.id}">
-                <div class="product-image-placeholder">
-                    <span>Product Image</span>
-                </div>
-                <div class="product-name" th:text="${product.name}">Product Name</div>
-                <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
+        <div class="products-grid">
+            <div class="product-card" th:each="product : ${products}">
+                <div class="product-image-placeholder">Product Image</div>
+                <div class="product-name" th:text="${product.name}"></div>
+                <div class="product-price" th:text="'$' + ${product.price}"></div>
                 <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
             </div>
         </div>
     </section>
 </main>
 
-<!-- Footer -->
 <footer class="footer-container">
     <div class="footer-content">
         <div class="footer-info">
-            <h3>Contact Information</h3>
-            <div class="contact-item">
-                <span class="contact-label">Phone:</span>
-                <span id="store-contact-phone">+1 (555) 123-4567</span>
-            </div>
-            <div class="contact-item">
-                <span class="contact-label">Email:</span>
-                <span id="store-contact-email">contact@store.com</span>
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <div class="contact-item"><span class="contact-label">Phone:</span> +1 (555) 123-4567</div>
+                <div class="contact-item"><span class="contact-label">Email:</span> contact@store.com</div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p id="copyright-notice">&copy; 2024 Store. All rights reserved.</p>
+            <p>&copy; 2024 Store. All rights reserved.</p>
         </div>
     </div>
 </footer>
 
-<!-- Fragmento recursivo Thymeleaf para o menu -->
 <th:block th:fragment="categoryList (categories)">
     <li th:each="cat : ${categories}">
-        <span th:text="${cat.name}"
-              th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''">
-        </span>
-        <ul class="submenu"
-            th:if="${cat.children != null and cat.children.size() > 0}"
-            th:insert="~{::categoryList(categories=${cat.children})}">
-        </ul>
+        <span th:text="${cat.name}" th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''"></span>
+        <ul class="submenu" th:if="${cat.children != null}" th:insert="~{::categoryList(categories=${cat.children})}"></ul>
     </li>
 </th:block>
 

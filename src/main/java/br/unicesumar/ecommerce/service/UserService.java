@@ -4,12 +4,15 @@ import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService (UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -27,4 +30,9 @@ public class UserService {
     public User findByEmail(String email){
         return userRepository.findByEmail(email).orElse(null);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }

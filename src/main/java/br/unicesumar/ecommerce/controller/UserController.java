@@ -53,7 +53,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String processRegisterForm(@ModelAttribute User user, Model model) {
-        user.setRole("user"); // padrão
+        user.setRole("USER");
         User processedUser = userService.saveUser(user);
         model.addAttribute("user", processedUser);
         return "successRegister";

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+<body>
+
+<header class="header-container">
+    <div class="header-content">
+        <div class="store-logo">
+            <div class="store-logo-icon">A</div>
+            <span class="store-name">Admin</span>
+        </div>
+        <div class="header-actions">
+            <a href="/" class="auth-link">Back to Store</a>
+            <a href="/logout" class="auth-link">Logout</a>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <section class="admin-section">
+        <h1 class="products-title">Manage Users</h1>
+        <div class="admin-container">
+            <div class="table-sidebar">
+                <ul>
+                    <li class="active">Users</li>
+                    <!-- Futuras tabelas podem ser adicionadas aqui -->
+                </ul>
+            </div>
+            <div class="table-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

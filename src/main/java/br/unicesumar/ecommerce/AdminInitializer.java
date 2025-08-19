@@ -25,7 +25,7 @@ public class AdminInitializer {
             admin.setEmail(adminEmail);
             admin.setAddress("123");
             admin.setPassword("admin");
-            admin.setRole("admin");
+            admin.setRole("ADMIN");
             userService.saveUser(admin);
             System.out.println("Admin criado: " + adminEmail);
         }
