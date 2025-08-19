@@ -10,6 +10,8 @@
 <div class="admin-form-container">
     <h2 th:text="${product.id != null} ? 'Edit Product' : 'New Product'"></h2>
     <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+        <input type="hidden" th:if="${product.id != null}" th:field="*{id}"/>
+
         <label for="name">Name</label>
         <input type="text" th:field="*{name}" id="name" required/>
 
@@ -28,7 +30,7 @@
         <label for="ammountSold">Sold Quantity</label>
         <input type="number" th:field="*{ammountSold}" id="ammountSold"/>
 
-        <label for="category">Category</label>
+        <label for="category">Category (text)</label>
         <input type="text" th:field="*{category}" id="category"/>
 
         <label for="description">Description</label>

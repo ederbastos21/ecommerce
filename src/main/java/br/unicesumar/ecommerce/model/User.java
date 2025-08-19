@@ -3,11 +3,12 @@ package br.unicesumar.ecommerce.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id; // wrapper
+
     private String name;
     private int age;
     private String cpf;
@@ -19,11 +20,12 @@ public class User {
     private String password;
     private String role;
 
-    public long getId() {
+    // <-- IMPORTANT: use Long (wrapper) on getter/setter
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,5 +84,4 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
 }

@@ -8,8 +8,12 @@
 </head>
 <body>
 <div class="admin-form-container">
-    <h2 th:text="${user.id != null} ? 'Edit User' : 'New User'"></h2>
+    <h2 th:if="${user != null and user.id != null}">Edit User</h2>
+    <h2 th:unless="${user != null and user.id != null}">New User</h2>
+
     <form th:action="@{/admin/users/save}" th:object="${user}" method="post">
+        <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
+
         <label for="name">Name</label>
         <input type="text" th:field="*{name}" id="name" required/>
 
