@@ -23,10 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String processLoginPage(@RequestParam String email,
-                                   @RequestParam String password,
-                                   HttpSession session,
-                                   Model model) {
+    public String processLoginPage(@RequestParam String email, @RequestParam String password, HttpSession session, Model model) {
         User user = userService.findByEmail(email);
 
         if (user != null && user.getPassword().equals(password)) {
