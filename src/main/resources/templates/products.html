@@ -53,19 +53,21 @@
     <section class="products-section">
         <h1 class="products-title">Products</h1>
 
-        <!-- Filtros -->
         <div class="filters-container">
-            <form method="get" action="#" id="filter-form">
-                <label>
-                    Sort by:
-                    <select name="sort" id="sort-select" onchange="this.form.submit()">
-                        <option value="">-- Select --</option>
-                        <option value="priceDesc" th:selected="${sort == 'priceDesc'}">Highest Price</option>
-                        <option value="priceAsc" th:selected="${sort == 'priceAsc'}">Lowest Price</option>
-                        <option value="relevance" th:selected="${sort == 'relevance'}">Relevance</option>
-                    </select>
-                </label>
-            </form>
+            <a th:href="@{/products(search=${param.search}, sort='priceDesc')}"
+               th:classappend="${sort == 'priceDesc'} ? ' active' : ''">
+                Maior para menor
+            </a>
+
+            <a th:href="@{/products(search=${param.search}, sort='priceAsc')}"
+               th:classappend="${sort == 'priceAsc'} ? ' active' : ''">
+                Menor para maior
+            </a>
+
+            <a th:href="@{/products(search=${param.search}, sort='relevance')}"
+               th:classappend="${sort == 'relevance'} ? ' active' : ''">
+                Relevância
+            </a>
         </div>
 
         <div class="products-grid" id="products-display-grid">

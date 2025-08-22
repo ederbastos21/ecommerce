@@ -539,3 +539,35 @@ li:hover > .submenu {
     user-select: none;
     font-size: 14px;
 }
+
+.filters-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filters-container a {
+    text-decoration: none;
+    color: #495057;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.filters-container a:hover {
+    background-color: #f1f1f1;
+    color: #007bff;
+}
+
+.filters-container a.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
