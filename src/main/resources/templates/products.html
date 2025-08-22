@@ -54,18 +54,18 @@
         <h1 class="products-title">Products</h1>
 
         <div class="filters-container">
-            <a th:href="@{/products(search=${param.search}, sort='priceDesc')}"
-               th:classappend="${sort == 'priceDesc'} ? ' active' : ''">
+            <a th:href="@{/products(search=${param.search}, sortParameter='priceDesc')}"
+               th:classappend="${sortParameter == 'priceDesc'} ? ' active' : ''">
                 Maior para menor
             </a>
 
-            <a th:href="@{/products(search=${param.search}, sort='priceAsc')}"
-               th:classappend="${sort == 'priceAsc'} ? ' active' : ''">
+            <a th:href="@{/products(search=${param.search}, sortParameter='priceAsc')}"
+               th:classappend="${sortParameter == 'priceAsc'} ? ' active' : ''">
                 Menor para maior
             </a>
 
-            <a th:href="@{/products(search=${param.search}, sort='relevance')}"
-               th:classappend="${sort == 'relevance'} ? ' active' : ''">
+            <a th:href="@{/products(search=${param.search}, sortParameter='relevance')}"
+               th:classappend="${sortParameter == 'relevance'} ? ' active' : ''">
                 Relevância
             </a>
         </div>

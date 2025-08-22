@@ -4,7 +4,6 @@ import br.unicesumar.ecommerce.repository.ProductRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -20,7 +19,7 @@ public class ProductService {
     }
 
     public List<Product> findByNameContainingIgnoreCase(String name, Sort sort){
-        return productRepository.findByNameContainingIgnoreCase(name);
+        return productRepository.findByNameContainingIgnoreCase(name, sort);
     }
 
     public Product save(Product product) {
