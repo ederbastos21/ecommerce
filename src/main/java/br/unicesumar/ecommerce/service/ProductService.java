@@ -16,6 +16,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<Product> findByNameContainingIgnoreCase(String name){
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
     public Product save(Product product) {
         return productRepository.save(product);
     }

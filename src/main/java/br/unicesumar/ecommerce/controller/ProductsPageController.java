@@ -5,6 +5,7 @@ import br.unicesumar.ecommerce.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProductsPageController {
@@ -17,9 +18,14 @@ public class ProductsPageController {
     }
 
     @GetMapping("/products")
-    public String index(Model model) {
-        model.addAttribute("categories", categoryService.getRootCategories());
-        model.addAttribute("products", productService.getAll());
-        return "products";
+    public String index(@RequestParam (required = false) String search, Model model) {
+        if (search != null && !search.isEmpty()){
+            model.addAttribute("products",productService.findByNameContainingIgnoreCase(search));
+            return "products";
+        } else {
+            model.addAttribute("categories", categoryService.getRootCategories());
+            model.addAttribute("products", productService.getAll());
+            return "products";
+        }
     }
 }
