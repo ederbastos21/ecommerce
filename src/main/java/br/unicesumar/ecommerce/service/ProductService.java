@@ -1,6 +1,7 @@
 package br.unicesumar.ecommerce.service;
 import br.unicesumar.ecommerce.model.Product;
 import br.unicesumar.ecommerce.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,16 +19,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> findByNameContainingIgnoreCase(String name){
+    public List<Product> findByNameContainingIgnoreCase(String name, Sort sort){
         return productRepository.findByNameContainingIgnoreCase(name);
-    }
-
-    public List<Product> findByPrice (BigDecimal price){
-        return productRepository.findByPrice(price);
-    }
-
-    public List<Product> findByAmmountSold (int ammountSold){
-        return productRepository.findByAmmountSold(ammountSold);
     }
 
     public Product save(Product product) {
