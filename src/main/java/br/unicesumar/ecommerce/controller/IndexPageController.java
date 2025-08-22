@@ -37,14 +37,6 @@ public class IndexPageController {
     public String showUserProfile(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         model.addAttribute("loggedUser",loggedUser);
-        model.addAttribute("name",loggedUser.getName());
-        model.addAttribute("age",loggedUser.getAge());
-        model.addAttribute("email",loggedUser.getEmail());
-        model.addAttribute("password",loggedUser.getPassword());
-        model.addAttribute("cpf",loggedUser.getCpf());
-        model.addAttribute("address",loggedUser.getAddress());
-        model.addAttribute("id",loggedUser.getId());
-        model.addAttribute("role",loggedUser.getRole());
         return "userProfile";
     }
 
