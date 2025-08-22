@@ -86,7 +86,8 @@
                         <th>Price</th>
                         <th>Discount</th>
                         <th>Shipping</th>
-                        <th>Available Qty</th>
+                        <th>Category</th>
+                        <th>Available</th>
                         <th>Sold Qty</th>
                         <th>Actions</th>
                     </tr>
@@ -98,6 +99,7 @@
                         <td th:text="${product.price}"></td>
                         <td th:text="${product.discount}"></td>
                         <td th:text="${product.shippingValue}"></td>
+                        <td th:text="${product.category}"></td>
                         <td th:text="${product.availableQuantity}"></td>
                         <td th:text="${product.ammountSold}"></td>
                         <td>
