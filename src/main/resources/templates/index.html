@@ -38,6 +38,9 @@
                     <span th:if="${session.loggedUser.role == 'ADMIN'}">
                         | <a href="/admin" class="auth-link">Admin Resources</a>
                     </span>
+                    <span th:if="${session.loggedUser.role != NULL}">
+                        | <a href="/userProfile" class="auth-link">My Profile</a>
+                    </span>
                 </div>
                 <div th:unless="${session.loggedUser != null}">
                     <a href="/login" class="auth-link">Login</a>

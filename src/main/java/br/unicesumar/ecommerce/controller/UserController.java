@@ -53,6 +53,6 @@ public class UserController {
         user.setRole("USER");
         User processedUser = userService.saveUser(user);
         model.addAttribute("user", processedUser);
-        return "successRegister";
+        return "redirect:/login";
     }
 }

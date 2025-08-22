@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>NOME: <span th:text="${loggedUser.name}"></span> </p>
+    <p>IDADE: <span th:text="${loggedUser.age}"></span></p>
+    <p>EMAIL: <span th:text="${loggedUser.email}"></span></p>
+    <p>SENHA: <span th:text="${loggedUser.password}"></span></p>
+    <p>CPF: <span th:text="${loggedUser.cpf}"></span></p>
+    <p>ENDEREÇO: <span th:text="${loggedUser.address}"></span></p>
+    <p>ID: <span th:text="${loggedUser.id}"></span></p>
+    <p>CARGO: <span th:text="${loggedUser.role}"></span></p>
+</body>
+</html>
