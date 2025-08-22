@@ -36,6 +36,9 @@ public class ProductsPageController {
             } else if (sortParameter.equals("relevance")) {
                 Sort sort = Sort.by("ammountSold").descending();
                 model.addAttribute("products",productService.findByNameContainingIgnoreCase(search, sort));
+            } else {
+                Sort sort = Sort.unsorted();
+                model.addAttribute("products", productService.findByNameContainingIgnoreCase(search, sort));
             }
             model.addAttribute("search",search);
             return "products";
