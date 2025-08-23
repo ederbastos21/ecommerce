@@ -2,17 +2,167 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - Store</title>
+    <link rel="stylesheet" th:href="@{/css/product.css}" />
 </head>
-    <body>
-        <p>ID: <span th:text="${product.id}"></span> </p>
-        <p>NOME: <span th:text="${product.name}"></span></p>
-        <p>PREÇO: <span th:text="${product.price}"></span></p>
-        <p>DESCONTO: <span th:text="${product.discount}"></span></p>
-        <p>VALOR FRETE: <span th:text="${product.shippingValue}"></span></p>
-        <p>DESCRIÇÃO: <span th:text="${product.description}"></span></p>
-        <p>CATEGORIA: <span th:text="${product.category}"></span></p>
-        <p>QUANTIDADE DISPONÍVEL: <span th:text="${product.availableQuantity}"></span></p>
-        <p>QUANTIDADE VENDIDA: <span th:text="${product.ammountSold}"></span></p>
-    </body>
+<body>
+
+<!-- Header copiado do index -->
+<header class="header-container">
+    <div class="header-content">
+        <div class="store-logo">
+            <div class="store-logo-icon">S</div>
+            <span class="store-name">Store</span>
+        </div>
+
+        <div class="departments-menu-container">
+            <button class="departments-button" aria-haspopup="true" aria-expanded="false">
+                <span class="hamburger-icon"><span></span><span></span><span></span></span>
+                Departamentos
+            </button>
+            <nav class="departments-menu">
+                <ul th:insert="~{::categoryList(categories=${categories})}"></ul>
+            </nav>
+        </div>
+
+        <div class="search-container">
+            <form action="/products" method="get">
+                <input type="text" class="search-input" name="search" placeholder="Search for products..." />
+                <button class="search-button" type="submit">🔍</button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Admin Resources</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != NULL}">
+                        | <a href="/userProfile" class="auth-link">My Profile</a>
+                    </span>
+                </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Register</a>
+                </div>
+            </div>
+
+            <div class="cart-container">
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Conteúdo Principal do Produto -->
+<main class="main-content">
+    <div class="product-detail-container">
+        <div class="product-images">
+            <div class="product-image-main">
+                <div class="product-image-placeholder">Product Image</div>
+            </div>
+        </div>
+
+        <div class="product-info">
+            <h1 class="product-title" th:text="${product.name}">Product Name</h1>
+
+            <div class="product-pricing">
+                <div class="product-price" th:text="'R$ ' + ${product.price}">R$ 99,99</div>
+                <div th:if="${product.discount > 0}" class="product-discount">
+                    <span class="discount-label">Desconto:</span>
+                    <span th:text="${product.discount} + '%'">10%</span>
+                </div>
+            </div>
+
+            <div class="product-shipping">
+                <span class="shipping-label">Frete:</span>
+                <span class="shipping-value" th:text="'R$ ' + ${product.shippingValue}">R$ 15,00</span>
+            </div>
+
+            <div class="product-availability">
+                <span class="availability-label">Disponível:</span>
+                <span class="availability-quantity" th:text="${product.availableQuantity} + ' unidades'">50 unidades</span>
+            </div>
+
+            <div class="product-sold">
+                <span class="sold-label">Vendidos:</span>
+                <span th:text="${product.ammountSold} + ' unidades'">25 unidades</span>
+            </div>
+
+            <div class="quantity-selector">
+                <label for="quantity">Quantidade:</label>
+                <div class="quantity-controls">
+                    <button class="quantity-btn decrease" onclick="decreaseQuantity()">-</button>
+                    <input type="number" id="quantity" class="quantity-input" value="1" min="1" th:max="${product.availableQuantity}">
+                    <button class="quantity-btn increase" onclick="increaseQuantity()">+</button>
+                </div>
+            </div>
+
+            <button class="add-to-cart-btn-main" th:onclick="'addToCart(' + ${product.id} + ')'">
+                Adicionar ao Carrinho
+            </button>
+
+            <div class="product-description">
+                <h3>Descrição do Produto</h3>
+                <p th:text="${product.description}">Product description goes here...</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer copiado do index -->
+<footer class="footer-container">
+    <div class="footer-content">
+        <div class="footer-info">
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <div class="contact-item"><span class="contact-label">Phone:</span> +1 (555) 123-4567</div>
+                <div class="contact-item"><span class="contact-label">Email:</span> contact@store.com</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Fragment para categorias -->
+<th:block th:fragment="categoryList (categories)">
+    <li th:each="cat : ${categories}">
+        <span th:text="${cat.name}" th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''"></span>
+        <ul class="submenu" th:if="${cat.children != null}" th:insert="~{::categoryList(categories=${cat.children})}"></ul>
+    </li>
+</th:block>
+
+<script>
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(input.max);
+        const current = parseInt(input.value);
+        if (current < max) {
+            input.value = current + 1;
+        }
+    }
+
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        const current = parseInt(input.value);
+        if (current > 1) {
+            input.value = current - 1;
+        }
+    }
+
+    function addToCart(productId) {
+        const quantity = document.getElementById('quantity').value;
+        console.log('Adding to cart:', productId, 'quantity:', quantity);
+        // Implementar lógica de adicionar ao carrinho
+    }
+</script>
+
+</body>
 </html>
