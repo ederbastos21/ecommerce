@@ -97,7 +97,7 @@ public class AdminController {
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         try {
-            Product product = productService.getById(id);
+            Product product = productService.findById(id);
             model.addAttribute("product", product);
             model.addAttribute("activeTable", "products");
             return "productForm";

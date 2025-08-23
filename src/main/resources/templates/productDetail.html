@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <body>
+        <p>ID: <span th:text="${product.id}"></span> </p>
+        <p>NOME: <span th:text="${product.name}"></span></p>
+        <p>PREÇO: <span th:text="${product.price}"></span></p>
+        <p>DESCONTO: <span th:text="${product.discount}"></span></p>
+        <p>VALOR FRETE: <span th:text="${product.shippingValue}"></span></p>
+        <p>DESCRIÇÃO: <span th:text="${product.description}"></span></p>
+        <p>CATEGORIA: <span th:text="${product.category}"></span></p>
+        <p>QUANTIDADE DISPONÍVEL: <span th:text="${product.availableQuantity}"></span></p>
+        <p>QUANTIDADE VENDIDA: <span th:text="${product.ammountSold}"></span></p>
+    </body>
+</html>

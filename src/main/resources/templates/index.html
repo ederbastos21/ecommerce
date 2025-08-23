@@ -57,13 +57,18 @@
     <section class="products-section">
         <h1 class="products-title">Products</h1>
         <div class="products-grid">
-            <div class="product-card" th:each="product : ${products}">
-                <div class="product-image-placeholder">Product Image</div>
-                <div class="product-name" th:text="${product.name}"></div>
-                <div class="product-price" th:text="'$' + ${product.price}"></div>
-                <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
-            </div>
+            <a th:each="product : ${products}"
+               th:href="@{/productDetail/{id}(id=${product.id})}"
+               class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image-placeholder">Product Image</div>
+                    <div class="product-name" th:text="${product.name}"></div>
+                    <div class="product-price" th:text="'$' + ${product.price}"></div>
+                    <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
+                </div>
+            </a>
         </div>
+
     </section>
 </main>
 
