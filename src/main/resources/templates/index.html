@@ -64,7 +64,6 @@
                     <div class="product-image-placeholder">Product Image</div>
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price" th:text="'$' + ${product.price}"></div>
-                    <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
                 </div>
             </a>
         </div>

@@ -70,15 +70,16 @@
             </a>
         </div>
 
-        <div class="products-grid" id="products-display-grid">
-            <div class="product-card" th:each="product : ${products}" th:data-product-id="${product.id}">
-                <div class="product-image-placeholder">
-                    <span>Product Image</span>
+        <div class="products-grid">
+            <a th:each="product : ${products}"
+               th:href="@{/productDetail/{id}(id=${product.id})}"
+               class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image-placeholder">Product Image</div>
+                    <div class="product-name" th:text="${product.name}"></div>
+                    <div class="product-price" th:text="'$' + ${product.price}"></div>
                 </div>
-                <div class="product-name" th:text="${product.name}">Product Name</div>
-                <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
-                <button class="add-to-cart-btn" th:onclick="'addToCart(' + ${product.id} + ')'">Add to Cart</button>
-            </div>
+            </a>
         </div>
     </section>
 </main>
