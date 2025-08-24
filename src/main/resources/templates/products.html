@@ -51,8 +51,6 @@
 
 <main class="main-content">
     <section class="products-section">
-        <h1 class="products-title">Products</h1>
-
         <div class="filters-container">
             <a th:href="@{/products(search=${param.search}, sortParameter='priceDesc')}"
                th:classappend="${sortParameter == 'priceDesc'} ? ' active' : ''">
