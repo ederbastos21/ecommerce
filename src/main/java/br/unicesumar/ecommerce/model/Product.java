@@ -17,7 +17,6 @@ public class Product {
     private int discount;
     private BigDecimal shippingValue;
     private String description;
-    private String category;
     private int availableQuantity;
     private int ammountSold;
 
@@ -31,7 +30,6 @@ public class Product {
         this.discount = discount;
         this.shippingValue = shippingValue;
         this.description = description;
-        this.category = category;
         this.availableQuantity = availableQuantity;
         this.ammountSold = ammountSold;
     }
