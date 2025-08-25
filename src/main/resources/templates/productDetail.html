@@ -92,10 +92,9 @@
                     <button class="quantity-btn increase" onclick="increaseQuantity()">+</button>
                 </div>
             </div>
-
-            <button class="add-to-cart-btn-main" th:onclick="'addToCart(' + ${product.id} + ')'">
-                Adicionar ao Carrinho
-            </button>
+            <form th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
+                <button type="submit" class="add-to-cart-btn-main">Adicionar ao Carrinho</button>
+            </form>
 
             <div class="product-description">
                 <h3>Descrição do Produto</h3>
