@@ -15,16 +15,6 @@
             <span class="store-name">Store</span>
         </div>
 
-        <div class="departments-menu-container">
-            <button class="departments-button" aria-haspopup="true" aria-expanded="false">
-                <span class="hamburger-icon"><span></span><span></span><span></span></span>
-                Departamentos
-            </button>
-            <nav class="departments-menu">
-                <ul th:insert="~{::categoryList(categories=${categories})}"></ul>
-            </nav>
-        </div>
-
         <div class="search-container">
             <form action="/products" method="get">
                 <input type="text" class="search-input" name="search" placeholder="Search for products..." />
@@ -123,13 +113,6 @@
         </div>
     </div>
 </footer>
-
-<th:block th:fragment="categoryList (categories)">
-    <li th:each="cat : ${categories}">
-        <span th:text="${cat.name}" th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''"></span>
-        <ul class="submenu" th:if="${cat.children != null}" th:insert="~{::categoryList(categories=${cat.children})}"></ul>
-    </li>
-</th:block>
 
 <script th:src="@{/js/script.js}"></script>
 </body>
