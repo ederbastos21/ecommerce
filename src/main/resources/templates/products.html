@@ -9,26 +9,40 @@
 <body>
 <header class="header-container">
     <div class="header-content">
-        <div class="store-logo">
-            <div class="store-logo-icon">S</div>
-            <span class="store-name">Store</span>
-        </div>
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <span class="store-name">UniWare</span>
+            </div>
+        </a>
 
         <div class="search-container">
             <form action="/products" method="get">
-                <input type="text" class="search-input" name="search" placeholder="Search for products..." />
+                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
                 <button class="search-button" type="submit">🔍</button>
             </form>
         </div>
 
         <div class="header-actions">
             <div class="auth-links">
-                <a href="/login" class="auth-link" id="user-login-link">Login</a>
-                <a href="/register" class="auth-link register-link" id="user-register-link">Register</a>
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != NULL}">
+                        | <a href="/userProfile" class="auth-link">Meu Perfil</a>
+                    </span>
+                </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Registrar</a>
+                </div>
             </div>
             <div class="cart-container">
-                <a href="#" class="cart-icon" id="shopping-cart-link">🛒</a>
-                <span class="cart-count" id="cart-items-count">0</span>
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count">0</span>
             </div>
         </div>
     </div>
@@ -70,18 +84,14 @@
 <footer class="footer-container">
     <div class="footer-content">
         <div class="footer-info">
-            <h3>Contact Information</h3>
-            <div class="contact-item">
-                <span class="contact-label">Phone:</span>
-                <span id="store-contact-phone">+1 (555) 123-4567</span>
-            </div>
-            <div class="contact-item">
-                <span class="contact-label">Email:</span>
-                <span id="store-contact-email">contact@store.com</span>
+            <div class="contact-info">
+                <h3>Informação para contato: </h3>
+                <div class="contact-item"><span class="contact-label">Telefone:</span> +55(42)91234-5678</div>
+                <div class="contact-item"><span class="contact-label">Email:</span> contto@uniware.com</div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p id="copyright-notice">&copy; 2024 Store. All rights reserved.</p>
+            <p>&copy; 2024 UniWare. Todos os direitos reservados.</p>
         </div>
     </div>
 </footer>
