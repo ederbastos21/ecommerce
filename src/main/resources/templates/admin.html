@@ -33,9 +33,6 @@
                     <li th:classappend="${activeTable == 'products'} ? ' active' : ''">
                         <a th:href="@{/admin/products}" class="auth-link">Products</a>
                     </li>
-                    <li th:classappend="${activeTable == 'categories'} ? ' active' : ''">
-                        <a th:href="@{/admin/categories}" class="auth-link">Categories</a>
-                    </li>
                 </ul>
             </div>
 
@@ -86,7 +83,6 @@
                         <th>Price</th>
                         <th>Discount</th>
                         <th>Shipping</th>
-                        <th>Category</th>
                         <th>Available</th>
                         <th>Sold Qty</th>
                         <th>Actions</th>
@@ -99,7 +95,6 @@
                         <td th:text="${product.price}"></td>
                         <td th:text="${product.discount}"></td>
                         <td th:text="${product.shippingValue}"></td>
-                        <td th:text="${product.category}"></td>
                         <td th:text="${product.availableQuantity}"></td>
                         <td th:text="${product.ammountSold}"></td>
                         <td>

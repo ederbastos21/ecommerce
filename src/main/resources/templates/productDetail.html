@@ -131,14 +131,6 @@
     </div>
 </footer>
 
-<!-- Fragment para categorias -->
-<th:block th:fragment="categoryList (categories)">
-    <li th:each="cat : ${categories}">
-        <span th:text="${cat.name}" th:classappend="${cat.children != null and cat.children.size() > 0} ? 'has-children' : ''"></span>
-        <ul class="submenu" th:if="${cat.children != null}" th:insert="~{::categoryList(categories=${cat.children})}"></ul>
-    </li>
-</th:block>
-
 <script>
     function increaseQuantity() {
         const input = document.getElementById('quantity');
