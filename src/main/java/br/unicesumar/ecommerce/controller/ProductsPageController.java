@@ -1,6 +1,5 @@
 package br.unicesumar.ecommerce.controller;
 
-import br.unicesumar.ecommerce.service.CategoryService;
 import br.unicesumar.ecommerce.service.ProductService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -10,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProductsPageController {
-    private final CategoryService categoryService;
     private final ProductService productService;
 
-    public ProductsPageController (CategoryService categoryService, ProductService productService){
-        this.categoryService = categoryService;
+    public ProductsPageController (ProductService productService){
         this.productService = productService;
     }
 
@@ -22,7 +19,6 @@ public class ProductsPageController {
     public String index(@RequestParam (required = false) String search, @RequestParam (required = false) String sortParameter, Model model) {
         if (search != null && !search.isEmpty()){
 
-            model.addAttribute("categories", categoryService.getRootCategories());
             model.addAttribute("sortParameter",sortParameter);
             if (sortParameter == null){
                 sortParameter = "relevance";
@@ -43,7 +39,6 @@ public class ProductsPageController {
             model.addAttribute("search",search);
             return "products";
         } else {
-            model.addAttribute("categories", categoryService.getRootCategories());
             model.addAttribute("products", productService.getAll());
             model.addAttribute("search",search);
             model.addAttribute("sortParameter",sortParameter);

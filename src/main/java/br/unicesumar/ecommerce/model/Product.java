@@ -84,14 +84,6 @@ public class Product {
         this.description = description;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public int getAvailableQuantity() {
         return availableQuantity;
     }
@@ -103,6 +95,7 @@ public class Product {
     public int getAmmountSold(){
         return ammountSold;
     }
+
     public void setAmmountSold(int ammountSold){
         this.ammountSold = ammountSold;
     }
