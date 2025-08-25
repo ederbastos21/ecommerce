@@ -15,7 +15,6 @@ body {
     padding: 20px;
 }
 
-/* Container principal */
 .auth-container {
     background-color: #fff;
     padding: 40px;
@@ -26,7 +25,6 @@ body {
     text-align: center;
 }
 
-/* Logo/Título */
 .auth-header {
     margin-bottom: 30px;
 }
@@ -65,7 +63,6 @@ body {
     font-weight: 500;
 }
 
-/* Formulário */
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -103,7 +100,6 @@ body {
     color: #6c757d;
 }
 
-/* Botão de submit */
 .submit-btn {
     background-color: #007bff;
     color: white;
@@ -121,7 +117,6 @@ body {
     background-color: #0056b3;
 }
 
-/* Links extras */
 .auth-footer {
     margin-top: 25px;
     padding-top: 20px;
@@ -150,7 +145,6 @@ body {
     font-weight: 500;
 }
 
-/* Responsivo */
 @media (max-width: 480px) {
     .auth-container {
         padding: 30px 20px;

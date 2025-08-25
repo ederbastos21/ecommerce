@@ -10,7 +10,6 @@ body {
     color: #333;
 }
 
-/* Header Styles */
 .header-container {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -164,7 +163,6 @@ a{
     font-weight: bold;
 }
 
-/* Advertisement Section */
 .ad-section {
     background-color: #e9ecef;
     padding: 60px 0;
@@ -184,14 +182,12 @@ a{
     font-style: italic;
 }
 
-/* Main Content */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Category Filter */
 .category-section {
     margin-bottom: 30px;
     background-color: #fff;
@@ -268,7 +264,6 @@ a{
     border-color: #007bff;
 }
 
-/* Products Section */
 .products-section {
     margin-bottom: 50px;
 }
@@ -346,7 +341,6 @@ a{
     background-color: #0056b3;
 }
 
-/* Footer */
 .footer-container {
     background-color: #343a40;
     color: #fff;
@@ -394,7 +388,6 @@ a{
     font-size: 14px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
@@ -472,7 +465,6 @@ a{
     border-color: #007bff;
 }
 
-/* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
@@ -492,7 +484,7 @@ a{
 }
 
 .hero-content {
-    max-width: 600px; /* Limita a largura do conteúdo para melhor legibilidade */
+    max-width: 600px;
 }
 
 .hero-title {
@@ -515,7 +507,7 @@ a{
 }
 
 .hero-btn {
-    padding: 12px 30px; /* Ajustei o padding para um valor mais razoável */
+    padding: 12px 30px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
@@ -543,7 +535,6 @@ a{
     color: #007bff;
 }
 
-/* Featured Categories */
 .featured-categories {
     margin-bottom: 60px;
 }
@@ -601,7 +592,6 @@ a{
     text-decoration: underline;
 }
 
-/* Offers Section */
 .offers-section {
     margin-bottom: 60px;
 }
@@ -662,7 +652,6 @@ a{
     font-size: 0.9rem;
 }
 
-/* Benefits Section */
 .benefits-section {
     background-color: #f8f9fa;
     padding: 60px 0;
@@ -696,7 +685,6 @@ a{
     line-height: 1.5;
 }
 
-/* Newsletter Section */
 .newsletter-section {
     background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     padding: 50px 0;
@@ -748,7 +736,6 @@ a{
     background-color: #0056b3;
 }
 
-/* Responsive Design para novas seções */
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2rem;

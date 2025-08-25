@@ -16,7 +16,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    /* LOGIN */
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";
@@ -35,14 +34,12 @@ public class UserController {
         return "login";
     }
 
-    /* LOGOUT */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
 
-    /* REGISTER */
     @GetMapping("/register")
     public String showRegisterForm() {
         return "register";

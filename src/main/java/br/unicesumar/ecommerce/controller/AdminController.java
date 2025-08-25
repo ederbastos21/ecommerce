@@ -23,7 +23,6 @@ public class AdminController {
         this.productService = productService;
     }
 
-    // Tela principal do admin, exibe Users por padrão
     @GetMapping
     public String adminHome(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -36,7 +35,6 @@ public class AdminController {
         return "admin";
     }
 
-    // ------------------ USERS ------------------
     @GetMapping("/users")
     public String listUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
@@ -75,7 +73,6 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-    // ------------------ PRODUCTS ------------------
     @GetMapping("/products")
     public String listProducts(Model model) {
         model.addAttribute("products", productService.getAll());

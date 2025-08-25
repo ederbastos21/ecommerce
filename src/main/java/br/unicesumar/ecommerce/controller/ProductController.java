@@ -1,10 +1,7 @@
 package br.unicesumar.ecommerce.controller;
 
 import br.unicesumar.ecommerce.model.Product;
-import br.unicesumar.ecommerce.model.User;
-import br.unicesumar.ecommerce.repository.UserRepository;
 import br.unicesumar.ecommerce.service.ProductService;
-import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

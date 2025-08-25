@@ -20,7 +20,6 @@ public class User {
     private String password;
     private String role;
 
-    // <-- IMPORTANT: use Long (wrapper) on getter/setter
     public Long getId() {
         return id;
     }

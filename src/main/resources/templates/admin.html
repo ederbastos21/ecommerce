@@ -24,7 +24,6 @@
     <section class="admin-section">
         <h1 class="products-title">Painel CRUD</h1>
         <div class="admin-container">
-            <!-- Sidebar para selecionar tabela -->
             <div class="table-sidebar">
                 <ul>
                     <li th:classappend="${activeTable == 'users'} ? ' active' : ''">
@@ -36,9 +35,7 @@
                 </ul>
             </div>
 
-            <!-- Conteúdo da tabela -->
             <div class="table-content">
-                <!-- Users Table -->
                 <table th:if="${activeTable == 'users'}">
                     <thead>
                     <tr>
@@ -74,7 +71,6 @@
                     </tbody>
                 </table>
 
-                <!-- Products Table -->
                 <table th:if="${activeTable == 'products'}">
                     <thead>
                     <tr>
@@ -110,7 +106,6 @@
                     </tbody>
                 </table>
 
-                <!-- Categories Table -->
                 <table th:if="${activeTable == 'categories'}">
                     <thead>
                     <tr>
@@ -139,7 +134,6 @@
                 </table>
 
                 <br/>
-                <!-- Botão adicionar -->
                 <a th:if="${activeTable == 'users'}" th:href="@{/admin/users/new}">
                     <button class="edit-btn" type="button">Add User</button>
                 </a>

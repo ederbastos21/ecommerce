@@ -18,7 +18,6 @@
         <input type="text" th:field="*{name}" id="name" required/>
 
         <label for="parent">Parent Category</label>
-        <!-- plain value for empty option -->
         <select th:field="*{parent.id}" id="parent">
             <option value="">None</option>
             <option th:each="cat : ${allCategories}"
