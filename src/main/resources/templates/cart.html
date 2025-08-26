@@ -1,29 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Carrinho</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
 </head>
 <body>
-<h1>Meu Carrinho</h1>
+<header class="header-container">
+    <div class="header-content">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <span class="store-name">UniWare</span>
+            </div>
+        </a>
 
-<div th:if="${#lists.isEmpty(cart)}">
-    <p>Seu carrinho está vazio.</p>
+        <div class="search-container">
+            <form action="/products" method="get">
+                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
+                <button class="search-button" type="submit">🔍</button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != NULL}">
+                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
+                    </span>
+                </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Registrar</a>
+                </div>
+            </div>
+            <div class="cart-container">
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <h1 class="page-title">Meu Carrinho</h1>
+
+    <div class="cart-section">
+        <div th:if="${#lists.isEmpty(cart)}" class="empty-cart">
+            <p>Seu carrinho está vazio.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(cart)}">
+            <table class="cart-table">
+                <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${cart}">
+                    <td class="product-name" th:text="${p.name}">Nome</td>
+                    <td class="product-price" th:text="${p.price}">0.00</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="cart-actions">
+                <a href="/products" class="continue-btn">
+                    ← Continuar comprando
+                </a>
+
+                <a href="/checkout" class="buy-btn">
+                    🛒 Finalizar Compra
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(cart)}" class="cart-actions" style="justify-content: center;">
+            <a href="/products" class="continue-btn">
+                ← Voltar às compras
+            </a>
+        </div>
+    </div>
 </div>
 
-<div th:unless="${#lists.isEmpty(cart)}">
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Produto</th>
-            <th>Preço</th>
-        </tr>
-        <tr th:each="p : ${cart}">
-            <td th:text="${p.name}">Nome</td>
-            <td th:text="${p.price}">0.00</td>
-        </tr>
-    </table>
+<div class="footer-container">
+    <div class="footer-content">
+        <div class="footer-bottom">
+            © 2025 Loja Online. Todos os direitos reservados.
+        </div>
+    </div>
 </div>
-
-<a href="/products">Continuar comprando</a>
 </body>
 </html>
