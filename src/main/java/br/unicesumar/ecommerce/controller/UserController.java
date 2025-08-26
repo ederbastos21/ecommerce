@@ -52,4 +52,42 @@ public class UserController {
         model.addAttribute("user", processedUser);
         return "redirect:/login";
     }
+
+    @GetMapping("/edit/{id}")
+    public String editUserForm(@PathVariable Long id, Model model, HttpSession session) {
+        try {
+            User loggedUser = (User) session.getAttribute("loggedUser");
+            if (!(loggedUser.getId().equals(id))) {
+                return "redirect:/userProfile";
+            }
+            User user = userService.getById(id);
+            model.addAttribute("user", user);
+            model.addAttribute("activeTable", "users");
+            return "editForm";
+        } catch (Exception e) {
+            return "redirect:/userProfile";
+        }
+    }
+
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute User user, HttpSession session) {
+
+        User loggedUser = (User) session.getAttribute("loggedUser");
+
+        if (loggedUser == null || !loggedUser.getId().equals(user.getId())) {
+            return "redirect:/userProfile";
+        }
+
+        if (!"ADMIN".equals(loggedUser.getRole())) {
+            user.setRole("USER");
+        }
+
+        User savedUser = userService.saveUser(user);
+
+        session.setAttribute("loggedUser", savedUser);
+
+        return "redirect:/userProfile";
+    }
+
+
 }
