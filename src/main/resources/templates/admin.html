@@ -26,12 +26,16 @@
         <div class="admin-container">
             <div class="table-sidebar">
                 <ul>
-                    <li th:classappend="${activeTable == 'users'} ? ' active' : ''">
-                        <a th:href="@{/admin/users}" class="auth-link">Usuários</a>
-                    </li>
-                    <li th:classappend="${activeTable == 'products'} ? ' active' : ''">
-                        <a th:href="@{/admin/products}" class="auth-link">Produtos</a>
-                    </li>
+                    <a th:href="@{/admin/users}">
+                        <li th:classappend="${activeTable == 'users'} ? ' active' : ''">
+                            <p class="auth-link">Usuários</p>
+                        </li>
+                    </a>
+                    <a th:href="@{/admin/products}">
+                        <li th:classappend="${activeTable == 'products'} ? ' active' : ''">
+                            <p class="auth-link">Produtos</p>
+                        </li>
+                    </a>
                 </ul>
             </div>
 
