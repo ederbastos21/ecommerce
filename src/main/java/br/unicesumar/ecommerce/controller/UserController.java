@@ -89,5 +89,15 @@ public class UserController {
         return "redirect:/userProfile";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id, @ModelAttribute User user, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null || !loggedUser.getId().equals(user.getId())) {
+            return "redirect:/userProfile";
+        }
+        userService.deleteById(id);
+        session.invalidate();
+        return "redirect:/";
+    }
 
 }
