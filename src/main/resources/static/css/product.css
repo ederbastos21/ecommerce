@@ -572,6 +572,10 @@ li:hover > .submenu {
     font-size: 14px;
 }
 
+a{
+    text-decoration:none;
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
