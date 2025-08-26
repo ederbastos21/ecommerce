@@ -2,16 +2,105 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Minha Conta</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
 </head>
 <body>
-    <p>NOME: <span th:text="${loggedUser.name}"></span> </p>
-    <p>IDADE: <span th:text="${loggedUser.age}"></span></p>
-    <p>EMAIL: <span th:text="${loggedUser.email}"></span></p>
-    <p>SENHA: <span th:text="${loggedUser.password}"></span></p>
-    <p>CPF: <span th:text="${loggedUser.cpf}"></span></p>
-    <p>ENDEREÇO: <span th:text="${loggedUser.address}"></span></p>
-    <p>ID: <span th:text="${loggedUser.id}"></span></p>
-    <p>CARGO: <span th:text="${loggedUser.role}"></span></p>
+<header class="header-container">
+    <div class="header-content">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <span class="store-name">UniWare</span>
+            </div>
+        </a>
+
+        <div class="search-container">
+            <form action="/products" method="get">
+                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
+                <button class="search-button" type="submit">🔍</button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != null}">
+                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
+                    </span>
+                </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Registrar</a>
+                </div>
+            </div>
+            <div class="cart-container">
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <h1 class="page-title">Minha Conta</h1>
+
+    <div class="account-section">
+        <h2 class="section-title">Informações Pessoais</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Nome:</span>
+                <span class="info-value" th:text="${session.loggedUser.name}"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value" th:text="${session.loggedUser.email}"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Idade:</span>
+                <span class="info-value" th:text="${session.loggedUser.age}"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">CPF:</span>
+                <span class="info-value" th:text="${session.loggedUser.cpf}"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Endereço:</span>
+                <span class="info-value" th:text="${session.loggedUser.address}"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Senha:</span>
+                <span class="info-value" th:text="${session.loggedUser.password}"></span>
+            </div>
+        </div>
+        <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
+            <div class="button-center">
+                <button class="edit-all-btn">Editar Informações</button>
+            </div>
+        </a>
+    </div>
+
+    <div class="account-section">
+        <h2 class="section-title">Ações da Conta</h2>
+        <a th:href="@{/remove/{id}(id=${session.loggedUser.id})}">
+            <div class="button-center">
+                <button class="action-btn danger">Excluir Conta</button>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="footer-container">
+    <div class="footer-content">
+        <div class="footer-bottom">
+            © 2025 Store. Todos os direitos reservados.
+        </div>
+    </div>
+</div>
 </body>
 </html>

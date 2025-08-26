@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>User Form</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+<body>
+<div class="admin-form-container">
+    <h2 th:if="${user != null and user.id != null}">Edit User</h2>
+    <h2 th:unless="${user != null and user.id != null}">New User</h2>
+
+    <form th:action="@{/save}" th:object="${user}" method="post">
+        <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
+
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name" required/>
+
+        <label for="email">Email</label>
+        <input type="email" th:field="*{email}" id="email" required/>
+
+        <label for="age">Age</label>
+        <input type="number" th:field="*{age}" id="age" required/>
+
+        <label for="cpf">CPF</label>
+        <input type="text" th:field="*{cpf}" id="cpf" required/>
+
+        <label for="address">Address</label>
+        <input type="text" th:field="*{address}" id="address" required/>
+
+        <label for="password">Password</label>
+        <input type="password" th:field="*{password}" id="password" required/>
+
+        <div class="form-buttons">
+            <button type="submit" class="save-btn">Save</button>
+            <a th:href="@{/userProfile}" class="cancel-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
