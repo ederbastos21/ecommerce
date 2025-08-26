@@ -939,47 +939,5 @@ a{
             color: #adb5bd;
             font-size: 14px;
         }
-
-
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hero-btn {
-        width: 100%;
-        max-width: 250px;
-        text-align: center;
-    }
-
-    .categories-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .offers-container {
-        grid-template-columns: 1fr;
-    }
-
-    .benefits-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .newsletter-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-
-    .newsletter-form {
-        flex-direction: column;
-    }
-
-    .newsletter-input {
-        min-width: auto;
-    }
 }
 
