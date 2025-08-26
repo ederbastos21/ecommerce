@@ -3,6 +3,7 @@ package br.unicesumar.ecommerce.controller;
 import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class UserController {
             return "redirect:/"; // volta para home já logado
         }
 
-        model.addAttribute("error", "Email ou senha inválidos");
+        model.addAttribute("loginNotFound", "Email ou senha inválidos");
         return "login";
     }
 
