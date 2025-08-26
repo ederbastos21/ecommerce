@@ -76,9 +76,10 @@
                     ← Continuar comprando
                 </a>
 
-                <a href="/checkout" class="buy-btn">
-                    🛒 Finalizar Compra
-                </a>
+                <form th:action="@{/buy}" method="post" onsubmit="return showThanks()" style="display:inline; ">
+                    <button type="submit" class="buy-btn">🛒 Finalizar Compra</button>
+                </form>
+
             </div>
         </div>
 
@@ -97,5 +98,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    function showThanks() {
+        alert("Obrigado pela compra! Tenha um ótimo dia.");
+        return true;
+    }
+</script>
+
 </body>
 </html>

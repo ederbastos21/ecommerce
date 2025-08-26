@@ -100,4 +100,9 @@ public class UserController {
         return "redirect:/";
     }
 
+    @PostMapping("/buy")
+    public String buy(HttpSession session){
+        session.removeAttribute("cart");
+        return "redirect:/cart";
+    }
 }
