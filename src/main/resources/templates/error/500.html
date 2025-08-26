@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 - Erro interno do servidor</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .error-container {
+        background-color: #fff;
+        padding: 50px 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .error-icon {
+        width: 80px;
+        height: 80px;
+        background-color: #dc3545;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 40px;
+    }
+
+    .error-title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .error-subtitle {
+        font-size: 18px;
+        color: #495057;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+
+    .error-info {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #dc3545;
+        text-align: left;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .info-label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .info-value {
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .action-btn {
+        padding: 12px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #c82333;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #545b62;
+    }
+
+    .help-text {
+        font-size: 14px;
+        color: #6c757d;
+        margin-top: 20px;
+    }
+
+    .help-link {
+        color: #dc3545;
+        text-decoration: none;
+    }
+
+    .help-link:hover {
+        text-decoration: underline;
+    }
+
+    .refresh-counter {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+        font-size: 14px;
+        color: #856404;
+    }
+
+    .counter-text {
+        margin-bottom: 10px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background-color: #ffc107;
+        border-radius: 4px;
+        transition: width 1s linear;
+    }
+
+    @media (max-width: 768px) {
+        .error-container {
+            padding: 30px 20px;
+        }
+
+        .error-title {
+            font-size: 24px;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            width: 100%;
+        }
+    }
+  </style>
+</head>
+<body>
+<div class="error-container">
+  <div class="error-icon">⚡</div>
+
+  <h1 class="error-title">Erro interno do servidor</h1>
+
+  <p class="error-subtitle">
+    Oops! Algo deu errado no nosso servidor. Nossa equipe de desenvolvimento já foi notificada e está trabalhando para resolver o problema.
+  </p>
+
+  <div class="error-info">
+    <div class="info-item">
+      <span class="info-label">Erro:</span>
+      <span class="info-value">500 - Erro Interno do Servidor</span>
+    </div>
+  </div>
+
+  <div class="refresh-counter" id="refresh-counter" style="display: none;">
+    <div class="counter-text">Tentativa automática em <span id="countdown">30</span> segundos...</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+    <div class="error-actions">
+      <a href="/" class="action-btn btn-secondary">
+        Página Inicial
+      </a>
+    </div>
+  <div class="help-text">
+    Entre em contato conosco caso o problema persista
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ops! Algo deu errado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .error-container {
+            background-color: #fff;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #ffc107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 40px;
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .error-subtitle {
+            font-size: 18px;
+            color: #495057;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .error-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #007bff;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .help-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+
+        .help-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 30px 20px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-icon">⚠️</div>
+
+    <h1 class="error-title">Ops! Algo não saiu como esperado</h1>
+
+    <p class="error-subtitle">
+        Encontramos um problema temporário. Nossa equipe já foi notificada e está trabalhando na solução.
+    </p>
+
+    <div class="error-info">
+        <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span class="info-value">Serviço Temporariamente Indisponível</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Horário:</span>
+            <span class="info-value" id="error-time"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Código:</span>
+            <span class="info-value">#ERR-500</span>
+        </div>
+    </div>
+
+    <div class="error-actions">
+        <button class="action-btn btn-primary" onclick="location.reload()">
+            Tentar Novamente
+        </button>
+        <a href="/" class="action-btn btn-secondary">
+            Página Inicial
+        </a>
+    </div>
+
+    <div class="help-text">
+        Se o problema persistir, entre em contato conosco através do
+        <a href="/contato" class="help-link">suporte</a> ou tente novamente em alguns minutos.
+    </div>
+</div>
+
+<script>
+    // Atualizar horário
+    document.getElementById('error-time').textContent = new Date().toLocaleString('pt-BR');
+</script>
+</body>
+</html>
