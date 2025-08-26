@@ -33,7 +33,7 @@
                         | <a href="/admin" class="auth-link">Área Adminstrador</a>
                     </span>
                     <span th:if="${session.loggedUser.role != NULL}">
-                        | <a href="/userProfile" class="auth-link">Meu Perfil</a>
+                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
                     </span>
                 </div>
                 <div th:unless="${session.loggedUser != null}">

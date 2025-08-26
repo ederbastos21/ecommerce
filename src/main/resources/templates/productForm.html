@@ -19,16 +19,16 @@
         <input type="number" th:field="*{price}" step="0.01" id="price" required/>
 
         <label for="discount">Discount</label>
-        <input type="number" th:field="*{discount}" id="discount"/>
+        <input type="number" th:field="*{discount}" id="discount" required/>
 
         <label for="shippingValue">Shipping Value</label>
-        <input type="number" th:field="*{shippingValue}" step="0.01" id="shippingValue"/>
+        <input type="number" th:field="*{shippingValue}" step="0.01" id="shippingValue" required/>
 
         <label for="availableQuantity">Available Quantity</label>
-        <input type="number" th:field="*{availableQuantity}" id="availableQuantity"/>
+        <input type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
 
         <label for="ammountSold">Sold Quantity</label>
-        <input type="number" th:field="*{ammountSold}" id="ammountSold"/>
+        <input type="number" th:field="*{ammountSold}" id="ammountSold" required/>
 
         <label for="description">Description</label>
         <textarea th:field="*{description}" id="description"></textarea>
