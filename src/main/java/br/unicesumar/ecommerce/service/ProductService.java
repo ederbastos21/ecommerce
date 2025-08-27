@@ -25,6 +25,11 @@ public class ProductService {
     public Product save(Product product) {
         return productRepository.save(product);
     }
+
+    public List<Product> getFirst12Products() {
+        return productRepository.findTop12ByOrderByAmmountSoldDesc();
+    }
+
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow();
     }

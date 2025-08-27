@@ -24,8 +24,7 @@ public class IndexPageController {
             model.addAttribute("role", loggedUser.getRole());
         }
 
-        model.addAttribute("products", productService.getAll());
-
+        model.addAttribute("products", productService.getFirst12Products());
         return "index";
     }
 
