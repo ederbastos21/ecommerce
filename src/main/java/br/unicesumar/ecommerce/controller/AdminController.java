@@ -9,9 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HexFormat;
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -24,6 +21,7 @@ public class AdminController {
         this.productService = productService;
     }
 
+    //admin home loader
     @GetMapping
     public String adminHome(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -36,6 +34,9 @@ public class AdminController {
         return "admin";
     }
 
+    //======================== USERS =========================
+
+    //show user table
     @GetMapping("/users")
     public String listUsers(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -47,6 +48,7 @@ public class AdminController {
         return "admin";
     }
 
+    //show form to create a new user
     @GetMapping("/users/new")
     public String newUserForm(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -58,6 +60,7 @@ public class AdminController {
         return "userForm";
     }
 
+    //show form to edit an existing user's info
     @GetMapping("/users/edit/{id}")
     public String editUserForm(@PathVariable Long id, Model model, HttpSession session) {
         try {
@@ -74,6 +77,7 @@ public class AdminController {
         }
     }
 
+    //saves the user in the db
     @PostMapping("/users/save")
     public String saveUser(@ModelAttribute User user, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -84,6 +88,7 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    //removes a user from the db
     @PostMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable Long id, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -94,6 +99,9 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    //======================== PRODUCTS =========================
+
+    //show products table
     @GetMapping("/products")
     public String listProducts(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -105,6 +113,7 @@ public class AdminController {
         return "admin";
     }
 
+    //show form to create a new product
     @GetMapping("/products/new")
     public String newProductForm(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -116,6 +125,7 @@ public class AdminController {
         return "productForm";
     }
 
+    //show form to edit an existing product
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model, HttpSession session) {
         try {
@@ -132,6 +142,7 @@ public class AdminController {
         }
     }
 
+    //saves the product in the db
     @PostMapping("/products/save")
     public String saveProduct(@ModelAttribute Product product, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -142,6 +153,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    //removes a product from the db
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");

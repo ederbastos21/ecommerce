@@ -17,6 +17,24 @@ public class UserController {
         this.userService = userService;
     }
 
+    //register
+    @GetMapping("/register")
+    public String showRegisterForm() {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String processRegisterForm(@ModelAttribute User user, Model model) {
+        user.setRole("USER");
+        if (userService.findByEmail(user.getEmail()) != null ){
+            model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
+            return "register";
+        }
+        userService.saveUser(user);
+        return "redirect:/login";
+    }
+
+    //login
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";
@@ -35,28 +53,22 @@ public class UserController {
         return "login";
     }
 
+    //logout
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
 
-    @GetMapping("/register")
-    public String showRegisterForm() {
-        return "register";
+    //show user profile get
+    @GetMapping("/userProfile")
+    public String showUserProfile(HttpSession session, Model model) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        model.addAttribute("loggedUser",loggedUser);
+        return "userProfile";
     }
 
-    @PostMapping("/register")
-    public String processRegisterForm(@ModelAttribute User user, Model model) {
-        user.setRole("USER");
-        if (userService.findByEmail(user.getEmail()) != null ){
-            model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
-            return "register";
-        }
-        userService.saveUser(user);
-        return "redirect:/login";
-    }
-
+    //account management functions
     @GetMapping("/edit/{id}")
     public String editUserForm(@PathVariable Long id, Model model, HttpSession session) {
         try {
@@ -104,6 +116,7 @@ public class UserController {
         return "redirect:/";
     }
 
+    //cart functions
     @PostMapping("/buy")
     public String buy(HttpSession session){
         session.removeAttribute("cart");
