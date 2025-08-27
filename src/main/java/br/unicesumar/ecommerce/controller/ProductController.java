@@ -1,6 +1,7 @@
 package br.unicesumar.ecommerce.controller;
 
 import br.unicesumar.ecommerce.model.Product;
+import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,13 @@ public class ProductController {
     }
 
     @PostMapping("/addToCart/{id}")
-    public String addToCart(@PathVariable Long id, HttpSession session){
+    public String addToCart(@PathVariable Long id, HttpSession session, Model model){
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            model.addAttribute("userNotLoggedError", "Favor logar para acessar o carrinho");
+            return"/login";
+        }
+
         Product product = productService.findById(id);
         List<Product> cart = (List<Product>) session.getAttribute("cart");
 
