@@ -89,7 +89,7 @@
         <h2 class="section-title">Ações da Conta</h2>
             <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
                 <div class="button-center">
-                    <button class="action-btn danger" type="submit">Excluir Conta</button>
+                    <button class="action-btn danger" type="submit" onclick="return confirm('Tem certeza que quer excluir sua conta?')">Excluir Conta</button>
                 </div>
             </form>
     </div>
