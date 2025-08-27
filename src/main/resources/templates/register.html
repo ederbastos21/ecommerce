@@ -16,6 +16,7 @@
             </div>
         </a>
         <h2 class="auth-title">Criar sua conta</h2>
+        <p th:text="${emailAlreadyRegisteredError}" style="color: red;"></p>
     </div>
 
     <form class="auth-form" action="/register" method="post">

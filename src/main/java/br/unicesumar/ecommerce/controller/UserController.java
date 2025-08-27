@@ -49,8 +49,11 @@ public class UserController {
     @PostMapping("/register")
     public String processRegisterForm(@ModelAttribute User user, Model model) {
         user.setRole("USER");
-        User processedUser = userService.saveUser(user);
-        model.addAttribute("user", processedUser);
+        if (userService.findByEmail(user.getEmail()) != null ){
+            model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
+            return "register";
+        }
+        userService.saveUser(user);
         return "redirect:/login";
     }
 
