@@ -72,6 +72,7 @@
                     <div class="product-image-placeholder">Product Image</div>
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price" th:text="'$' + ${product.price}"></div>
+                    <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
                 </div>
             </a>
         </div>
