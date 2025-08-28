@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameContainingIgnoreCase(String name, Sort sort);
-    List<Product> findByStockGreaterThan(int stock);
     Optional<Product> findById(Long id);
     List<Product> findTop12ByOrderByAmmountSoldDesc();
 }
