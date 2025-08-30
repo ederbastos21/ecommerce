@@ -117,9 +117,9 @@ public class UserController {
     }
 
     //cart functions
-    @PostMapping("/buy")
+/*    @PostMapping("/buy")
     public String buy(HttpSession session){
         session.removeAttribute("cart");
         return "redirect:/cart";
-    }
+    }*/
 }

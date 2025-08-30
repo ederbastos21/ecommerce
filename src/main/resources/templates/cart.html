@@ -51,39 +51,57 @@
     <h1 class="page-title">Meu Carrinho</h1>
 
     <div class="cart-section">
-        <div th:if="${#lists.isEmpty(cart)}" class="empty-cart">
+        <div th:if="${#lists.isEmpty(cartItems)}" class="empty-cart">
             <p>Seu carrinho está vazio.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(cart)}">
+        <div th:unless="${#lists.isEmpty(cartItems)}">
             <table class="cart-table">
                 <thead>
                 <tr>
                     <th>Produto</th>
-                    <th>Preço</th>
+                    <th>Preço Unit.</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="p : ${cart}">
-                    <td class="product-name" th:text="${p.name}">Nome</td>
-                    <td class="product-price" th:text="${p.price}">0.00</td>
+                <tr th:each="item : ${cartItems}">
+                    <td class="product-name" th:text="${item.product.name}">Nome</td>
+                    <td class="product-price" th:text="${'R$ ' + #numbers.formatDecimal(item.product.price, 1, 2)}">0.00</td>
+                    <td>
+                        <form th:action="@{/updateCart/{id}(id=${item.product.id})}" method="post" style="display: inline;">
+                            <input type="number" name="quantity" th:value="${item.quantity}" min="1" max="999" style="width: 60px;">
+                            <button type="submit" class="update-btn">Atualizar</button>
+                        </form>
+                    </td>
+                    <td class="subtotal" th:text="${'R$ ' + #numbers.formatDecimal(item.subtotal, 1, 2)}">0.00</td>
+                    <td>
+                        <form th:action="@{/removeFromCart/{id}(id=${item.product.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="remove-btn" onclick="return confirm('Remover item?')">Remover</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>
+
+            <div class="cart-total">
+                <h3>Total: <span th:text="${'R$ ' + #numbers.formatDecimal(totalPrice, 1, 2)}">R$ 0,00</span></h3>
+            </div>
 
             <div class="cart-actions">
                 <a href="/products?search=" class="continue-btn">
                     ← Continuar comprando
                 </a>
 
-                <form th:action="@{/buy}" method="post" onsubmit="return showThanks()" style="display:inline; ">
+                <form th:action="@{/buy}" method="post" style="display:inline;">
                     <button type="submit" class="buy-btn">🛒 Finalizar Compra</button>
                 </form>
-
             </div>
         </div>
 
-        <div th:if="${#lists.isEmpty(cart)}" class="cart-actions" style="justify-content: center;">
+        <div th:if="${#lists.isEmpty(cartItems)}" class="cart-actions" style="justify-content: center;">
             <a href="/products" class="continue-btn">
                 ← Voltar às compras
             </a>
@@ -98,13 +116,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function showThanks() {
-        alert("Obrigado pela compra! Tenha um ótimo dia.");
-        return true;
-    }
-</script>
-
 </body>
 </html>

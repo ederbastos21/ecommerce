@@ -83,15 +83,15 @@
                 <span th:text="${product.ammountSold} + ' unidades'">25 unidades</span>
             </div>
 
-            <div class="quantity-selector">
-                <label for="quantity">Quantidade:</label>
-                <div class="quantity-controls">
-                    <button class="quantity-btn decrease" onclick="decreaseQuantity()">-</button>
-                    <input type="number" id="quantity" class="quantity-input" value="1" min="1" th:max="${product.availableQuantity}">
-                    <button class="quantity-btn increase" onclick="increaseQuantity()">+</button>
-                </div>
-            </div>
             <form th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
+                <div class="quantity-selector">
+                    <label for="quantity">Quantidade:</label>
+                    <div class="quantity-controls">
+                        <button type="button" class="quantity-btn decrease" onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" th:max="${product.availableQuantity}">
+                        <button type="button" class="quantity-btn increase" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
                 <button type="submit" class="add-to-cart-btn-main">Adicionar ao Carrinho</button>
             </form>
 
@@ -134,12 +134,6 @@
         if (current > 1) {
             input.value = current - 1;
         }
-    }
-
-    function addToCart(productId) {
-        const quantity = document.getElementById('quantity').value;
-        console.log('Adding to cart:', productId, 'quantity:', quantity);
-        // Implementar lógica de adicionar ao carrinho
     }
 </script>
 

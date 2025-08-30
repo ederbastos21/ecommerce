@@ -33,8 +33,19 @@ public class ProductService {
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow();
     }
+
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
-}
 
+    public void updateStock(Long productId, int quantityPurchased) {
+        Product product = findById(productId);
+        if (product.getAvailableQuantity() >= quantityPurchased) {
+            product.setAvailableQuantity(product.getAvailableQuantity() - quantityPurchased);
+            product.setAmmountSold(product.getAmmountSold() + quantityPurchased);
+            productRepository.save(product);
+        } else {
+            throw new IllegalArgumentException("Estoque insuficiente para o produto: " + product.getName());
+        }
+    }
+}
