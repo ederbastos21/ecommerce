@@ -92,6 +92,13 @@ public class ProductController {
         }
 
         Product product = productService.findById(id);
+
+        //---block---
+        if (product.getAvailableQuantity() <= 0) {
+            model.addAttribute("product", product);
+            model.addAttribute("outOfStockError", "Produto indisponível para compra.");
+            return "productDetail";
+        }
         List<Product> cart = (List<Product>) session.getAttribute("cart");
 
         if (cart == null){

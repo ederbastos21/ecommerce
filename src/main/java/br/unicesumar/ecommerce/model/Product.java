@@ -1,6 +1,8 @@
 package br.unicesumar.ecommerce.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Min;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
