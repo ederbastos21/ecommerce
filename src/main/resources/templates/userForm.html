@@ -23,14 +23,19 @@
         <label for="age">Age</label>
         <input type="number" th:field="*{age}" id="age" required/>
 
+        <!-- CPF: only for new user; blocked when editing user -->
         <label for="cpf">CPF</label>
-        <input type="text" th:field="*{cpf}" id="cpf" required/>
+        <input type="text" th:field="*{cpf}" id="cpf" required
+               th:attr="readonly=${user != null and user.id != null}"/>
 
         <label for="address">Address</label>
         <input type="text" th:field="*{address}" id="address" required/>
 
-        <label for="password">Password</label>
-        <input type="password" th:field="*{password}" id="password" required/>
+        <!-- Password: only for new user -->
+        <div th:if="${user == null or user.id == null}">
+            <label for="password">Password</label>
+            <input type="password" th:field="*{password}" id="password" required/>
+        </div>
 
         <label for="role">Role</label>
         <select th:field="*{role}" id="role">
