@@ -68,7 +68,7 @@
                             </a>
 
                             <form th:action="@{/admin/users/delete/{id}(id=${user.id})}" method="post" style="display:inline">
-                                <button type="submit" class="delete-btn">Deletar</button>
+                                <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza que quer excluir sua conta?')">Deletar</button>
                             </form>
                         </td>
                     </tr>
