@@ -1219,4 +1219,24 @@ body:has(.auth-container) {
         padding: 10px 15px;
         font-size: 14px;
     }
+
+    .badge-out {
+      background: #e74c3c;
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .out-of-stock-msg {
+      color: #e74c3c;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .add-to-cart-btn-main.disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
 }

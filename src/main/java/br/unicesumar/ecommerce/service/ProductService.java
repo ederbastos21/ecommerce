@@ -27,7 +27,11 @@ public class ProductService {
     }
 
     public List<Product> getFirst12Products() {
-        return productRepository.findTop12ByAvailableQuantityGreaterThanEqualOrderByAmmountSoldDesc(1);
+        return productRepository.findTop12ByOrderByAmmountSoldDesc();
+    }
+
+    public List<Product> getOnlyAvailable() {
+        return productRepository.findByAvailableQuantityGreaterThan(0);
     }
 
     public Product findById(Long id) {
