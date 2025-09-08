@@ -76,6 +76,7 @@
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price" th:text="'$' + ${product.price}"></div>
                     <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
+                    <div th:if="${product.availableQuantity == 0}" class="badge-out">Indisponível</div>
                 </div>
             </a>
         </div>
