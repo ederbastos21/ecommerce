@@ -79,15 +79,6 @@
             </div>
 
             <div th:if="${product.availableQuantity == 0}" class="out-of-stock-msg">Produto indisponível no momento.</div>
-            <form th:if="${product.AvailableQuantity > 0}"
-                  th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
-                <button type="submit" class="add-to-cart-btn-main">Adicionar ao Carrinho</button>
-            </form>
-
-            <button th:if="${product.AvailableQuantity == 0}"
-                    class="add-to-cart-btn-main disabled" disabled>
-                Indisponível
-            </button>
 
             <div class="product-sold">
                 <span class="sold-label">Vendidos:</span>
@@ -98,13 +89,28 @@
                 <div class="quantity-selector">
                     <label for="quantity">Quantidade:</label>
                     <div class="quantity-controls">
-                        <button type="button" class="quantity-btn decrease" onclick="decreaseQuantity()">-</button>
-                        <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" th:max="${product.availableQuantity}">
-                        <button type="button" class="quantity-btn increase" onclick="increaseQuantity()">+</button>
+                        <button type="button" class="quantity-btn decrease"
+                                onclick="decreaseQuantity()"
+                                th:disabled="${product.availableQuantity == 0}">-</button>
+
+                        <input type="number" id="quantity" name="quantity" class="quantity-input"
+                               th:value="${product.availableQuantity > 0 ? 1 : 0}"
+                               min="1" th:attr="max=${product.availableQuantity}"
+                               th:disabled="${product.availableQuantity == 0}" />
+
+                        <button type="button" class="quantity-btn increase"
+                                onclick="increaseQuantity()"
+                                th:disabled="${product.availableQuantity == 0}">+</button>
                     </div>
                 </div>
-                <button type="submit" class="add-to-cart-btn-main">Adicionar ao Carrinho</button>
+
+                <button type="submit" class="add-to-cart-btn-main"
+                        th:disabled="${product.availableQuantity == 0}">
+                    <span th:if="${product.availableQuantity > 0}">Adicionar ao Carrinho</span>
+                    <span th:if="${product.availableQuantity == 0}">Indisponível</span>
+                </button>
             </form>
+
 
             <div class="product-description">
                 <h3>Descrição do Produto</h3>
