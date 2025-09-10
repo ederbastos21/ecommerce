@@ -68,12 +68,12 @@
                 </div>
             </div>
 
-            <div class="product-shipping">
+            <div th:if="${product.availableQuantity > 0}" class="product-shipping">
                 <span class="shipping-label">Frete:</span>
                 <span class="shipping-value" th:text="'R$ ' + ${product.shippingValue}">R$ 15,00</span>
             </div>
 
-            <div class="product-availability">
+            <div th:if="${product.availableQuantity > 0}" class="product-availability">
                 <span class="availability-label">Disponível:</span>
                 <span class="availability-quantity" th:text="${product.availableQuantity} + ' unidades'">50 unidades</span>
             </div>
