@@ -99,4 +99,8 @@ public class Product {
     public void setAmmountSold(int ammountSold){
         this.ammountSold = ammountSold;
     }
+
+    public boolean isLowStock() {
+        return availableQuantity > 0 && availableQuantity <= 5;
+    }
 }

@@ -1239,4 +1239,17 @@ body:has(.auth-container) {
       background: #ccc;
       cursor: not-allowed;
     }
+
+    .low-stock {
+        color: #e6b800;
+        font-weight: bold;
+    }
+
+    .low-stock-detail {
+        color: #e6b800;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+
 }

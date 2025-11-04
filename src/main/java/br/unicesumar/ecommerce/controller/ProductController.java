@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -99,6 +100,8 @@ public class ProductController {
             }
         }
 
+        int totalItems = cart.values().stream().mapToInt(Integer::intValue).sum();
+        model.addAttribute("cartItemCount", totalItems);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
         return "cart";
@@ -108,24 +111,26 @@ public class ProductController {
     @PostMapping("/addToCart/{id}")
     public String addToCart(@PathVariable Long id,
                             @RequestParam(defaultValue = "1") int quantity,
-                            HttpSession session, Model model){
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
-            model.addAttribute("userNotLoggedError", "Favor logar para acessar o carrinho");
-            return "/login";
+            redirectAttributes.addFlashAttribute("userNotLoggedError", "Favor logar para acessar o carrinho");
+            return "redirect:/login";
         }
 
-        if (quantity <= 0) {
-            quantity = 1;
-        }
+        if (quantity <= 0) quantity = 1;
 
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null){
-            cart = new HashMap<>();
-        }
+        if (cart == null) cart = new HashMap<>();
 
         cart.merge(id, quantity, Integer::sum);
         session.setAttribute("cart", cart);
+
+        int totalItems = cart.values().stream().mapToInt(Integer::intValue).sum();
+        session.setAttribute("cartItemCount", totalItems);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Produto adicionado ao carrinho com sucesso!");
 
         return "redirect:/productDetail/{id}";
     }
