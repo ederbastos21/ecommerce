@@ -1140,6 +1140,62 @@ body:has(.auth-container) {
     font-size: 14px;
 }
 
+/* ====== BANNER ANIMADO ====== */
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}
+
+.banner-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: slideAnimation 12s infinite;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.banner-slide:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.banner-slide:nth-child(2) {
+  animation-delay: 4s;
+}
+
+.banner-slide:nth-child(3) {
+  animation-delay: 8s;
+}
+
+@keyframes slideAnimation {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  30% { opacity: 1; }
+  35% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -1260,52 +1316,6 @@ body:has(.auth-container) {
         border-radius: 5px;
         width: 80%;
         font-weight: bold;
-    }
-
-    /* ====== BANNER ANIMADO ====== */
-    .banner-container {
-        position: relative;
-        width: 100%;
-        max-height: 400px;
-        overflow: hidden;
-    }
-
-    .banner-slide {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 400px;
-        text-align: center;
-    }
-
-    .banner-slide img {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
-        filter: brightness(0.7);
-    }
-
-    .banner-text {
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: #fff;
-        font-size: 28px;
-        font-weight: 600;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 10px 20px;
-        border-radius: 10px;
-    }
-
-    /* Efeito de transição suave */
-    .fade {
-        animation: fadeEffect 1.5s ease-in-out;
-    }
-
-    @keyframes fadeEffect {
-        from { opacity: 0.3; }
-        to { opacity: 1; }
     }
 
 }
