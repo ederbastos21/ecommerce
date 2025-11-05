@@ -20,6 +20,13 @@ public class User {
     private String password;
     private String role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Address> addresses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<PaymentMethod> paymentMethods;
+
+
     public Long getId() {
         return id;
     }
@@ -82,5 +89,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public java.util.List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(java.util.List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public java.util.List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
+
+    public void setPaymentMethods(java.util.List<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
     }
 }
