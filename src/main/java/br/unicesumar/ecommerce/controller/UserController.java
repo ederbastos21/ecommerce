@@ -60,13 +60,13 @@ public class UserController {
         return "redirect:/";
     }
 
-    //show user profile get
-    @GetMapping("/userProfile")
-    public String showUserProfile(HttpSession session, Model model) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        model.addAttribute("loggedUser",loggedUser);
-        return "userProfile";
-    }
+//    //show user profile get
+//    @GetMapping("/userProfile")
+//    public String showUserProfile(HttpSession session, Model model) {
+//        User loggedUser = (User) session.getAttribute("loggedUser");
+//        model.addAttribute("loggedUser",loggedUser);
+//        return "userProfile";
+//    }
 
     //account management functions
     @GetMapping("/edit/{id}")
