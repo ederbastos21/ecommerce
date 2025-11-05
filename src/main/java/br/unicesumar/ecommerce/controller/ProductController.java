@@ -66,9 +66,11 @@ public class ProductController {
 
     //shows product detail individual page
     @GetMapping("/productDetail/{id}")
-    public String ShowProductDetail(Model model, @PathVariable Long id){
+    public String ShowProductDetail(Model model,
+                                    @PathVariable Long id,
+                                    @ModelAttribute("successMessage") String successMessage) {
         Product product = productService.findById(id);
-        model.addAttribute("product",product);
+        model.addAttribute("product", product);
         return "productDetail";
     }
 
@@ -130,6 +132,7 @@ public class ProductController {
         int totalItems = cart.values().stream().mapToInt(Integer::intValue).sum();
         session.setAttribute("cartItemCount", totalItems);
 
+        // Mensagem de sucesso
         redirectAttributes.addFlashAttribute("successMessage", "Produto adicionado ao carrinho com sucesso!");
 
         return "redirect:/productDetail/{id}";
