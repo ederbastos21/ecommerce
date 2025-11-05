@@ -50,6 +50,13 @@
 </header>
 
 <main class="main-content">
+
+    <div th:if="${successMessage}"
+         class="alert-success"
+         style="text-align:center; margin-top:20px;">
+        <span th:text="${successMessage}"></span>
+    </div>
+
     <div class="product-detail-container">
         <div class="product-images">
             <div class="product-image-main">
@@ -82,7 +89,7 @@
                 <span class="availability-quantity" th:text="${product.availableQuantity} + ' unidades'">50 unidades</span>
             </div>
 
-            <button th:if="${product.AvailableQuantity == 0}"
+            <button th:if="${product.availableQuantity == 0}"
                     class="add-to-cart-btn-main disabled" disabled>
                 Indisponível
             </button>
