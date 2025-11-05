@@ -35,7 +35,7 @@ docker ps
 
 - Acesse o MySQL via terminal:
 ```
-docker exec -it mysql-ecommerce mysql -uroot -p1234
+docker exec -it ecommerce-db-1 mysql -uroot -p1234
 ```
 
 (Senha padrão: 1234)
