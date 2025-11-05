@@ -43,7 +43,9 @@
             </div>
             <div class="cart-container">
                 <a href="/cart" class="cart-icon">🛒</a>
-                <span class="cart-count">0</span>
+                <span class="cart-count"
+                      th:text="${session.cartItemCount != null ? session.cartItemCount : 0}">
+                </span>
             </div>
         </div>
     </div>
