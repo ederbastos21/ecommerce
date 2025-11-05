@@ -8,6 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import br.unicesumar.ecommerce.service.PurchaseService;
+import br.unicesumar.ecommerce.model.Purchase;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class UserController {
 
@@ -122,4 +131,55 @@ public class UserController {
         session.removeAttribute("cart");
         return "redirect:/cart";
     }*/
+
+    @Autowired
+    private PurchaseService purchaseService;
+
+/*    @PostMapping("/purchase")
+    public String createPurchase(HttpSession session, RedirectAttributes redirectAttributes) {
+        System.out.println("=== Purchase endpoint called ===");
+        
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+    
+        if (cart == null || cart.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Carrinho vazio!");
+            return "redirect:/cart";
+        }
+
+        try {
+            Purchase purchase = purchaseService.createPurchase(user, cart);
+            System.out.println("Purchase created successfully with ID: " + purchase.getId());
+            session.removeAttribute("cart"); // Limpa o carrinho após a compra
+            redirectAttributes.addFlashAttribute("success", "Compra realizada com sucesso! Pedido #" + purchase.getId());
+            return "redirect:/purchaseHistory";
+        } catch (Exception e) {
+            System.err.println("Error creating purchase: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Erro ao processar compra: " + e.getMessage());
+            return "redirect:/cart";
+        }
+    }*/
+
+    @GetMapping("/purchaseHistory")
+    public String purchaseHistory(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<Purchase> purchases = purchaseService.getUserPurchasesById(user.getId());
+        System.out.println("User ID: " + user.getId());
+        System.out.println("Number of purchases found: " + purchases.size());
+        
+        model.addAttribute("purchases", purchases);
+        model.addAttribute("user", user);
+    
+        return "purchaseHistory";
+    }
 }

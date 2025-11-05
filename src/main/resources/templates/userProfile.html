@@ -87,6 +87,11 @@
 
     <div class="account-section">
         <h2 class="section-title">Ações da Conta</h2>
+            <div class="button-center">
+                <a th:href="@{/purchaseHistory}" style="text-decoration: none;">
+                    <button class="action-btn" type="button" style="background-color: #3498db; margin-bottom: 10px;">Ver Histórico de Compras</button>
+                </a>
+            </div>
             <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
                 <div class="button-center">
                     <button class="action-btn danger" type="submit" onclick="return confirm('Tem certeza que quer excluir sua conta?')">Excluir Conta</button>
