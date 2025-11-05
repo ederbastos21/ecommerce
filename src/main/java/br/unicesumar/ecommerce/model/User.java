@@ -1,7 +1,7 @@
 package br.unicesumar.ecommerce.model;
 
 import jakarta.persistence.*;
-
+//test
 @Entity
 @Table(name = "users")
 public class User {
