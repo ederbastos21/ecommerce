@@ -1,0 +1,175 @@
+/* Estilos simplificados para a página de perfil */
+
+.main-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.account-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: left;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Grid de informações */
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-left: 0;
+}
+
+/* Botões */
+.button-center {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit-all-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-all-btn:hover {
+    background-color: #218838;
+}
+
+/* Formulários inline */
+.form-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-inline input,
+.form-inline select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-inline input:focus,
+.form-inline select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Botão de ação */
+.action-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #007bff;
+    color: white;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+.action-btn.danger {
+    background-color: #dc3545;
+}
+
+.action-btn.danger:hover {
+    background-color: #c82333;
+}
+
+/* Lista de itens (endereços/pagamentos) */
+.info-grid .info-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.info-grid .info-item .info-label {
+    margin-bottom: 0;
+    min-width: auto;
+}
+
+.info-grid .info-item .info-value {
+    flex: 1;
+    padding: 0;
+    background-color: transparent;
+    margin: 0 15px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 0 15px;
+    }
+
+    .account-section {
+        padding: 20px;
+    }
+
+    .info-grid .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-grid .info-item .info-value {
+        margin: 5px 0 0 0;
+        width: 100%;
+    }
+}
