@@ -1,15 +1,16 @@
 package br.unicesumar.ecommerce.model;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,19 +20,30 @@ public class Product {
     private int discount;
     private BigDecimal shippingValue;
     private String description;
+    private String category;
     private int availableQuantity;
     private int ammountSold;
 
-    public Product() {
-    }
+    public Product() {}
 
-    public Product(Long id, String name, BigDecimal price, int discount, BigDecimal shippingValue, String description, String category, int availableQuantity, int ammountSold) {
+    public Product(
+        Long id,
+        String name,
+        BigDecimal price,
+        int discount,
+        BigDecimal shippingValue,
+        String description,
+        String category,
+        int availableQuantity,
+        int ammountSold
+    ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.discount = discount;
         this.shippingValue = shippingValue;
         this.description = description;
+        this.category = category;
         this.availableQuantity = availableQuantity;
         this.ammountSold = ammountSold;
     }
@@ -92,11 +104,19 @@ public class Product {
         this.availableQuantity = availableQuantity;
     }
 
-    public int getAmmountSold(){
+    public int getAmmountSold() {
         return ammountSold;
     }
 
-    public void setAmmountSold(int ammountSold){
+    public void setAmmountSold(int ammountSold) {
         this.ammountSold = ammountSold;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -1,148 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product</title>
-    <link rel="stylesheet" th:href="@{/css/index.css}" />
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Product</title>
+        <link rel="stylesheet" th:href="@{/css/index.css}" />
+    </head>
+    <body>
+        <header class="header-container">
+            <div class="header-content">
+                <a href="/">
+                    <div class="store-logo">
+                        <div class="store-logo-icon">U</div>
+                        <span class="store-name">UniWare</span>
+                    </div>
+                </a>
 
-<header class="header-container">
-    <div class="header-content">
-        <a href="/">
-            <div class="store-logo">
-                <div class="store-logo-icon">U</div>
-                <span class="store-name">UniWare</span>
-            </div>
-        </a>
-
-        <div class="search-container">
-            <form action="/products" method="get">
-                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
-                <button class="search-button" type="submit">🔍</button>
-            </form>
-        </div>
-
-        <div class="header-actions">
-            <div class="auth-links">
-                <div th:if="${session.loggedUser != null}">
-                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
-                    <a href="/logout" class="auth-link">Logout</a>
-                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
-                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
-                    </span>
-                    <span th:if="${session.loggedUser.role != NULL}">
-                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
-                    </span>
+                <div class="search-container">
+                    <form action="/products" method="get">
+                        <input
+                            type="text"
+                            class="search-input"
+                            name="search"
+                            placeholder="Procure por produtos..."
+                        />
+                        <button class="search-button" type="submit">🔍</button>
+                    </form>
                 </div>
-                <div th:unless="${session.loggedUser != null}">
-                    <a href="/login" class="auth-link">Login</a>
-                    <a href="/register" class="auth-link register-link">Registrar</a>
-                </div>
-            </div>
-            <div class="cart-container">
-                <a href="/cart" class="cart-icon">🛒</a>
-                <span class="cart-count">0</span>
-            </div>
-        </div>
-    </div>
-</header>
 
-<main class="main-content">
-    <div class="product-detail-container">
-        <div class="product-images">
-            <div class="product-image-main">
-                <div class="product-image-placeholder">Product Image</div>
-            </div>
-        </div>
-
-        <div class="product-info">
-            <h1 class="product-title" th:text="${product.name}">Product Name</h1>
-
-            <div class="product-pricing">
-                <div class="product-price" th:text="'R$ ' + ${product.price}">R$ 99,99</div>
-                <div th:if="${product.discount > 0}" class="product-discount">
-                    <span class="discount-label">Desconto:</span>
-                    <span th:text="${product.discount} + '%'">10%</span>
-                </div>
-            </div>
-
-            <div th:if="${product.availableQuantity > 0}" class="product-shipping">
-                <span class="shipping-label">Frete:</span>
-                <span class="shipping-value" th:text="'R$ ' + ${product.shippingValue}">R$ 15,00</span>
-            </div>
-
-            <div th:if="${product.availableQuantity > 0}" class="product-availability">
-                <span class="availability-label">Disponível:</span>
-                <span class="availability-quantity" th:text="${product.availableQuantity} + ' unidades'">50 unidades</span>
-            </div>
-
-            <button th:if="${product.AvailableQuantity == 0}"
-                    class="add-to-cart-btn-main disabled" disabled>
-                Indisponível
-            </button>
-
-            <div class="product-sold">
-                <span class="sold-label">Vendidos:</span>
-                <span th:text="${product.ammountSold} + ' unidades'">25 unidades</span>
-            </div>
-
-            <form th:if="${product.availableQuantity > 0}"
-                  th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
-                <div class="quantity-selector">
-                    <label for="quantity">Quantidade:</label>
-                    <div class="quantity-controls">
-                        <button type="button" class="quantity-btn decrease" onclick="decreaseQuantity()">-</button>
-                        <input type="number" id="quantity" name="quantity" class="quantity-input"
-                               value="1" min="1" th:max="${product.availableQuantity}">
-                        <button type="button" class="quantity-btn increase" onclick="increaseQuantity()">+</button>
+                <div class="header-actions">
+                    <div class="auth-links">
+                        <div th:if="${session.loggedUser != null}">
+                            <span
+                                >Olá,
+                                <span
+                                    th:text="${session.loggedUser.name}"
+                                ></span
+                            ></span>
+                            <a href="/logout" class="auth-link">Logout</a>
+                            <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                                |
+                                <a href="/admin" class="auth-link"
+                                    >Área Adminstrador</a
+                                >
+                            </span>
+                            <span th:if="${session.loggedUser.role != NULL}">
+                                |
+                                <a href="/userProfile" class="auth-link"
+                                    >Minha Conta</a
+                                >
+                            </span>
+                        </div>
+                        <div th:unless="${session.loggedUser != null}">
+                            <a href="/login" class="auth-link">Login</a>
+                            <a href="/register" class="auth-link register-link"
+                                >Registrar</a
+                            >
+                        </div>
+                    </div>
+                    <div class="cart-container">
+                        <a href="/cart" class="cart-icon">🛒</a>
+                        <span class="cart-count">0</span>
                     </div>
                 </div>
-                <button type="submit" class="add-to-cart-btn-main">Adicionar ao Carrinho</button>
-            </form>
-
-            <div class="product-description">
-                <h3>Descrição do Produto</h3>
-                <p th:text="${product.description}">Product description goes here...</p>
             </div>
-        </div>
-    </div>
-</main>
+        </header>
 
-<footer class="footer-container">
-    <div class="footer-content">
-        <div class="footer-info">
-            <div class="contact-info">
-                <h3>Informação para contato: </h3>
-                <div class="contact-item"><span class="contact-label">Telefone:</span> +55(42)91234-5678</div>
-                <div class="contact-item"><span class="contact-label">Email:</span> contato@uniware.com</div>
+        <main class="main-content">
+            <div class="product-detail-container">
+                <div class="product-images">
+                    <div class="product-image-main">
+                        <div class="product-image-placeholder">
+                            Product Image
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h1 class="product-title" th:text="${product.name}">
+                        Product Name
+                    </h1>
+
+                    <div class="product-pricing">
+                        <div
+                            class="product-price"
+                            th:text="'R$ ' + ${product.price}"
+                        >
+                            R$ 99,99
+                        </div>
+                        <div
+                            th:if="${product.discount > 0}"
+                            class="product-discount"
+                        >
+                            <span class="discount-label">Desconto:</span>
+                            <span th:text="${product.discount} + '%'">10%</span>
+                        </div>
+                    </div>
+
+                    <div
+                        th:if="${product.availableQuantity > 0}"
+                        class="product-shipping"
+                    >
+                        <span class="shipping-label">Frete:</span>
+                        <span
+                            class="shipping-value"
+                            th:text="'R$ ' + ${product.shippingValue}"
+                            >R$ 15,00</span
+                        >
+                    </div>
+
+                    <div
+                        th:if="${product.availableQuantity > 0}"
+                        class="product-availability"
+                    >
+                        <span class="availability-label">Disponível:</span>
+                        <span
+                            class="availability-quantity"
+                            th:text="${product.availableQuantity} + ' unidades'"
+                            >50 unidades</span
+                        >
+                    </div>
+
+                    <button
+                        th:if="${product.AvailableQuantity == 0}"
+                        class="add-to-cart-btn-main disabled"
+                        disabled
+                    >
+                        Indisponível
+                    </button>
+
+                    <div class="product-sold">
+                        <span class="sold-label">Vendidos:</span>
+                        <span th:text="${product.ammountSold} + ' unidades'"
+                            >25 unidades</span
+                        >
+                    </div>
+
+                    <form
+                        th:if="${product.availableQuantity > 0}"
+                        th:action="@{/addToCart/{id}(id=${product.id})}"
+                        method="post"
+                    >
+                        <div class="quantity-selector">
+                            <label for="quantity">Quantidade:</label>
+                            <div class="quantity-controls">
+                                <button
+                                    type="button"
+                                    class="quantity-btn decrease"
+                                    onclick="decreaseQuantity()"
+                                >
+                                    -
+                                </button>
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    name="quantity"
+                                    class="quantity-input"
+                                    value="1"
+                                    min="1"
+                                    th:max="${product.availableQuantity}"
+                                />
+                                <button
+                                    type="button"
+                                    class="quantity-btn increase"
+                                    onclick="increaseQuantity()"
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="add-to-cart-btn-main">
+                            Adicionar ao Carrinho
+                        </button>
+                    </form>
+
+                    <div class="product-description">
+                        <h3>Descrição do Produto</h3>
+                        <p th:text="${product.description}">
+                            Product description goes here...
+                        </p>
+                    </div>
+
+                    <div class="related-products">
+                        <h3>Produtos Relacionados</h3>
+
+                        <div th:if="${#lists.isEmpty(relatedProducts)}">
+                            <p>Nenhum produto relacionado encontrado.</p>
+                        </div>
+
+                        <div
+                            th:if="${!#lists.isEmpty(relatedProducts)}"
+                            class="related-grid"
+                        >
+                            <div
+                                th:each="related : ${relatedProducts}"
+                                class="related-item"
+                            >
+                                <a
+                                    th:href="@{/productDetail/{id}(id=${related.id})}"
+                                >
+                                    <h4 th:text="${related.name}"></h4>
+                                    <span
+                                        th:text="'R$ ' + ${related.price}"
+                                    ></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 UniWare. Todos os direitos reservados.</p>
-        </div>
-    </div>
-</footer>
+        </main>
 
-<script>
-    function increaseQuantity() {
-        const input = document.getElementById('quantity');
-        const max = parseInt(input.max);
-        const current = parseInt(input.value);
-        if (current < max) {
-            input.value = current + 1;
-        }
-    }
+        <footer class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="contact-info">
+                        <h3>Informação para contato:</h3>
+                        <div class="contact-item">
+                            <span class="contact-label">Telefone:</span>
+                            +55(42)91234-5678
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Email:</span>
+                            contato@uniware.com
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 UniWare. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
 
-    function decreaseQuantity() {
-        const input = document.getElementById('quantity');
-        const current = parseInt(input.value);
-        if (current > 1) {
-            input.value = current - 1;
-        }
-    }
-</script>
+        <script>
+            function increaseQuantity() {
+                const input = document.getElementById("quantity");
+                const max = parseInt(input.max);
+                const current = parseInt(input.value);
+                if (current < max) {
+                    input.value = current + 1;
+                }
+            }
 
-</body>
+            function decreaseQuantity() {
+                const input = document.getElementById("quantity");
+                const current = parseInt(input.value);
+                if (current > 1) {
+                    input.value = current - 1;
+                }
+            }
+        </script>
+    </body>
 </html>
