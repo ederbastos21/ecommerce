@@ -68,6 +68,30 @@
         icon.innerHTML = getIconSVG('neutral');
         parent.appendChild(icon);
 
+        if (input.id === 'password') {
+          const eye = document.createElement('span');
+          eye.classList.add('toggle-password');
+          eye.innerHTML = getEyeSVG(false);
+          parent.appendChild(eye);
+
+          // comportamento do clique
+          eye.addEventListener('click', () => {
+            const visible = input.type === 'text';
+            input.type = visible ? 'password' : 'text';
+            eye.innerHTML = getEyeSVG(!visible);
+          });
+
+          // estilo básico do olhinho
+          eye.style.position = 'absolute';
+          eye.style.right = '35px';
+          eye.style.top = '50%';
+          eye.style.transform = 'translateY(-50%)';
+          eye.style.cursor = 'pointer';
+          eye.style.width = '20px';
+          eye.style.height = '20px';
+        }
+
+
         // For CPF we need special handling to mask while typing
         if (input.id === 'cpf') {
           input.addEventListener('input', (ev) => {
@@ -156,6 +180,24 @@
       function onlyDigits(s) {
         return String(s || '').replace(/\D/g, '');
       }
+
+      function getEyeSVG(open) {
+          const size = 18;
+          if (open) {
+            return `
+              <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>`;
+          } else {
+            return `
+              <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.59 21.59 0 0 1 5.06-5.94"/>
+                <path d="M1 1l22 22"/>
+              </svg>`;
+          }
+        }
+
 
       function formatCPF(digits) {
         // digits is only numbers and max length 11
