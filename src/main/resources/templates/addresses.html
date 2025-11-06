@@ -118,7 +118,7 @@
         const icon = document.createElement('span');
         icon.classList.add('validation-icon', 'neutral');
         icon.innerHTML = getIconSVG('neutral');
-        parent.appendChild(icon);
+        input.insertAdjacentElement('afterend', icon);
 
         // Input event
         input.addEventListener('input', async () => {
