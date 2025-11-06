@@ -86,24 +86,35 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute User user, HttpSession session) {
+    public String saveUser(@ModelAttribute User userForm, HttpSession session) {
 
         User loggedUser = (User) session.getAttribute("loggedUser");
 
-        if (loggedUser == null || !loggedUser.getId().equals(user.getId())) {
+        if (loggedUser == null || !loggedUser.getId().equals(userForm.getId())) {
             return "redirect:/userProfile";
         }
 
+        // busca o usuário completo no banco
+        User userToUpdate = userService.getById(userForm.getId());
+
+        // atualiza apenas os campos do formulário
+        userToUpdate.setName(userForm.getName());
+        userToUpdate.setEmail(userForm.getEmail());
+        userToUpdate.setAge(userForm.getAge());
+
+        // se não for admin, força role para USER
         if (!"ADMIN".equals(loggedUser.getRole())) {
-            user.setRole("USER");
+            userToUpdate.setRole("USER");
         }
 
-        User savedUser = userService.saveUser(user);
+        User savedUser = userService.saveUser(userToUpdate);
 
         session.setAttribute("loggedUser", savedUser);
 
         return "redirect:/userProfile";
     }
+
+
 
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id, @ModelAttribute User user, HttpSession session) {
