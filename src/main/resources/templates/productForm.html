@@ -21,26 +21,26 @@
     <form class="auth-form" th:action="@{/admin/products/save}" th:object="${product}" method="post">
         <input type="hidden" th:if="${product.id != null}" th:field="*{id}"/>
         <div class="form-group">
-            <label class="form-label" for="name">Nome</label>
+            <label class="form-label" for="name">Nome (min-20 max-200)</label>
             <input class="form-input" type="text" th:field="*{name}" id="name" required/>
         </div>
         <div class="form-group">
-            <label class="form-label" for="price">Preço</label>
+            <label class="form-label" for="price">Preço (min-1 max-100.000)</label>
             <input class="form-input" type="number" th:field="*{price}" step="0.01" id="price" required/>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="discount">Desconto</label>
+            <label class="form-label" for="discount">Desconto (min-0% max-100%)</label>
             <input class="form-input" type="number" th:field="*{discount}" id="discount" required/>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="availableQuantity">Quantidade Disponivel</label>
+            <label class="form-label" for="availableQuantity">Quantidade Disponivel (min-0, max-100.000)</label>
             <input class="form-input" type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="ammountSold">Quantidade Vendida</label>
+            <label class="form-label" for="ammountSold">Quantidade Vendida (min-0, max-100.000)</label>
             <input class="form-input" type="number" th:field="*{ammountSold}" id="ammountSold" required/>
         </div>
 
