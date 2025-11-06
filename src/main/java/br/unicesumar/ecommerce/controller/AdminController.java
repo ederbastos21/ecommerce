@@ -24,6 +24,7 @@ public class AdminController {
     //admin home loader
     @GetMapping
     public String adminHome(HttpSession session, Model model) {
+
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
@@ -46,46 +47,6 @@ public class AdminController {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("activeTable", "users");
         return "admin";
-    }
-
-    //show form to create a new user
-    @GetMapping("/users/new")
-    public String newUserForm(Model model, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
-            return "redirect:/";
-        }
-        model.addAttribute("user", new User());
-        model.addAttribute("activeTable", "users");
-        return "userForm";
-    }
-
-    //show form to edit an existing user's info
-    @GetMapping("/users/edit/{id}")
-    public String editUserForm(@PathVariable Long id, Model model, HttpSession session) {
-        try {
-            User loggedUser = (User) session.getAttribute("loggedUser");
-            if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
-                return "redirect:/";
-            }
-            User user = userService.getById(id);
-            model.addAttribute("user", user);
-            model.addAttribute("activeTable", "users");
-            return "userForm";
-        } catch (Exception e) {
-            return "redirect:/admin/users";
-        }
-    }
-
-    //saves the user in the db
-    @PostMapping("/users/save")
-    public String saveUser(@ModelAttribute User user, HttpSession session) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
-            return "redirect:/";
-        }
-        userService.saveUser(user);
-        return "redirect:/admin/users";
     }
 
     //removes a user from the db

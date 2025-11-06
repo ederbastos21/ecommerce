@@ -57,18 +57,11 @@
                     <tr th:each="user : ${users}">
                         <td th:text="${user.id}"></td>
                         <td th:text="${user.name}"></td>
-                        <td th:text="${user.age}"></td>
                         <td th:text="${user.email}"></td>
-                        <!-- <td th:text="${user.password}"></td> -->
-                        <td th:text="${user.cpf}"></td>
                         <td th:text="${user.role}"></td>
                         <td>
-                            <a th:href="@{/admin/users/edit/{id}(id=${user.id})}">
-                                <button class="edit-btn" type="button">Editar</button>
-                            </a>
-
                             <form th:action="@{/admin/users/delete/{id}(id=${user.id})}" method="post" style="display:inline">
-                                <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza que quer excluir sua conta?')">Deletar</button>
+                                <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza que quer excluir essa conta?')">Deletar</button>
                             </form>
                         </td>
                     </tr>
