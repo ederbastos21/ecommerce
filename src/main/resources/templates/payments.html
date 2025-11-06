@@ -89,5 +89,110 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function() {
+        const form = document.querySelector('.form-inline');
+        const inputs = form.querySelectorAll('input');
+
+        inputs.forEach(input => {
+            const parent = input.parentElement;
+            parent.style.position = 'relative';
+
+            // Criar ícone de validação
+            const icon = document.createElement('span');
+            icon.classList.add('validation-icon', 'neutral');
+            icon.innerHTML = getIconSVG('neutral');
+            parent.appendChild(icon);
+
+            // Máscara e validação específicas
+            if (input.name === 'cardNumber') {
+                input.addEventListener('input', (ev) => {
+                    let digits = input.value.replace(/\D/g,'').slice(0,16); // Máximo 16 dígitos
+                    let formatted = '';
+                    for(let i=0; i<digits.length; i+=4){
+                        formatted += digits.slice(i,i+4) + ' ';
+                    }
+                    formatted = formatted.trim();
+                    input.value = formatted;
+
+                    // Validar: deve ter 16 dígitos
+                    const isValid = digits.length === 16;
+                    setIconState(icon, digits.length === 0 ? 'neutral' : (isValid ? 'valid' : 'invalid'));
+                    input.setCustomValidity(isValid ? '' : 'Número do cartão inválido');
+                });
+                input.addEventListener('paste', (ev) => {
+                    ev.preventDefault();
+                    const text = (ev.clipboardData || window.clipboardData).getData('text');
+                    const digits = text.replace(/\D/g,'').slice(0,16);
+                    input.value = digits.replace(/(.{4})/g, '$1 ').trim();
+                    input.dispatchEvent(new Event('input'));
+                });
+                return;
+            }
+
+            if (input.name === 'expirationDate') {
+                input.addEventListener('input', () => {
+                    let value = input.value.replace(/\D/g,'').slice(0,4); // MMYY
+                    if(value.length >= 3){
+                        value = value.slice(0,2) + '/' + value.slice(2);
+                    }
+                    input.value = value;
+
+                    // Validar MM/YY
+                    const parts = value.split('/');
+                    let isValid = false;
+                    if(parts.length === 2){
+                        const mm = Number(parts[0]);
+                        const yy = Number(parts[1]);
+                        isValid = mm >= 1 && mm <= 12 && yy >= 0 && yy <= 99;
+                    }
+                    setIconState(icon, value.length === 0 ? 'neutral' : (isValid ? 'valid' : 'invalid'));
+                    input.setCustomValidity(isValid ? '' : 'Data inválida');
+                });
+                return;
+            }
+
+            if(input.name === 'cardHolderName'){
+                input.addEventListener('input', () => {
+                    const parts = input.value.trim().split(/\s+/);
+                    const isValid = parts.length >= 2;
+                    setIconState(icon, input.value.length === 0 ? 'neutral' : (isValid ? 'valid' : 'invalid'));
+                    input.setCustomValidity(isValid ? '' : 'Digite nome e sobrenome');
+                });
+                return;
+            }
+        });
+
+        // Funções auxiliares
+        function setIconState(icon, state) {
+            icon.classList.remove('neutral','valid','invalid');
+            icon.classList.add(state);
+            icon.innerHTML = getIconSVG(state);
+        }
+
+        function getIconSVG(state){
+            const size = 18;
+            if(state === 'valid'){
+                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>`;
+            }
+            if(state === 'invalid'){
+                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d50000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M15 9l-6 6M9 9l6 6"></path>
+                        </svg>`;
+            }
+            return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>`;
+        }
+
+    })();
+</script>
+
 </body>
 </html>
