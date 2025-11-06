@@ -49,6 +49,7 @@
 </header>
 
 <div class="main-container">
+    <h1 class="page-title">Meus Endereços</h1>
 
     <!-- Menu de Navegação -->
     <div class="profile-navigation">
@@ -62,11 +63,11 @@
 
         <!-- Formulário de novo endereço -->
         <form th:action="@{/userProfile/addAddress}" method="post" class="form-inline">
-            <input type="text" name="street" placeholder="Rua" required>
-            <input type="text" name="number" placeholder="Número" required>
+            <input type="text" name="zipCode" placeholder="CEP" required>
             <input type="text" name="city" placeholder="Cidade" required>
             <input type="text" name="state" placeholder="Estado" required>
-            <input type="text" name="zipCode" placeholder="CEP" required>
+            <input type="text" name="street" placeholder="Rua" required>
+            <input type="text" name="number" placeholder="Número" required>
             <button type="submit" class="action-btn">Adicionar Endereço</button>
         </form>
 
@@ -94,5 +95,126 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+      const form = document.querySelector('.form-inline');
+      const streetInput = form.querySelector('input[name="street"]');
+      const numberInput = form.querySelector('input[name="number"]');
+      const cepInput = form.querySelector('input[name="zipCode"]');
+      const cityInput = form.querySelector('input[name="city"]');
+      const stateInput = form.querySelector('input[name="state"]');
+
+      // Bloquear edição de cidade e estado
+      cityInput.readOnly = true;
+      stateInput.readOnly = true;
+
+      const fields = [streetInput, numberInput, cepInput];
+
+      fields.forEach(input => {
+        const parent = input.parentElement;
+        parent.style.position = 'relative';
+
+        const icon = document.createElement('span');
+        icon.classList.add('validation-icon', 'neutral');
+        icon.innerHTML = getIconSVG('neutral');
+        parent.appendChild(icon);
+
+        // Input event
+        input.addEventListener('input', async () => {
+          const value = input.value.trim();
+
+          if (!value) {
+            input.setCustomValidity('');
+            setIconState(icon, 'neutral');
+            if(input === cepInput) {
+              cityInput.value = '';
+              stateInput.value = '';
+            }
+            return;
+          }
+
+          if (input === streetInput) {
+            const ok = /^[A-Za-zÀ-ÿ\s]{1,200}$/.test(value);
+            input.setCustomValidity(ok ? '' : 'Rua inválida.');
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
+          }
+
+          if (input === numberInput) {
+            const ok = /^\d{1,4}$/.test(value);
+            input.setCustomValidity(ok ? '' : 'Número inválido.');
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
+          }
+
+          if (input === cepInput) {
+            // Apenas números
+            const digits = onlyDigits(value).slice(0,8);
+            let formatted = digits;
+            if(digits.length > 5) formatted = digits.slice(0,5) + '-' + digits.slice(5);
+            input.value = formatted;
+
+            if(digits.length === 8) {
+              try {
+                const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+                const data = await res.json();
+                if(data.erro) throw new Error('CEP inválido');
+                cityInput.value = data.localidade;
+                stateInput.value = data.uf;
+                setIconState(icon, 'valid');
+                input.setCustomValidity('');
+              } catch(e) {
+                cityInput.value = '';
+                stateInput.value = '';
+                setIconState(icon, 'invalid');
+                input.setCustomValidity('CEP inválido.');
+              }
+            } else {
+              cityInput.value = '';
+              stateInput.value = '';
+              setIconState(icon, 'neutral');
+              input.setCustomValidity('CEP incompleto.');
+            }
+          }
+        });
+      });
+
+      function onlyDigits(s) {
+        return String(s || '').replace(/\D/g, '');
+      }
+
+      function setIconState(icon, state) {
+        icon.classList.remove('neutral', 'valid', 'invalid');
+        icon.classList.add(state);
+        icon.innerHTML = getIconSVG(state);
+      }
+
+      function getIconSVG(state) {
+        const size = 18;
+        if (state === 'valid') {
+          return `
+            <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>`;
+        }
+        if (state === 'invalid') {
+          return `
+            <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d50000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M15 9l-6 6M9 9l6 6"></path>
+            </svg>`;
+        }
+        return `
+          <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>`;
+      }
+
+    })();
+</script>
+
 </body>
 </html>
