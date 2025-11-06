@@ -1,25 +1,33 @@
 package br.unicesumar.ecommerce.controller;
 
 import br.unicesumar.ecommerce.model.Product;
+import br.unicesumar.ecommerce.model.Purchase;
 import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.service.ProductService;
+import br.unicesumar.ecommerce.service.PurchaseService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProductController {
 
     private final ProductService productService;
+
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -42,25 +50,41 @@ public class ProductController {
 
     //shows products in products page using sort
     @GetMapping("/products")
-    public String index(@RequestParam (required = false) String search, @RequestParam (required = false) String sortParameter, Model model) {
-        model.addAttribute("sortParameter",sortParameter);
-        if (sortParameter == null){
+    public String index(
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) String sortParameter,
+        Model model
+    ) {
+        model.addAttribute("sortParameter", sortParameter);
+        if (sortParameter == null) {
             sortParameter = "relevance";
         }
         if (sortParameter.equals("priceAsc")) {
             Sort sort = Sort.by("price").ascending();
-            model.addAttribute("products", productService.findByNameContainingIgnoreCase(search, sort));
+            model.addAttribute(
+                "products",
+                productService.findByNameContainingIgnoreCase(search, sort)
+            );
         } else if (sortParameter.equals("priceDesc")) {
             Sort sort = Sort.by("price").descending();
-            model.addAttribute("products", productService.findByNameContainingIgnoreCase(search, sort));
+            model.addAttribute(
+                "products",
+                productService.findByNameContainingIgnoreCase(search, sort)
+            );
         } else if (sortParameter.equals("relevance")) {
             Sort sort = Sort.by("ammountSold").descending();
-            model.addAttribute("products",productService.findByNameContainingIgnoreCase(search, sort));
+            model.addAttribute(
+                "products",
+                productService.findByNameContainingIgnoreCase(search, sort)
+            );
         } else {
             Sort sort = Sort.unsorted();
-            model.addAttribute("products", productService.findByNameContainingIgnoreCase(search, sort));
+            model.addAttribute(
+                "products",
+                productService.findByNameContainingIgnoreCase(search, sort)
+            );
         }
-        model.addAttribute("search",search);
+        model.addAttribute("search", search);
         return "products";
     }
 
@@ -68,9 +92,18 @@ public class ProductController {
     @GetMapping("/productDetail/{id}")
     public String ShowProductDetail(Model model,
                                     @PathVariable Long id,
-                                    @ModelAttribute("successMessage") String successMessage) {
+                                    @ModelAttribute("successMessage") String successMessage)  {
+        System.out.println(">>> Entrou em ShowProductDetail");
         Product product = productService.findById(id);
-        model.addAttribute("product", product);
+        model.addAttribute("product",  product);
+
+        // produtos relacionados
+        List<Product> relatedProducts = productService.findRelatedProducts(
+            product.getCategory(),
+            product.getId()
+        );
+        model.addAttribute("relatedProducts", relatedProducts);
+
         return "productDetail";
     }
 
@@ -78,8 +111,10 @@ public class ProductController {
 
     //shows cart page
     @GetMapping("/cart")
-    public String cart(HttpSession session, Model model){
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+    public String cart(HttpSession session, Model model) {
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
+            "cart"
+        );
         if (cart == null || cart.isEmpty()) {
             model.addAttribute("cartItems", new ArrayList<>());
             model.addAttribute("totalPrice", BigDecimal.ZERO);
@@ -95,7 +130,11 @@ public class ProductController {
                 CartItemView item = new CartItemView();
                 item.setProduct(product);
                 item.setQuantity(entry.getValue());
-                item.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+                item.setSubtotal(
+                    product
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(entry.getValue()))
+                );
 
                 cartItems.add(item);
                 totalPrice = totalPrice.add(item.getSubtotal());
@@ -111,20 +150,29 @@ public class ProductController {
 
     //adds item to cart
     @PostMapping("/addToCart/{id}")
-    public String addToCart(@PathVariable Long id,
-                            @RequestParam(defaultValue = "1") int quantity,
-                            HttpSession session,
-                            RedirectAttributes redirectAttributes) {
+    public String addToCart(
+        @PathVariable Long id,
+        @RequestParam(defaultValue = "1") int quantity,
+        HttpSession session,
+        Model model
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
-            redirectAttributes.addFlashAttribute("userNotLoggedError", "Favor logar para acessar o carrinho");
-            return "redirect:/login";
+            model.addAttribute(
+                "userNotLoggedError",
+                "Favor logar para acessar o carrinho"
+            );
+            return "/login";
         }
 
         if (quantity <= 0) quantity = 1;
 
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null) cart = new HashMap<>();
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
+            "cart"
+        );
+        if (cart == null) {
+            cart = new HashMap<>();
+        }
 
         cart.merge(id, quantity, Integer::sum);
         session.setAttribute("cart", cart);
@@ -141,7 +189,9 @@ public class ProductController {
     //removes item from cart
     @PostMapping("/removeFromCart/{id}")
     public String removeFromCart(@PathVariable Long id, HttpSession session) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
+            "cart"
+        );
         if (cart != null) {
             cart.remove(id);
             session.setAttribute("cart", cart);
@@ -151,10 +201,14 @@ public class ProductController {
 
     //updates item quantity in cart
     @PostMapping("/updateCart/{id}")
-    public String updateCart(@PathVariable Long id,
-                             @RequestParam int quantity,
-                             HttpSession session) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+    public String updateCart(
+        @PathVariable Long id,
+        @RequestParam int quantity,
+        HttpSession session
+    ) {
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
+            "cart"
+        );
         if (cart != null) {
             if (quantity <= 0) {
                 cart.remove(id);
@@ -167,49 +221,87 @@ public class ProductController {
     }
 
     //processes purchase
+    @Autowired
+    private PurchaseService purchaseService;
+
     @PostMapping("/buy")
-    public String processPurchase(HttpSession session, Model model) {
+    public String processPurchase(
+        HttpSession session,
+        Model model,
+        RedirectAttributes redirectAttributes
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
 
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
+            "cart"
+        );
         if (cart == null || cart.isEmpty()) {
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Carrinho vazio!"
+            );
             return "redirect:/cart";
         }
 
         try {
-            // update stock products
+            Purchase purchase = purchaseService.createPurchase(
+                loggedUser,
+                cart
+            );
+
             for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
                 productService.updateStock(entry.getKey(), entry.getValue());
             }
 
-            // clean cart
             session.removeAttribute("cart");
 
-            model.addAttribute("successMessage", "Compra realizada com sucesso!");
-            return "purchaseSuccess";
-
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Compra realizada com sucesso! Pedido #" + purchase.getId()
+            );
+            return "redirect:/purchaseHistory";
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Erro ao processar compra: " + e.getMessage()
+            );
             return "redirect:/cart";
         }
     }
 
     //inner class for cart display
     public static class CartItemView {
+
         private Product product;
         private Integer quantity;
         private BigDecimal subtotal;
 
-        public Product getProduct() { return product; }
-        public void setProduct(Product product) { this.product = product; }
+        public Product getProduct() {
+            return product;
+        }
 
-        public Integer getQuantity() { return quantity; }
-        public void setQuantity(Integer quantity) { this.quantity = quantity; }
+        public void setProduct(Product product) {
+            this.product = product;
+        }
 
-        public BigDecimal getSubtotal() { return subtotal; }
-        public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(Integer quantity) {
+            this.quantity = quantity;
+        }
+
+        public BigDecimal getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(BigDecimal subtotal) {
+            this.subtotal = subtotal;
+        }
     }
 }

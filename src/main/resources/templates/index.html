@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
@@ -50,9 +50,6 @@
     </div>
 </header>
 
-<!-- ============================= -->
-<!-- BANNER ANIMADO -->
-<!-- ============================= -->
 <section class="banner-container">
     <div class="banner-slide">
         <img th:src="@{/img/banner1.jpg}" alt="Promoção 1">
@@ -79,21 +76,27 @@
 
 <main class="main-content">
     <section class="products-section">
-        <h1 class="products-title">Produtos em Destaque: </h1>
+        <h1 class="products-title">Produtos em Destaque:</h1>
         <div class="products-grid">
-            <a th:each="product : ${products}"
-               th:href="@{/productDetail/{id}(id=${product.id})}"
-               class="product-card-link">
+            <a th:each="product : ${products}" th:href="@{/productDetail/{id}(id=${product.id})}" class="product-card-link">
                 <div class="product-card">
-                    <div class="product-image-placeholder">Product Image</div>
+                    <div th:if="${product.imageFileName == null}" class="product-image-placeholder">
+                        Sem Imagem
+                    </div>
+
+                    <img th:if="${product.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${product.imageFileName})}" th:alt="${product.name}" class="product-card-image"/>
+
                     <div class="product-name" th:text="${product.name}"></div>
-                    <div class="product-price" th:text="'$' + ${product.price}"></div>
+                    <div class="product-price" th:text="'R$ ' + ${product.price}"></div>
                     <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
-                    <div th:if="${product.availableQuantity == 0}" class="badge-out">Indisponível</div>
+                    <div th:if="${product.availableQuantity == 0}" class="badge-out">
+                        Indisponível
+                    </div>
                 </div>
             </a>
         </div>
     </section>
+
     <section class="benefits-section">
         <div class="main-content">
             <h2 class="section-title">Por que escolher nossa loja?</h2>
@@ -127,9 +130,15 @@
     <div class="footer-content">
         <div class="footer-info">
             <div class="contact-info">
-                <h3>Informação para contato: </h3>
-                <div class="contact-item"><span class="contact-label">Telefone:</span> +55(42)91234-5678</div>
-                <div class="contact-item"><span class="contact-label">Email:</span> contato@uniware.com</div>
+                <h3>Informação para contato:</h3>
+                <div class="contact-item">
+                    <span class="contact-label">Telefone:</span>
+                    +55(42)91234-5678
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Email:</span>
+                    contato@uniware.com
+                </div>
             </div>
         </div>
         <div class="footer-bottom">

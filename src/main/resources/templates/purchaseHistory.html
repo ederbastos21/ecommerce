@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Compras</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <style>
+        .purchase-history {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .purchase-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .purchase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .purchase-info {
+            flex: 1;
+        }
+        
+        .purchase-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .purchase-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .purchase-items {
+            margin: 15px 0;
+        }
+        
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .item-quantity {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .purchase-total {
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .total-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="purchase-history">
+        <a th:href="@{/userProfile}" class="back-button">← Voltar ao Perfil</a>
+        
+        <h1>Histórico de Compras</h1>
+        
+        <div th:if="${purchases.isEmpty()}" class="empty-history">
+            <h2>Você ainda não realizou nenhuma compra</h2>
+            <p>Explore nossa loja e encontre produtos incríveis!</p>
+            <a th:href="@{/products}" class="back-button">Ver Produtos</a>
+        </div>
+        
+        <div th:each="purchase : ${purchases}" class="purchase-card">
+            <div class="purchase-header">
+                <div class="purchase-info">
+                    <h3>Pedido #<span th:text="${purchase.id}">1</span></h3>
+                    <p class="purchase-date" th:text="${#temporals.format(purchase.purchaseDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</p>
+                </div>
+                <div>
+                    <span class="purchase-status" 
+                          th:classappend="${purchase.status == 'COMPLETED' ? 'status-completed' : (purchase.status == 'PENDING' ? 'status-pending' : 'status-cancelled')}"
+                          th:text="${purchase.status == 'COMPLETED' ? 'Concluído' : (purchase.status == 'PENDING' ? 'Pendente' : 'Concluído')}">
+                        Concluído
+                    </span>
+                </div>
+            </div>
+            
+            <div class="purchase-items">
+                <div th:each="item : ${purchase.items}" class="item-row">
+                    <div class="item-details">
+                        <div class="item-name" th:text="${item.product.name}">Nome do Produto</div>
+                        <div class="item-quantity">
+                            Quantidade: <span th:text="${item.quantity}">1</span> x 
+                            R$ <span th:text="${#numbers.formatDecimal(item.priceAtPurchase, 1, 2)}">0.00</span>
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        R$ <span th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)}">0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="purchase-total">
+                <span class="total-label">Total: </span>
+                <span class="total-amount">R$ <span th:text="${#numbers.formatDecimal(purchase.totalAmount, 1, 2)}">0.00</span></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

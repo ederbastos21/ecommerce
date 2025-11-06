@@ -1,13 +1,17 @@
 package br.unicesumar.ecommerce.controller;
 
-import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.model.Product;
-import br.unicesumar.ecommerce.service.UserService;
+import br.unicesumar.ecommerce.model.User;
+import br.unicesumar.ecommerce.service.FileStorageService;
 import br.unicesumar.ecommerce.service.ProductService;
+import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.dao.DataIntegrityViolationException; // IMPORTADO
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; // IMPORTADO
 
 @Controller
 @RequestMapping("/admin")
@@ -15,10 +19,17 @@ public class AdminController {
 
     private final UserService userService;
     private final ProductService productService;
+    private final FileStorageService fileStorageService;
 
-    public AdminController(UserService userService, ProductService productService) {
+    // CONSTRUTOR ATUALIZADO
+    public AdminController(
+        UserService userService,
+        ProductService productService,
+        FileStorageService fileStorageService
+    ) {
         this.userService = userService;
         this.productService = productService;
+        this.fileStorageService = fileStorageService;
     }
 
     //admin home loader
@@ -36,8 +47,8 @@ public class AdminController {
     }
 
     //======================== USERS =========================
+    // (Seção de Users permanece inalterada)
 
-    //show user table
     @GetMapping("/users")
     public String listUsers(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -49,20 +60,39 @@ public class AdminController {
         return "admin";
     }
 
-    //removes a user from the db
+    // MÉTODO 'deleteUser' ATUALIZADO COM TRATAMENTO DE ERRO (Recomendado)
     @PostMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable Long id, HttpSession session) {
+    public String deleteUser(
+        @PathVariable Long id,
+        HttpSession session,
+        RedirectAttributes redirectAttributes
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
         }
-        userService.deleteById(id);
+        try {
+            userService.deleteById(id);
+            redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Usuário deletado com sucesso!"
+            );
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Erro: Este usuário não pode ser deletado pois está associado a pedidos."
+            );
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Erro inesperado ao deletar usuário."
+            );
+        }
         return "redirect:/admin/users";
     }
 
     //======================== PRODUCTS =========================
 
-    //show products table
     @GetMapping("/products")
     public String listProducts(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -74,7 +104,6 @@ public class AdminController {
         return "admin";
     }
 
-    //show form to create a new product
     @GetMapping("/products/new")
     public String newProductForm(Model model, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -86,9 +115,12 @@ public class AdminController {
         return "productForm";
     }
 
-    //show form to edit an existing product
     @GetMapping("/products/edit/{id}")
-    public String editProductForm(@PathVariable Long id, Model model, HttpSession session) {
+    public String editProductForm(
+        @PathVariable Long id,
+        Model model,
+        HttpSession session
+    ) {
         try {
             User loggedUser = (User) session.getAttribute("loggedUser");
             if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
@@ -103,25 +135,76 @@ public class AdminController {
         }
     }
 
-    //saves the product in the db
+    /**
+     * MÉTODO 'saveProduct' (Correto, como estava antes)
+     */
     @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute Product product, HttpSession session) {
+    public String saveProduct(
+        @ModelAttribute Product product,
+        @RequestParam("imageFile") MultipartFile imageFile,
+        HttpSession session
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
         }
+
+        // Lógica de Upload de Imagem
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // 1. Salva o novo arquivo e obtém o nome único
+            String fileName = fileStorageService.storeFile(imageFile);
+            // 2. Define o nome do arquivo no objeto produto
+            product.setImageFileName(fileName);
+        } else if (product.getId() != null) {
+            // 3. Caso de EDIÇÃO
+            try {
+                Product oldProduct = productService.findById(product.getId());
+                product.setImageFileName(oldProduct.getImageFileName());
+            } catch (Exception e) {
+                // Produto não encontrado
+            }
+        }
+
         productService.save(product);
         return "redirect:/admin/products";
     }
 
-    //removes a product from the db
+    /**
+     * MÉTODO 'deleteProduct' ATUALIZADO COM TRATAMENTO DE ERRO
+     */
     @PostMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable Long id, HttpSession session) {
+    public String deleteProduct(
+        @PathVariable Long id,
+        HttpSession session,
+        RedirectAttributes redirectAttributes // Adicionado
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
         }
-        productService.deleteById(id);
+
+        try {
+            productService.deleteById(id);
+            redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Produto deletado com sucesso!"
+            );
+        } catch (DataIntegrityViolationException e) {
+            // Captura o erro de chave estrangeira
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Erro: Este produto não pode ser deletado pois já está associado a um pedido."
+            );
+        } catch (Exception e) {
+            // Captura outros erros inesperados
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Ocorreu um erro inesperado ao tentar deletar o produto."
+            );
+        }
+
         return "redirect:/admin/products";
     }
 }

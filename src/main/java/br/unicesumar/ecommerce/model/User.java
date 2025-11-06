@@ -1,7 +1,9 @@
 package br.unicesumar.ecommerce.model;
 
 import jakarta.persistence.*;
-//test
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -19,6 +21,9 @@ public class User {
     private String address;
     private String password;
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Purchase> purchases = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Address> addresses;
@@ -89,6 +94,24 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Purchase> getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
+    }
+
+    public void addPurchase(Purchase purchase) {
+        purchases.add(purchase);
+        purchase.setUser(this);
+    }
+
+    public void removePurchase(Purchase purchase) {
+        purchases.remove(purchase);
+        purchase.setUser(null);
     }
 
     public java.util.List<Address> getAddresses() {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
@@ -8,6 +8,7 @@
 </head>
 <body>
 <div class="auth-container">
+
     <div class="auth-header">
         <a href="/">
             <div class="store-logo">
@@ -18,27 +19,40 @@
     </div>
 
     <h2 th:text="${product.id != null} ? 'Edit Product' : 'New Product'"></h2>
-    <form class="auth-form" th:action="@{/admin/products/save}" th:object="${product}" method="post">
+    <form class="auth-form" th:action="@{/admin/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:if="${product.id != null}" th:field="*{id}"/>
-        <div class="form-group">
+
+        <div class="form-current-image" th:if="${product.id != null AND product.imageFileName != null}">
+            <label>Imagem Atual:</label>
+            <img th:src="@{/uploads/{filename}(filename=${product.imageFileName})}" alt="Imagem Atual" style="max-width: 200px; display: block; margin-bottom: 10px; border-radius: 4px;"/>
+        </div>
+
+        <label for="imageFile">Imagem do Produto</label>
+        <input type="file" name="imageFile" id="imageFile" accept="image/png, image/jpeg"/>
+        <small th:if="${product.id != null}" style="display: block; margin-bottom: 10px">
+            Deixe em branco para manter a imagem atual.
+        </small>
+
+        <div class="auth-container">
             <label class="form-label" for="name">Nome (min-20 max-200)</label>
             <input class="form-input" type="text" th:field="*{name}" id="name" required/>
         </div>
+
         <div class="form-group">
             <label class="form-label" for="price">Preço (min-1 max-100.000)</label>
             <input class="form-input" type="number" th:field="*{price}" step="0.01" id="price" required/>
         </div>
 
-        <div class="form-group">
-            <label class="form-label" for="discount">Desconto (min-0% max-100%)</label>
-            <input class="form-input" type="number" th:field="*{discount}" id="discount" required/>
+        <div class="form-group"></div>
+            <label for="discount">Desconto (min-0% max-100%)</label>
+            <input type="number" th:field="*{discount}" id="discount" required/>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="availableQuantity">Quantidade Disponivel (min-0, max-100.000)</label>
-            <input class="form-input" type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
+            <label for="availableQuantity">Quantidade Disponivel (min-0, max-100.000)</label>
+            <input type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
         </div>
-
+        
         <div class="form-group">
             <label class="form-label" for="ammountSold">Quantidade Vendida (min-0, max-100.000)</label>
             <input class="form-input" type="number" th:field="*{ammountSold}" id="ammountSold" required/>
@@ -49,107 +63,16 @@
             <textarea class="form-input" th:field="*{description}" id="description"></textarea>
         </div>
 
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" th:field="*{category}" id="category" required/>
+        </div>
+
         <div class="form-buttons">
             <button type="submit" class="save-btn">Salvar</button>
             <a th:href="@{/admin/products}" class="cancel-btn">Cancelar</a>
         </div>
     </form>
 </div>
-
-<script>
-    (function () {
-        const fields = document.querySelectorAll('.auth-form .form-group .form-input, .auth-form .form-group textarea');
-        fields.forEach(input => {
-            const parent = input.parentElement;
-            parent.style.position = 'relative';
-
-            const icon = document.createElement('span');
-            icon.classList.add('validation-icon', 'neutral');
-            icon.innerHTML = getIconSVG('neutral');
-            parent.appendChild(icon);
-
-            input.addEventListener('input', () => {
-                const value = input.value.trim();
-
-                if (!value) {
-                    input.setCustomValidity('');
-                    setIconState(icon, 'neutral');
-                    return;
-                }
-
-                let ok = false;
-
-                switch (input.id) {
-                    case 'name':
-                        ok = value.length >= 20 && value.length <= 200;
-                        input.setCustomValidity(ok ? '' : 'Nome deve ter entre 20 e 200 caracteres.');
-                        break;
-
-                    case 'price':
-                        const price = Number(value);
-                        ok = !isNaN(price) && price >= 1 && price <= 100000;
-                        input.setCustomValidity(ok ? '' : 'Preço deve ser entre 1 e 100000.');
-                        break;
-
-                    case 'discount':
-                        const discount = Number(value);
-                        ok = !isNaN(discount) && discount >= 0 && discount <= 100;
-                        input.setCustomValidity(ok ? '' : 'Desconto deve ser entre 0 e 100.');
-                        break;
-
-                    case 'availableQuantity':
-                        const available = Number(value);
-                        ok = Number.isInteger(available) && available >= 0 && available <= 100000;
-                        input.setCustomValidity(ok ? '' : 'Quantidade disponível deve ser entre 1 e 100000.');
-                        break;
-
-                    case 'ammountSold':
-                        const sold = Number(value);
-                        ok = Number.isInteger(sold) && sold >= 0 && sold <= 100000;
-                        input.setCustomValidity(ok ? '' : 'Quantidade vendida deve ser entre 1 e 100000.');
-                        break;
-
-                    case 'description':
-                        ok = value.length >= 20 && value.length <= 2000;
-                        input.setCustomValidity(ok ? '' : 'Descrição deve ter entre 20 e 2000 caracteres.');
-                        break;
-
-                    default:
-                        ok = input.checkValidity();
-                        input.setCustomValidity(ok ? '' : 'Campo inválido.');
-                }
-
-                setIconState(icon, ok ? 'valid' : 'invalid');
-            });
-        });
-
-        function setIconState(icon, state) {
-            icon.classList.remove('neutral', 'valid', 'invalid');
-            icon.classList.add(state);
-            icon.innerHTML = getIconSVG(state);
-        }
-
-        function getIconSVG(state) {
-            const size = 18;
-            if (state === 'valid') {
-                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9 12l2 2 4-4"></path>
-                        </svg>`;
-            }
-            if (state === 'invalid') {
-                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d50000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M15 9l-6 6M9 9l6 6"></path>
-                        </svg>`;
-            }
-            return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="8" y1="12" x2="16" y2="12"></line>
-                    </svg>`;
-        }
-    })();
-</script>
-
 </body>
 </html>

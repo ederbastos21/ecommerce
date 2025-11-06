@@ -1,8 +1,7 @@
 package br.unicesumar.ecommerce.model;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +9,7 @@ import java.math.BigDecimal;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,23 +18,47 @@ public class Product {
     private BigDecimal price;
     private int discount;
     private BigDecimal shippingValue;
+
+    // Coloquei a anotação de volta para garantir que descrições longas funcionem
+    @Column(length = 1000)
     private String description;
+
+    private String category;
     private int availableQuantity;
     private int ammountSold;
 
-    public Product() {
-    }
+    // ===================================
+    // CAMPO FALTANTE ADICIONADO AQUI
+    // ===================================
+    private String imageFileName;
 
-    public Product(Long id, String name, BigDecimal price, int discount, BigDecimal shippingValue, String description, String category, int availableQuantity, int ammountSold) {
+    public Product() {}
+
+    public Product(
+        Long id,
+        String name,
+        BigDecimal price,
+        int discount,
+        BigDecimal shippingValue,
+        String description,
+        String category,
+        int availableQuantity,
+        int ammountSold,
+        String imageFileName // Adicionado ao construtor
+    ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.discount = discount;
         this.shippingValue = shippingValue;
         this.description = description;
+        this.category = category;
         this.availableQuantity = availableQuantity;
         this.ammountSold = ammountSold;
+        this.imageFileName = imageFileName; // Adicionado
     }
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -92,12 +116,31 @@ public class Product {
         this.availableQuantity = availableQuantity;
     }
 
-    public int getAmmountSold(){
+    public int getAmmountSold() {
         return ammountSold;
     }
 
-    public void setAmmountSold(int ammountSold){
+    public void setAmmountSold(int ammountSold) {
         this.ammountSold = ammountSold;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    // ===================================
+    // GETTER E SETTER FALTANTES
+    // ===================================
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 
     public boolean isLowStock() {
