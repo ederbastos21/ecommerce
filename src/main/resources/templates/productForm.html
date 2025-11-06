@@ -99,13 +99,13 @@
 
                     case 'availableQuantity':
                         const available = Number(value);
-                        ok = Number.isInteger(available) && available >= 1 && available <= 100000;
+                        ok = Number.isInteger(available) && available >= 0 && available <= 100000;
                         input.setCustomValidity(ok ? '' : 'Quantidade disponível deve ser entre 1 e 100000.');
                         break;
 
                     case 'ammountSold':
                         const sold = Number(value);
-                        ok = Number.isInteger(sold) && sold >= 1 && sold <= 100000;
+                        ok = Number.isInteger(sold) && sold >= 0 && sold <= 100000;
                         input.setCustomValidity(ok ? '' : 'Quantidade vendida deve ser entre 1 e 100000.');
                         break;
 
