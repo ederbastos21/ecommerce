@@ -14,25 +14,17 @@
     <form th:action="@{/save}" th:object="${user}" method="post">
         <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
 
+        <!-- Nome -->
         <label for="name">Name</label>
         <input type="text" th:field="*{name}" id="name" required/>
 
+        <!-- Email -->
         <label for="email">Email</label>
         <input type="email" th:field="*{email}" id="email" required/>
 
+        <!-- Idade -->
         <label for="age">Age</label>
-        <input type="number" th:field="*{age}" id="age" required/>
-
-        <!-- hidden when editing only -->
-        <label for="cpf">CPF</label>
-        <input type="text" th:field="*{cpf}" id="cpf" required
-               th:attr="readonly=${user != null and user.id != null}"/>
-
-        <label for="address">Address</label>
-        <input type="text" th:field="*{address}" id="address" required/>
-
-        <label for="password">Password</label>
-        <input type="password" th:field="*{password}" id="password" required/>
+        <input type="number" th:field="*{age}" id="age" min="1" max="120" required/>
 
         <div class="form-buttons">
             <button type="submit" class="save-btn">Save</button>
