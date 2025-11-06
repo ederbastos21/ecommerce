@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="password">Senha</label>
+            <label class="form-label" for="password">Senha (min. 8 digitos)</label>
             <input class="form-input" type="password" name="password" id="password" placeholder="Digite sua senha" minlength="8" maxlength="64" required>
         </div>
 
@@ -57,7 +57,6 @@
 
 <script>
     (function () {
-
       const fields = document.querySelectorAll('.auth-form .form-group .form-input');
 
       fields.forEach(input => {
@@ -69,28 +68,104 @@
         icon.innerHTML = getIconSVG('neutral');
         parent.appendChild(icon);
 
-        input.addEventListener('input', () => {
-          const value = input.value.trim();
+        // For CPF we need special handling to mask while typing
+        if (input.id === 'cpf') {
+          input.addEventListener('input', (ev) => {
+            const rawDigits = onlyDigits(input.value).slice(0, 11); // limit to 11
+            const formatted = formatCPF(rawDigits);
+            // preserve simple caret position as best-effort:
+            const prevLen = input.value.length;
+            const prevPos = input.selectionStart || prevLen;
+            input.value = formatted;
+            const newLen = formatted.length;
+            const delta = newLen - prevLen;
+            const newPos = Math.max(0, prevPos + delta);
+            input.setSelectionRange(newPos, newPos);
 
+            const isValid = rawDigits.length === 11 && validarCPF(rawDigits);
+            input.setCustomValidity(isValid ? '' : 'CPF inválido.');
+            setIconState(icon, isValid ? 'valid' : (rawDigits.length === 0 ? 'neutral' : 'invalid'));
+          });
+          // also handle paste to sanitize
+          input.addEventListener('paste', (ev) => {
+            ev.preventDefault();
+            const text = (ev.clipboardData || window.clipboardData).getData('text');
+            const digits = onlyDigits(text).slice(0,11);
+            input.value = formatCPF(digits);
+            input.dispatchEvent(new Event('input'));
+          });
+          return;
+        }
+
+        input.addEventListener('input', () => {
+          const value = input.value;
           if (!value) {
+            input.setCustomValidity('');
             setIconState(icon, 'neutral');
             return;
           }
 
-          let isValid = input.checkValidity();
+          // Age (number) explicit handling
+          if (input.type === 'number' || input.id === 'age') {
+            const n = Number(value);
+            const min = input.hasAttribute('min') ? Number(input.min) : -Infinity;
+            const max = input.hasAttribute('max') ? Number(input.max) : Infinity;
 
-          if (input.id === 'cpf') {
-            const raw = value.replace(/\D/g, '');
-            isValid = validarCPF(raw);
+            const ok = Number.isFinite(n) && n >= min && n <= max && /^\d+$/.test(value);
+            input.setCustomValidity(ok ? '' : `Idade inválida (${min}-${max}).`);
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
           }
 
-          if (isValid) {
-            setIconState(icon, 'valid');
-          } else {
-            setIconState(icon, 'invalid');
+          // Email explicit (keeps the previous regex)
+          if (input.type === 'email' || input.id === 'email') {
+            const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+            const ok = emailRegex.test(value.trim());
+            input.setCustomValidity(ok ? '' : 'Email inválido.');
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
           }
+
+          // Password explicit: use minlength/maxlength attributes
+          if (input.type === 'password' || input.id === 'password') {
+            const len = value.length;
+            const min = input.hasAttribute('minlength') ? Number(input.getAttribute('minlength')) : 0;
+            const max = input.hasAttribute('maxlength') ? Number(input.getAttribute('maxlength')) : Infinity;
+            const ok = len >= min && len <= max;
+            input.setCustomValidity(ok ? '' : `Senha deve ter entre ${min} e ${max} caracteres.`);
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
+          }
+
+          // Name explicit: at least two words
+          if (input.id === 'name') {
+            const partes = value.trim().split(/\s+/).filter(p => p.length > 0);
+            const ok = partes.length >= 2;
+            input.setCustomValidity(ok ? '' : 'Digite nome e sobrenome.');
+            setIconState(icon, ok ? 'valid' : 'invalid');
+            return;
+          }
+
+          // Fallback generic: use browser validity but also clear customValidity if passes
+          const ok = input.checkValidity();
+          input.setCustomValidity(ok ? '' : 'Campo inválido.');
+          setIconState(icon, ok ? 'valid' : 'invalid');
         });
       });
+
+      function onlyDigits(s) {
+        return String(s || '').replace(/\D/g, '');
+      }
+
+      function formatCPF(digits) {
+        // digits is only numbers and max length 11
+        const p = digits;
+        if (!p) return '';
+        if (p.length <= 3) return p;
+        if (p.length <= 6) return `${p.slice(0,3)}.${p.slice(3)}`;
+        if (p.length <= 9) return `${p.slice(0,3)}.${p.slice(3,6)}.${p.slice(6)}`;
+        return `${p.slice(0,3)}.${p.slice(3,6)}.${p.slice(6,9)}-${p.slice(9,11)}`;
+      }
 
       function setIconState(icon, state) {
         icon.classList.remove('neutral', 'valid', 'invalid');
@@ -137,30 +212,6 @@
         const dig2 = calc(cpf.slice(0, 9) + dig1);
         return Number(cpf[9]) === dig1 && Number(cpf[10]) === dig2;
       }
-
-      const inputEmail = document.getElementById('email');
-        if (inputEmail) {
-          inputEmail.addEventListener('input', () => {
-            const valor = inputEmail.value.trim();
-
-            const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
-
-            const icon = inputEmail.parentElement.querySelector('.validation-icon');
-            if (!valor) {
-              inputEmail.setCustomValidity('');
-              icon.className = 'validation-icon neutral';
-              return;
-            }
-
-            if (emailRegex.test(valor)) {
-              inputEmail.setCustomValidity('');
-              icon.className = 'validation-icon valid';
-            } else {
-              inputEmail.setCustomValidity('Email inválido.');
-              icon.className = 'validation-icon invalid';
-            }
-          });
-        }
 
     })();
 </script>
