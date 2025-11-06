@@ -8,41 +8,58 @@
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
 </head>
 <body>
-<div class="admin-form-container">
+<div class="auth-container">
+    <div class="auth-header">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <div class="store-name">UniWare</div>
+            </div>
+        </a>
+        <p th:text="${emailAlreadyRegisteredError}" style="color: red;"></p>
+    </div>
+
     <h2 th:if="${user != null and user.id != null}">Edit User</h2>
     <h2 th:unless="${user != null and user.id != null}">New User</h2>
 
-    <form th:action="@{/admin/users/save}" th:object="${user}" method="post">
+    <form class="auth-form" th:action="@{/admin/users/save}" th:object="${user}" method="post">
         <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
 
-        <label for="name">Name</label>
-        <input type="text" th:field="*{name}" id="name" required/>
+        <div class="form-group">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-input" type="text" th:field="*{name}" id="name" required/>
+        </div>
 
-        <label for="email">Email</label>
-        <input type="email" th:field="*{email}" id="email" required/>
+        <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" type="email" th:field="*{email}" id="email" required/>
+        </div>
 
-        <label for="age">Age</label>
-        <input type="number" th:field="*{age}" id="age" required/>
+        <div class="form-group">
+            <label class="form-label" for="age">Age</label>
+            <input class="form-input" type="number" th:field="*{age}" id="age" required/>
+        </div>
 
         <!-- CPF: only for new user; blocked when editing user -->
-        <label for="cpf">CPF</label>
-        <input type="text" th:field="*{cpf}" id="cpf" required
-               th:attr="readonly=${user != null and user.id != null}"/>
-
-        <label for="address">Address</label>
-        <input type="text" th:field="*{address}" id="address" required/>
+        <div class="form-group">
+            <label class="form-label" for="cpf">CPF</label>
+            <input class="form-input" type="text" th:field="*{cpf}" id="cpf" required
+                   th:attr="readonly=${user != null and user.id != null}"/>
+        </div>
 
         <!-- Password: only for new user -->
         <div th:if="${user == null or user.id == null}">
-            <label for="password">Password</label>
-            <input type="password" th:field="*{password}" id="password" required/>
+            <label class="form-label" for="password">Password</label>
+            <input class="form-input" type="password" th:field="*{password}" id="password" required/>
         </div>
 
-        <label for="role">Role</label>
-        <select th:field="*{role}" id="role">
-            <option value="USER">USER</option>
-            <option value="ADMIN">ADMIN</option>
-        </select>
+        <div class="form-group">
+            <label class="form-label" for="role">Role</label>
+            <select th:field="*{role}" id="role">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+        </div>
 
         <div class="form-buttons">
             <button type="submit" class="save-btn">Save</button>
