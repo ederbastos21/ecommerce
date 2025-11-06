@@ -7,24 +7,30 @@
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
 </head>
 <body>
-<div class="admin-form-container">
+<div class="auth-container">
     <h2 th:if="${user != null and user.id != null}">Edit User</h2>
     <h2 th:unless="${user != null and user.id != null}">New User</h2>
 
-    <form th:action="@{/save}" th:object="${user}" method="post">
+    <form class="auth-form" th:action="@{/save}" th:object="${user}" method="post">
         <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
 
         <!-- Nome -->
-        <label for="name">Name</label>
-        <input type="text" th:field="*{name}" id="name" required/>
+        <div class="form-group">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-input" type="text" th:field="*{name}" id="name" required/>
+        </div>
 
         <!-- Email -->
-        <label for="email">Email</label>
-        <input type="email" th:field="*{email}" id="email" required/>
+        <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" type="email" th:field="*{email}" id="email" required/>
+        </div>
 
         <!-- Idade -->
-        <label for="age">Age</label>
-        <input type="number" th:field="*{age}" id="age" min="1" max="120" required/>
+        <div class="form-group">
+            <label class="form-label" for="age">Age</label>
+            <input class="form-input" type="number" th:field="*{age}" id="age" min="1" max="120" required/>
+        </div>
 
         <div class="form-buttons">
             <button type="submit" class="save-btn">Save</button>
