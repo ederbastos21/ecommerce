@@ -69,13 +69,13 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Discount</th>
-                        <th>Shipping</th>
-                        <th>Available</th>
-                        <th>Sold Qty</th>
-                        <th>Actions</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Desconto</th>
+                        <th>Frete</th>
+                        <th>Disponivel</th>
+                        <th>Quantidade Vendida</th>
+                        <th>Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -89,11 +89,11 @@
                         <td th:text="${product.ammountSold}"></td>
                         <td>
                             <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">
-                                <button class="edit-btn" type="button">Edit</button>
+                                <button class="edit-btn" type="button">Editar</button>
                             </a>
 
                             <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post" style="display:inline">
-                                <button type="submit" class="delete-btn">Delete</button>
+                                <button type="submit" class="delete-btn">Deletar</button>
                             </form>
                         </td>
                     </tr>
@@ -120,7 +120,7 @@
                             </a>
 
                             <form th:action="@{/admin/categories/delete/{id}(id=${cat.id})}" method="post" style="display:inline">
-                                <button type="submit" class="delete-btn">Delete</button>
+                                <button type="submit" class="delete-btn">Deletar</button>
                             </form>
                         </td>
                     </tr>
