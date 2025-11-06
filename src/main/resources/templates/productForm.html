@@ -11,10 +11,12 @@
             <h2
                 th:text="${product.id != null} ? 'Edit Product' : 'New Product'"
             ></h2>
+
             <form
                 th:action="@{/admin/products/save}"
                 th:object="${product}"
                 method="post"
+                enctype="multipart/form-data"
             >
                 <input
                     type="hidden"
@@ -22,9 +24,39 @@
                     th:field="*{id}"
                 />
 
+                <div
+                    class="form-current-image"
+                    th:if="${product.id != null AND product.imageFileName != null}"
+                >
+                    <label>Imagem Atual:</label>
+                    <img
+                        th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
+                        alt="Imagem Atual"
+                        style="
+                            max-width: 200px;
+                            display: block;
+                            margin-bottom: 10px;
+                            border-radius: 4px;
+                        "
+                    />
+                </div>
+
+                <label for="imageFile">Imagem do Produto</label>
+                <input
+                    type="file"
+                    name="imageFile"
+                    id="imageFile"
+                    accept="image/png, image/jpeg"
+                />
+                <small
+                    th:if="${product.id != null}"
+                    style="display: block; margin-bottom: 10px"
+                >
+                    Deixe em branco para manter a imagem atual.
+                </small>
+
                 <label for="name">Name</label>
                 <input type="text" th:field="*{name}" id="name" required />
-
                 <label for="price">Price</label>
                 <input
                     type="number"
@@ -33,7 +65,6 @@
                     id="price"
                     required
                 />
-
                 <label for="discount">Discount</label>
                 <input
                     type="number"
@@ -41,7 +72,6 @@
                     id="discount"
                     required
                 />
-
                 <label for="shippingValue">Shipping Value</label>
                 <input
                     type="number"
@@ -50,7 +80,6 @@
                     id="shippingValue"
                     required
                 />
-
                 <label for="availableQuantity">Available Quantity</label>
                 <input
                     type="number"
@@ -58,7 +87,6 @@
                     id="availableQuantity"
                     required
                 />
-
                 <label for="ammountSold">Sold Quantity</label>
                 <input
                     type="number"
@@ -66,10 +94,8 @@
                     id="ammountSold"
                     required
                 />
-
                 <label for="description">Description</label>
                 <textarea th:field="*{description}" id="description"></textarea>
-
                 <label for="category">Category</label>
                 <input
                     type="text"
@@ -77,7 +103,6 @@
                     id="category"
                     required
                 />
-
                 <div class="form-buttons">
                     <button type="submit" class="save-btn">Save</button>
                     <a th:href="@{/admin/products}" class="cancel-btn"

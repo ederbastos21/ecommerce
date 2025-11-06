@@ -1,127 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Uniware</title>
-    <link rel="stylesheet" th:href="@{/css/index.css}" />
-</head>
-<body>
-
-<header class="header-container">
-    <div class="header-content">
-        <a href="/">
-            <div class="store-logo">
-                <div class="store-logo-icon">U</div>
-                <span class="store-name">UniWare</span>
-            </div>
-        </a>
-
-        <div class="search-container">
-            <form action="/products" method="get">
-                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
-                <button class="search-button" type="submit">🔍</button>
-            </form>
-        </div>
-
-        <div class="header-actions">
-            <div class="auth-links">
-                <div th:if="${session.loggedUser != null}">
-                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
-                    <a href="/logout" class="auth-link">Logout</a>
-                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
-                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
-                    </span>
-                    <span th:if="${session.loggedUser.role != NULL}">
-                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
-                    </span>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Uniware</title>
+        <link rel="stylesheet" th:href="@{/css/index.css}" />
+    </head>
+    <body>
+        <header class="header-container">
+            <div class="header-content">
+                <a href="/">
+                    <div class="store-logo">
+                        <div class="store-logo-icon">U</div>
+                        <span class="store-name">UniWare</span>
+                    </div>
+                </a>
+                <div class="search-container">
+                    <form action="/products" method="get">
+                        <input
+                            type="text"
+                            class="search-input"
+                            name="search"
+                            placeholder="Procure por produtos..."
+                        />
+                        <button class="search-button" type="submit">🔍</button>
+                    </form>
                 </div>
-                <div th:unless="${session.loggedUser != null}">
-                    <a href="/login" class="auth-link">Login</a>
-                    <a href="/register" class="auth-link register-link">Registrar</a>
-                </div>
-            </div>
-            <div class="cart-container">
-                <a href="/cart" class="cart-icon">🛒</a>
-                <span class="cart-count">0</span>
-            </div>
-        </div>
-    </div>
-</header>
-
-<section class="hero-section">
-    <div class="hero-container">
-        <div class="hero-content">
-            <h1 class="hero-title">Bem-vindo à UniWare</h1>
-            <p class="hero-subtitle">Descubra produtos incríveis de hardware com os melhores preços!</p>
-            <div class="hero-actions">
-                <a href="/products?search=" class="hero-btn primary">Ver Produtos</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<main class="main-content">
-    <section class="products-section">
-        <h1 class="products-title">Produtos em Destaque: </h1>
-        <div class="products-grid">
-            <a th:each="product : ${products}"
-               th:href="@{/productDetail/{id}(id=${product.id})}"
-               class="product-card-link">
-                <div class="product-card">
-                    <div class="product-image-placeholder">Product Image</div>
-                    <div class="product-name" th:text="${product.name}"></div>
-                    <div class="product-price" th:text="'$' + ${product.price}"></div>
-                    <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
-                    <div th:if="${product.availableQuantity == 0}" class="badge-out">Indisponível</div>
-                </div>
-            </a>
-        </div>
-    </section>
-    <section class="benefits-section">
-        <div class="main-content">
-            <h2 class="section-title">Por que escolher nossa loja?</h2>
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">🚚</div>
-                    <h4>Entrega Rápida</h4>
-                    <p>Receba seus produtos em até 2 dias úteis</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">🔒</div>
-                    <h4>Compra Segura</h4>
-                    <p>Seus dados protegidos com criptografia</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">↩️</div>
-                    <h4>Troca Fácil</h4>
-                    <p>30 dias para trocar ou devolver</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">💳</div>
-                    <h4>Pagamento Flexível</h4>
-                    <p>Parcelamento em até 12x sem juros</p>
+                <div class="header-actions">
+                    <div class="auth-links">
+                        <div th:if="${session.loggedUser != null}">
+                            <span
+                                >Olá,
+                                <span
+                                    th:text="${session.loggedUser.name}"
+                                ></span
+                            ></span>
+                            <a href="/logout" class="auth-link">Logout</a>
+                            <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                                |
+                                <a href="/admin" class="auth-link"
+                                    >Área Adminstrador</a
+                                >
+                            </span>
+                            <span th:if="${session.loggedUser.role != NULL}">
+                                |
+                                <a href="/userProfile" class="auth-link"
+                                    >Minha Conta</a
+                                >
+                            </span>
+                        </div>
+                        <div th:unless="${session.loggedUser != null}">
+                            <a href="/login" class="auth-link">Login</a>
+                            <a href="/register" class="auth-link register-link"
+                                >Registrar</a
+                            >
+                        </div>
+                    </div>
+                    <div class="cart-container">
+                        <a href="/cart" class="cart-icon">🛒</a>
+                        <span class="cart-count">0</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</main>
+        </header>
 
-<footer class="footer-container">
-    <div class="footer-content">
-        <div class="footer-info">
-            <div class="contact-info">
-                <h3>Informação para contato: </h3>
-                <div class="contact-item"><span class="contact-label">Telefone:</span> +55(42)91234-5678</div>
-                <div class="contact-item"><span class="contact-label">Email:</span> contato@uniware.com</div>
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Bem-vindo à UniWare</h1>
+                    <p class="hero-subtitle">
+                        Descubra produtos incríveis de hardware com os melhores
+                        preços!
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/products?search=" class="hero-btn primary"
+                            >Ver Produtos</a
+                        >
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 UniWare. Todos os direitos reservados.</p>
-        </div>
-    </div>
-</footer>
+        </section>
 
-<script th:src="@{/js/script.js}"></script>
-</body>
+        <main class="main-content">
+            <section class="products-section">
+                <h1 class="products-title">Produtos em Destaque:</h1>
+                <div class="products-grid">
+                    <a
+                        th:each="product : ${products}"
+                        th:href="@{/productDetail/{id}(id=${product.id})}"
+                        class="product-card-link"
+                    >
+                        <div class="product-card">
+                            <div
+                                th:if="${product.imageFileName == null}"
+                                class="product-image-placeholder"
+                            >
+                                Sem Imagem
+                            </div>
+
+                            <img
+                                th:if="${product.imageFileName != null}"
+                                th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
+                                th:alt="${product.name}"
+                                class="product-card-image"
+                            />
+
+                            <div
+                                class="product-name"
+                                th:text="${product.name}"
+                            ></div>
+                            <div
+                                class="product-price"
+                                th:text="'R$ ' + ${product.price}"
+                            ></div>
+                            <div
+                                th:text="${product.ammountSold} + ' vendidos' "
+                                style="color: grey"
+                            ></div>
+                            <div
+                                th:if="${product.availableQuantity == 0}"
+                                class="badge-out"
+                            >
+                                Indisponível
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="benefits-section">
+                <div class="main-content">
+                    <h2 class="section-title">Por que escolher nossa loja?</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🚚</div>
+                            <h4>Entrega Rápida</h4>
+                            <p>Receba seus produtos em até 2 dias úteis</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🔒</div>
+                            <h4>Compra Segura</h4>
+                            <p>Seus dados protegidos com criptografia</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">↩️</div>
+                            <h4>Troca Fácil</h4>
+                            <p>30 dias para trocar ou devolver</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">💳</div>
+                            <h4>Pagamento Flexível</h4>
+                            <p>Parcelamento em até 12x sem juros</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="contact-info">
+                        <h3>Informação para contato:</h3>
+                        <div class="contact-item">
+                            <span class="contact-label">Telefone:</span>
+                            +55(42)91234-5678
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Email:</span>
+                            contato@uniware.com
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 UniWare. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script th:src="@{/js/script.js}"></script>
+    </body>
 </html>

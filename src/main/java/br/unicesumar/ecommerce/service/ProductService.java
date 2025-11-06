@@ -19,14 +19,6 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    /**
-     * BUG 1 (CORRIGIDO):
-     * A implementação anterior estava errada. Ela ignorava a busca (name) e a
-     * ordenação (sort).
-     * Esta nova implementação verifica se a string de busca é nula ou vazia.
-     * - Se for, retorna todos os produtos (respeitando a ordenação).
-     * - Se não for, chama o método correto do repositório para filtrar por nome.
-     */
     public List<Product> findByNameContainingIgnoreCase(
         String name,
         Sort sort
@@ -37,13 +29,8 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(name, sort);
     }
 
-    /**
-     * BUG 2 (CORRIGIDO):
-     * A implementação anterior chamava 'findByCategoryIgnoreCase',
-     * que não existe no repositório. Corrigido para 'findByCategory'.
-     */
     public List<Product> findByCategory(String category) {
-        return productRepository.findByCategory(category); // Corrigido
+        return productRepository.findByCategory(category);
     }
 
     public Product save(Product product) {
@@ -83,14 +70,6 @@ public class ProductService {
         }
     }
 
-    /**
-     * BUG 3 (OTIMIZADO):
-     * A implementação anterior buscava TODOS os produtos da categoria no banco
-     * para depois filtrar em Java (usando stream().filter()).
-     * Esta nova versão chama o método 'findTop4ByCategoryAndIdNot' do repositório,
-     * que já faz o filtro e a limitação direto no banco de dados, sendo
-     * muito mais eficiente.
-     */
     public List<Product> findRelatedProducts(String category, Long excludeId) {
         System.out.println(
             ">>> findRelatedProducts chamado com categoria=" +

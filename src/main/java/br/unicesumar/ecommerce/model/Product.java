@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 
 @Entity
@@ -19,10 +18,19 @@ public class Product {
     private BigDecimal price;
     private int discount;
     private BigDecimal shippingValue;
+
+    // Coloquei a anotação de volta para garantir que descrições longas funcionem
+    @Column(length = 1000)
     private String description;
+
     private String category;
     private int availableQuantity;
     private int ammountSold;
+
+    // ===================================
+    // CAMPO FALTANTE ADICIONADO AQUI
+    // ===================================
+    private String imageFileName;
 
     public Product() {}
 
@@ -35,7 +43,8 @@ public class Product {
         String description,
         String category,
         int availableQuantity,
-        int ammountSold
+        int ammountSold,
+        String imageFileName // Adicionado ao construtor
     ) {
         this.id = id;
         this.name = name;
@@ -46,7 +55,10 @@ public class Product {
         this.category = category;
         this.availableQuantity = availableQuantity;
         this.ammountSold = ammountSold;
+        this.imageFileName = imageFileName; // Adicionado
     }
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -118,5 +130,16 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    // ===================================
+    // GETTER E SETTER FALTANTES
+    // ===================================
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 }
