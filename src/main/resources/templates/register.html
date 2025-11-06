@@ -54,5 +54,75 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+      const inputCpf = document.getElementById('cpf');
+      if (!inputCpf) return;
+
+      // Função principal de validação do CPF
+      function validarCPF(raw) {
+        const cpf = String(raw).replace(/\D/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+        const calc = (slice) => {
+          let soma = 0;
+          let peso = slice.length + 1;
+          for (let i = 0; i < slice.length; i++) soma += Number(slice[i]) * peso--;
+          const resto = soma % 11;
+          return resto < 2 ? 0 : 11 - resto;
+        };
+
+        const dig1 = calc(cpf.slice(0, 9));
+        const dig2 = calc(cpf.slice(0, 9) + dig1);
+        return Number(cpf[9]) === dig1 && Number(cpf[10]) === dig2;
+      }
+
+      // Aplica máscara e valida em tempo real
+      inputCpf.addEventListener('input', () => {
+        let v = inputCpf.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+
+        v = v.replace(/(\d{3})(\d)/, '$1.$2')
+             .replace(/(\d{3})(\d)/, '$1.$2')
+             .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+        inputCpf.value = v;
+        inputCpf.setCustomValidity('');
+
+        const digits = v.replace(/\D/g, '');
+        if (digits.length === 11) {
+          if (!validarCPF(digits)) {
+            inputCpf.setCustomValidity('CPF inválido.');
+            inputCpf.reportValidity();
+          } else {
+            inputCpf.setCustomValidity('');
+          }
+        }
+      });
+
+      const form = inputCpf.form;
+      if (!form) return;
+
+      // Validação final ao enviar o formulário
+      form.addEventListener('submit', (e) => {
+        const normalized = inputCpf.value.replace(/\D/g, '');
+        if (!validarCPF(normalized)) {
+          e.preventDefault();
+          inputCpf.setCustomValidity('CPF inválido.');
+          inputCpf.reportValidity();
+          return false;
+        }
+        inputCpf.setCustomValidity('');
+        return true;
+      });
+
+      // expõe no console para teste manual
+      window.validarCPF = validarCPF;
+    })();
+</script>
+
+
+
 </body>
 </html>
