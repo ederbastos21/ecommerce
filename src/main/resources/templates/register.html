@@ -42,7 +42,7 @@
 
         <div class="form-group">
             <label class="form-label" for="password">Senha</label>
-            <input class="form-input" type="password" name="password" id="password" placeholder="Digite sua senha" minlength="8" max="64" required>
+            <input class="form-input" type="password" name="password" id="password" placeholder="Digite sua senha" minlength="8" maxlength="64" required>
         </div>
 
         <button class="submit-btn" type="submit">Cadastrar</button>
@@ -57,10 +57,70 @@
 
 <script>
     (function () {
-      const inputCpf = document.getElementById('cpf');
-      if (!inputCpf) return;
 
-      // Função principal de validação do CPF
+      const fields = document.querySelectorAll('.auth-form .form-group .form-input');
+
+      fields.forEach(input => {
+        const parent = input.parentElement;
+        parent.style.position = 'relative';
+
+        const icon = document.createElement('span');
+        icon.classList.add('validation-icon', 'neutral');
+        icon.innerHTML = getIconSVG('neutral');
+        parent.appendChild(icon);
+
+        input.addEventListener('input', () => {
+          const value = input.value.trim();
+
+          if (!value) {
+            setIconState(icon, 'neutral');
+            return;
+          }
+
+          let isValid = input.checkValidity();
+
+          if (input.id === 'cpf') {
+            const raw = value.replace(/\D/g, '');
+            isValid = validarCPF(raw);
+          }
+
+          if (isValid) {
+            setIconState(icon, 'valid');
+          } else {
+            setIconState(icon, 'invalid');
+          }
+        });
+      });
+
+      function setIconState(icon, state) {
+        icon.classList.remove('neutral', 'valid', 'invalid');
+        icon.classList.add(state);
+        icon.innerHTML = getIconSVG(state);
+      }
+
+      function getIconSVG(state) {
+        const size = 18;
+        if (state === 'valid') {
+          return `
+            <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>`;
+        }
+        if (state === 'invalid') {
+          return `
+            <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d50000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M15 9l-6 6M9 9l6 6"></path>
+            </svg>`;
+        }
+        return `
+          <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>`;
+      }
+
       function validarCPF(raw) {
         const cpf = String(raw).replace(/\D/g, '');
         if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -78,50 +138,32 @@
         return Number(cpf[9]) === dig1 && Number(cpf[10]) === dig2;
       }
 
-      // Aplica máscara e valida em tempo real
-      inputCpf.addEventListener('input', () => {
-        let v = inputCpf.value.replace(/\D/g, '');
-        if (v.length > 11) v = v.slice(0, 11);
+      const inputEmail = document.getElementById('email');
+        if (inputEmail) {
+          inputEmail.addEventListener('input', () => {
+            const valor = inputEmail.value.trim();
 
-        v = v.replace(/(\d{3})(\d)/, '$1.$2')
-             .replace(/(\d{3})(\d)/, '$1.$2')
-             .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
-        inputCpf.value = v;
-        inputCpf.setCustomValidity('');
+            const icon = inputEmail.parentElement.querySelector('.validation-icon');
+            if (!valor) {
+              inputEmail.setCustomValidity('');
+              icon.className = 'validation-icon neutral';
+              return;
+            }
 
-        const digits = v.replace(/\D/g, '');
-        if (digits.length === 11) {
-          if (!validarCPF(digits)) {
-            inputCpf.setCustomValidity('CPF inválido.');
-            inputCpf.reportValidity();
-          } else {
-            inputCpf.setCustomValidity('');
-          }
+            if (emailRegex.test(valor)) {
+              inputEmail.setCustomValidity('');
+              icon.className = 'validation-icon valid';
+            } else {
+              inputEmail.setCustomValidity('Email inválido.');
+              icon.className = 'validation-icon invalid';
+            }
+          });
         }
-      });
 
-      const form = inputCpf.form;
-      if (!form) return;
-
-      // Validação final ao enviar o formulário
-      form.addEventListener('submit', (e) => {
-        const normalized = inputCpf.value.replace(/\D/g, '');
-        if (!validarCPF(normalized)) {
-          e.preventDefault();
-          inputCpf.setCustomValidity('CPF inválido.');
-          inputCpf.reportValidity();
-          return false;
-        }
-        inputCpf.setCustomValidity('');
-        return true;
-      });
-
-      // expõe no console para teste manual
-      window.validarCPF = validarCPF;
     })();
 </script>
-
 
 
 </body>

@@ -1317,5 +1317,44 @@ body:has(.auth-container) {
         width: 80%;
         font-weight: bold;
     }
+    /* Estilo base do ícone */
+    .validation-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px; /* pequeno espaço abaixo do campo */
+      pointer-events: none; /* não interfere na interação do input */
+    }
+
+    /* Tamanho e estilo dos ícones SVG */
+    .validation-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Cores dos estados */
+    .validation-icon.neutral svg {
+      stroke: #9e9e9e; /* cinza neutro */
+      opacity: 0.6;
+    }
+
+    .validation-icon.valid svg {
+      stroke: #00c853; /* verde moderno */
+      transform: scale(1.1);
+    }
+
+    .validation-icon.invalid svg {
+      stroke: #d50000; /* vermelho forte */
+      transform: scale(1.1);
+    }
+
+    /* Suavização ao trocar de estado */
+    .validation-icon svg path {
+      transition: all 0.25s ease;
+    }
 
 }
