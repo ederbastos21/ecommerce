@@ -7,37 +7,55 @@
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
 </head>
 <body>
-<div class="admin-form-container">
+<div class="auth-container">
+    <div class="auth-header">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <div class="store-name">UniWare</div>
+            </div>
+        </a>
+    </div>
+
     <h2 th:text="${product.id != null} ? 'Edit Product' : 'New Product'"></h2>
-    <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+    <form class="auth-form" th:action="@{/admin/products/save}" th:object="${product}" method="post">
         <input type="hidden" th:if="${product.id != null}" th:field="*{id}"/>
+        <div class="form-group">
+            <label class="form-label" for="name">Nome</label>
+            <input class="form-input" type="text" th:field="*{name}" id="name" required/>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="price">Preço</label>
+            <input class="form-input" type="number" th:field="*{price}" step="0.01" id="price" required/>
+        </div>
 
-        <label for="name">Name</label>
-        <input type="text" th:field="*{name}" id="name" required/>
+        <div class="form-group">
+            <label class="form-label" for="discount">Desconto</label>
+            <input class="form-input" type="number" th:field="*{discount}" id="discount" required/>
+        </div>
 
-        <label for="price">Price</label>
-        <input type="number" th:field="*{price}" step="0.01" id="price" required/>
+        <div class="form-group">
+            <label class="form-label" for="availableQuantity">Quantidade Disponivel</label>
+            <input class="form-input" type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
+        </div>
 
-        <label for="discount">Discount</label>
-        <input type="number" th:field="*{discount}" id="discount" required/>
+        <div class="form-group">
+            <label class="form-label" for="ammountSold">Quantidade Vendida</label>
+            <input class="form-input" type="number" th:field="*{ammountSold}" id="ammountSold" required/>
+        </div>
 
-        <label for="shippingValue">Shipping Value</label>
-        <input type="number" th:field="*{shippingValue}" step="0.01" id="shippingValue" required/>
-
-        <label for="availableQuantity">Available Quantity</label>
-        <input type="number" th:field="*{availableQuantity}" id="availableQuantity" required/>
-
-        <label for="ammountSold">Sold Quantity</label>
-        <input type="number" th:field="*{ammountSold}" id="ammountSold" required/>
-
-        <label for="description">Description</label>
-        <textarea th:field="*{description}" id="description"></textarea>
+        <div class="form-group">
+            <label class="form-label" for="description">Descrição</label>
+            <textarea class="form-input" th:field="*{description}" id="description"></textarea>
+        </div>
 
         <div class="form-buttons">
-            <button type="submit" class="save-btn">Save</button>
-            <a th:href="@{/admin/products}" class="cancel-btn">Cancel</a>
+            <button type="submit" class="save-btn">Salvar</button>
+            <a th:href="@{/admin/products}" class="cancel-btn">Cancelar</a>
         </div>
     </form>
 </div>
+
+
 </body>
 </html>
