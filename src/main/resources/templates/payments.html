@@ -54,22 +54,17 @@
     <div class="profile-navigation">
         <a href="/userProfile" class="nav-link">Informações Pessoais</a>
         <a href="/userProfile/addresses" class="nav-link">Endereços</a>
-        <a href="/userProfile/payments" class="nav-link active">Métodos de Pagamento</a>
+        <a href="/userProfile/payments" class="nav-link active">Cartões</a>
     </div>
 
     <div class="account-section">
-        <h2 class="section-title">Métodos de Pagamento</h2>
+        <h2 class="section-title">Meus Cartões</h2>
 
         <form th:action="@{/userProfile/addPayment}" method="post" class="form-inline">
-            <select name="type" required>
-                <option value="">Tipo de pagamento</option>
-                <option value="Cartão">Cartão</option>
-            </select>
-            <input type="text" name="cardHolderName" placeholder="Nome no cartão" required>
-            <input type="text" name="cardNumber" placeholder="Número do cartão (opcional)">
+            <input type="text" name="cardHolderName" placeholder="Nome do titular" required>
+            <input type="text" name="cardNumber" placeholder="Número do Cartao">
             <input type="text" name="expirationDate" placeholder="Validade (MM/AA)">
-            <input type="text" name="cvv" placeholder="CVV">
-            <button type="submit" class="action-btn">Adicionar Método</button>
+            <button type="submit" class="action-btn">Adicionar Cartão</button>
         </form>
 
         <div class="info-grid" th:if="${payments != null and !payments.isEmpty()}">
