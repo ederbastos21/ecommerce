@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Minha Conta</title>
+    <title>Meus Endereços</title>
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
 </head>
@@ -49,54 +49,41 @@
 </header>
 
 <div class="main-container">
-    <h1 class="page-title">Minha Conta</h1>
+    <h1 class="page-title">Meus Endereços</h1>
 
     <!-- Menu de Navegação -->
     <div class="profile-navigation">
-        <a href="/userProfile" class="nav-link active">Informações Pessoais</a>
-        <a href="/userProfile/addresses" class="nav-link">Endereços</a>
+        <a href="/userProfile" class="nav-link">Informações Pessoais</a>
+        <a href="/userProfile/addresses" class="nav-link active">Endereços</a>
         <a href="/userProfile/payments" class="nav-link">Métodos de Pagamento</a>
     </div>
 
     <div class="account-section">
-        <h2 class="section-title">Informações Pessoais</h2>
-        <div class="info-grid">
-            <div class="info-item">
-                <span class="info-label">Nome:</span>
-                <span class="info-value" th:text="${session.loggedUser.name}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Email:</span>
-                <span class="info-value" th:text="${session.loggedUser.email}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Idade:</span>
-                <span class="info-value" th:text="${session.loggedUser.age}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">CPF:</span>
-                <span class="info-value" th:text="${session.loggedUser.cpf}"></span>
+        <h2 class="section-title">Endereços Salvos</h2>
+
+        <!-- Formulário de novo endereço -->
+        <form th:action="@{/userProfile/addAddress}" method="post" class="form-inline">
+            <input type="text" name="street" placeholder="Rua" required>
+            <input type="text" name="number" placeholder="Número" required>
+            <input type="text" name="city" placeholder="Cidade" required>
+            <input type="text" name="state" placeholder="Estado" required>
+            <input type="text" name="zipCode" placeholder="CEP" required>
+            <button type="submit" class="action-btn">Adicionar Endereço</button>
+        </form>
+
+        <!-- Lista de endereços -->
+        <div class="info-grid" th:if="${addresses != null and !addresses.isEmpty()}">
+            <div class="info-item" th:each="address : ${addresses}">
+                <span class="info-label">Endereço:</span>
+                <span class="info-value"
+                      th:text="${address.street} + ', ' + ${address.number} + ' - ' + ${address.city} + ' / ' + ${address.state}"></span>
+                <form th:action="@{/userProfile/deleteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="action-btn danger">Remover</button>
+                </form>
             </div>
         </div>
-
-        <!-- Botão de edição -->
-        <div class="button-center">
-            <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
-                <button class="edit-all-btn" type="button">Editar Informações</button>
-            </a>
-        </div>
-
-        <!-- Ações da Conta -->
-        <div class="account-section">
-            <h2 class="section-title">Ações da Conta</h2>
-            <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
-                <div class="button-center">
-                    <button class="action-btn danger" type="submit"
-                            onclick="return confirm('Tem certeza que quer excluir sua conta?')">
-                        Excluir Conta
-                    </button>
-                </div>
-            </form>
+        <div th:if="${addresses == null or addresses.isEmpty()}" style="text-align:center; margin-top:10px;">
+            <em>Nenhum endereço salvo.</em>
         </div>
     </div>
 </div>

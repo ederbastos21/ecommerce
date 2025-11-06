@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Minha Conta</title>
+    <title>Métodos de Pagamento</title>
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
 </head>
@@ -49,54 +49,41 @@
 </header>
 
 <div class="main-container">
-    <h1 class="page-title">Minha Conta</h1>
+    <h1 class="page-title">Métodos de Pagamento</h1>
 
     <!-- Menu de Navegação -->
     <div class="profile-navigation">
-        <a href="/userProfile" class="nav-link active">Informações Pessoais</a>
+        <a href="/userProfile" class="nav-link">Informações Pessoais</a>
         <a href="/userProfile/addresses" class="nav-link">Endereços</a>
-        <a href="/userProfile/payments" class="nav-link">Métodos de Pagamento</a>
+        <a href="/userProfile/payments" class="nav-link active">Métodos de Pagamento</a>
     </div>
 
     <div class="account-section">
-        <h2 class="section-title">Informações Pessoais</h2>
-        <div class="info-grid">
-            <div class="info-item">
-                <span class="info-label">Nome:</span>
-                <span class="info-value" th:text="${session.loggedUser.name}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Email:</span>
-                <span class="info-value" th:text="${session.loggedUser.email}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Idade:</span>
-                <span class="info-value" th:text="${session.loggedUser.age}"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">CPF:</span>
-                <span class="info-value" th:text="${session.loggedUser.cpf}"></span>
+        <h2 class="section-title">Métodos de Pagamento</h2>
+
+        <form th:action="@{/userProfile/addPayment}" method="post" class="form-inline">
+            <select name="type" required>
+                <option value="">Tipo de pagamento</option>
+                <option value="Cartão">Cartão</option>
+            </select>
+            <input type="text" name="cardHolderName" placeholder="Nome no cartão" required>
+            <input type="text" name="cardNumber" placeholder="Número do cartão (opcional)">
+            <input type="text" name="expirationDate" placeholder="Validade (MM/AA)">
+            <input type="text" name="cvv" placeholder="CVV">
+            <button type="submit" class="action-btn">Adicionar Método</button>
+        </form>
+
+        <div class="info-grid" th:if="${payments != null and !payments.isEmpty()}">
+            <div class="info-item" th:each="pay : ${payments}">
+                <span class="info-label" th:text="${pay.type}"></span>
+                <span class="info-value" th:text="${pay.cardHolderName}"></span>
+                <form th:action="@{/userProfile/deletePayment/{id}(id=${pay.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="action-btn danger">Remover</button>
+                </form>
             </div>
         </div>
-
-        <!-- Botão de edição -->
-        <div class="button-center">
-            <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
-                <button class="edit-all-btn" type="button">Editar Informações</button>
-            </a>
-        </div>
-
-        <!-- Ações da Conta -->
-        <div class="account-section">
-            <h2 class="section-title">Ações da Conta</h2>
-            <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
-                <div class="button-center">
-                    <button class="action-btn danger" type="submit"
-                            onclick="return confirm('Tem certeza que quer excluir sua conta?')">
-                        Excluir Conta
-                    </button>
-                </div>
-            </form>
+        <div th:if="${payments == null or payments.isEmpty()}" style="text-align:center; margin-top:10px;">
+            <em>Nenhum método de pagamento salvo.</em>
         </div>
     </div>
 </div>
