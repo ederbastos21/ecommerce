@@ -86,6 +86,10 @@
                         <td th:text="${product.availableQuantity}"></td>
                         <td th:text="${product.ammountSold}"></td>
                         <td>
+                            <a th:href="@{/productDetail/{id}(id=${product.id})}">
+                                <button class="see-btn" type="button">Ver</button>
+                            </a>
+
                             <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">
                                 <button class="edit-btn" type="button">Editar</button>
                             </a>

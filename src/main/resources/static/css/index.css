@@ -833,7 +833,7 @@ tbody td {
     border-bottom: 1px solid #dee2e6;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn, .see-btn {
     padding: 6px 12px;
     border: none;
     border-radius: 5px;
@@ -849,6 +849,14 @@ tbody td {
 
 .edit-btn:hover {
     background-color: #218838;
+}
+
+.see-btn {
+    background-color: #fd7e14;
+}
+
+.see-btn:hover{
+    background-color: #e06c0d;
 }
 
 .delete-btn {
