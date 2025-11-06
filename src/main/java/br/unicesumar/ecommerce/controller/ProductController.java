@@ -112,9 +112,7 @@ public class ProductController {
     //shows cart page
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
-            "cart"
-        );
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         if (cart == null || cart.isEmpty()) {
             model.addAttribute("cartItems", new ArrayList<>());
             model.addAttribute("totalPrice", BigDecimal.ZERO);
@@ -154,7 +152,8 @@ public class ProductController {
         @PathVariable Long id,
         @RequestParam(defaultValue = "1") int quantity,
         HttpSession session,
-        Model model
+        Model model,
+        RedirectAttributes redirectAttributes
     ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
@@ -167,9 +166,7 @@ public class ProductController {
 
         if (quantity <= 0) quantity = 1;
 
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
-            "cart"
-        );
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
         }
