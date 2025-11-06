@@ -100,33 +100,6 @@
                     </tbody>
                 </table>
 
-                <table th:if="${activeTable == 'categories'}">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Parent ID</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="cat : ${categories}">
-                        <td th:text="${cat.id}"></td>
-                        <td th:text="${cat.name}"></td>
-                        <td th:text="${cat.parent} != null ? cat.parent.id : 'None'"></td>
-                        <td>
-                            <a th:href="@{/admin/categories/edit/{id}(id=${cat.id})}">
-                                <button class="edit-btn" type="button">Edit</button>
-                            </a>
-
-                            <form th:action="@{/admin/categories/delete/{id}(id=${cat.id})}" method="post" style="display:inline">
-                                <button type="submit" class="delete-btn">Deletar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
                 <br/>
                 <a th:if="${activeTable == 'products'}" th:href="@{/admin/products/new}">
                     <button class="edit-btn" type="button">Adicionar Produto</button>
