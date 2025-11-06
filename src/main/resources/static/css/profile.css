@@ -153,6 +153,33 @@
     margin: 0 15px;
 }
 
+/* Navegação do perfil - NOVO */
+.profile-navigation {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.nav-link:hover {
+    background-color: #0056b3;
+}
+
+.nav-link.active {
+    background-color: #0056b3;
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
     .main-container {
@@ -170,6 +197,14 @@
 
     .info-grid .info-item .info-value {
         margin: 5px 0 0 0;
+        width: 100%;
+    }
+
+    .profile-navigation {
+        flex-direction: column;
+    }
+
+    .nav-link {
         width: 100%;
     }
 }

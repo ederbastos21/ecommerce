@@ -22,6 +22,7 @@ public class UserProfileController {
         this.paymentRepository = paymentRepository;
     }
 
+    // Página principal do perfil
     @GetMapping
     public String profile(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedUser");
@@ -29,11 +30,34 @@ public class UserProfileController {
             return "redirect:/login";
         }
 
-        model.addAttribute("addresses", addressRepository.findByUserId(user.getId()));
-        model.addAttribute("payments", paymentRepository.findByUserId(user.getId()));
-        model.addAttribute("newAddress", new Address());
-        model.addAttribute("newPayment", new PaymentMethod());
+        model.addAttribute("user", user);
         return "userProfile";
+    }
+
+    // Página de endereços
+    @GetMapping("/addresses")
+    public String addresses(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("addresses", addressRepository.findByUserId(user.getId()));
+        model.addAttribute("newAddress", new Address());
+        return "addresses";
+    }
+
+    // Página de métodos de pagamento
+    @GetMapping("/payments")
+    public String payments(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("payments", paymentRepository.findByUserId(user.getId()));
+        model.addAttribute("newPayment", new PaymentMethod());
+        return "payments";
     }
 
     @PostMapping("/addAddress")
@@ -43,7 +67,7 @@ public class UserProfileController {
             address.setUser(user);
             addressRepository.save(address);
         }
-        return "redirect:/userProfile";
+        return "redirect:/userProfile/addresses";
     }
 
     @PostMapping("/addPayment")
@@ -53,19 +77,19 @@ public class UserProfileController {
             payment.setUser(user);
             paymentRepository.save(payment);
         }
-        return "redirect:/userProfile";
+        return "redirect:/userProfile/payments";
     }
 
     @PostMapping("/deleteAddress/{id}")
     public String deleteAddress(@PathVariable Long id) {
         addressRepository.deleteById(id);
-        return "redirect:/userProfile";
+        return "redirect:/userProfile/addresses";
     }
 
     @PostMapping("/deletePayment/{id}")
     public String deletePayment(@PathVariable Long id) {
         paymentRepository.deleteById(id);
-        return "redirect:/userProfile";
+        return "redirect:/userProfile/payments";
     }
 }
 
