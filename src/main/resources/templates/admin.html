@@ -128,14 +128,8 @@
                 </table>
 
                 <br/>
-                <a th:if="${activeTable == 'users'}" th:href="@{/admin/users/new}">
-                    <button class="edit-btn" type="button">Adicionar Usuário</button>
-                </a>
                 <a th:if="${activeTable == 'products'}" th:href="@{/admin/products/new}">
                     <button class="edit-btn" type="button">Adicionar Produto</button>
-                </a>
-                <a th:if="${activeTable == 'categories'}" th:href="@{/admin/categories/new}">
-                    <button class="edit-btn" type="button">Adicionar Categoria</button>
                 </a>
             </div>
         </div>
