@@ -56,6 +56,100 @@
     </form>
 </div>
 
+<script>
+    (function () {
+        const fields = document.querySelectorAll('.auth-form .form-group .form-input, .auth-form .form-group textarea');
+        fields.forEach(input => {
+            const parent = input.parentElement;
+            parent.style.position = 'relative';
+
+            const icon = document.createElement('span');
+            icon.classList.add('validation-icon', 'neutral');
+            icon.innerHTML = getIconSVG('neutral');
+            parent.appendChild(icon);
+
+            input.addEventListener('input', () => {
+                const value = input.value.trim();
+
+                if (!value) {
+                    input.setCustomValidity('');
+                    setIconState(icon, 'neutral');
+                    return;
+                }
+
+                let ok = false;
+
+                switch (input.id) {
+                    case 'name':
+                        ok = value.length >= 20 && value.length <= 200;
+                        input.setCustomValidity(ok ? '' : 'Nome deve ter entre 20 e 200 caracteres.');
+                        break;
+
+                    case 'price':
+                        const price = Number(value);
+                        ok = !isNaN(price) && price >= 1 && price <= 100000;
+                        input.setCustomValidity(ok ? '' : 'Preço deve ser entre 1 e 100000.');
+                        break;
+
+                    case 'discount':
+                        const discount = Number(value);
+                        ok = !isNaN(discount) && discount >= 0 && discount <= 100;
+                        input.setCustomValidity(ok ? '' : 'Desconto deve ser entre 0 e 100.');
+                        break;
+
+                    case 'availableQuantity':
+                        const available = Number(value);
+                        ok = Number.isInteger(available) && available >= 1 && available <= 100000;
+                        input.setCustomValidity(ok ? '' : 'Quantidade disponível deve ser entre 1 e 100000.');
+                        break;
+
+                    case 'ammountSold':
+                        const sold = Number(value);
+                        ok = Number.isInteger(sold) && sold >= 1 && sold <= 100000;
+                        input.setCustomValidity(ok ? '' : 'Quantidade vendida deve ser entre 1 e 100000.');
+                        break;
+
+                    case 'description':
+                        ok = value.length >= 20 && value.length <= 2000;
+                        input.setCustomValidity(ok ? '' : 'Descrição deve ter entre 20 e 2000 caracteres.');
+                        break;
+
+                    default:
+                        ok = input.checkValidity();
+                        input.setCustomValidity(ok ? '' : 'Campo inválido.');
+                }
+
+                setIconState(icon, ok ? 'valid' : 'invalid');
+            });
+        });
+
+        function setIconState(icon, state) {
+            icon.classList.remove('neutral', 'valid', 'invalid');
+            icon.classList.add(state);
+            icon.innerHTML = getIconSVG(state);
+        }
+
+        function getIconSVG(state) {
+            const size = 18;
+            if (state === 'valid') {
+                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>`;
+            }
+            if (state === 'invalid') {
+                return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#d50000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M15 9l-6 6M9 9l6 6"></path>
+                        </svg>`;
+            }
+            return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>`;
+        }
+    })();
+</script>
 
 </body>
 </html>
