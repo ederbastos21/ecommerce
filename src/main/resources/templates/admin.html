@@ -81,10 +81,10 @@
                     <tr th:each="product : ${products}">
                         <td th:text="${product.id}"></td>
                         <td th:text="${product.name}"></td>
-                        <td th:text="${product.price}"></td>
-                        <td th:text="${product.discount}"></td>
-                        <td th:text="${product.availableQuantity}"></td>
-                        <td th:text="${product.ammountSold}"></td>
+                        <td th:text="'R$' + ${product.price}"></td>
+                        <td th:text="${product.discount} + '%' "></td>
+                        <td th:text="${product.availableQuantity} + 'un' "></td>
+                        <td th:text="${product.ammountSold} + 'un'"></td>
                         <td>
                             <a th:href="@{/productDetail/{id}(id=${product.id})}">
                                 <button class="see-btn" type="button">Ver</button>
