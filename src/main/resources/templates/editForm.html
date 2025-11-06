@@ -8,15 +8,13 @@
 </head>
 <body>
 <div class="auth-container">
-    <h2 th:if="${user != null and user.id != null}">Edit User</h2>
-    <h2 th:unless="${user != null and user.id != null}">New User</h2>
-
+    <h2 th:if="${user != null and user.id != null}">Editar Usuario</h2>
     <form class="auth-form" th:action="@{/save}" th:object="${user}" method="post">
         <input type="hidden" th:if="${user != null and user.id != null}" th:field="*{id}"/>
 
         <!-- Nome -->
         <div class="form-group">
-            <label class="form-label" for="name">Name</label>
+            <label class="form-label" for="name">Nome</label>
             <input class="form-input" type="text" th:field="*{name}" id="name" required/>
         </div>
 
@@ -28,13 +26,13 @@
 
         <!-- Idade -->
         <div class="form-group">
-            <label class="form-label" for="age">Age</label>
+            <label class="form-label" for="age">Idade</label>
             <input class="form-input" type="number" th:field="*{age}" id="age" min="1" max="120" required/>
         </div>
 
         <div class="form-buttons">
-            <button type="submit" class="save-btn">Save</button>
-            <a th:href="@{/userProfile}" class="cancel-btn">Cancel</a>
+            <button type="submit" class="save-btn">Salvar</button>
+            <a th:href="@{/userProfile}" class="cancel-btn">Cancelar</a>
         </div>
     </form>
 </div>
