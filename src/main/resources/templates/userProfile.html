@@ -79,24 +79,27 @@
         </div>
 
         <!-- Botão de edição -->
-        <div class="button-center">
+        <div>
             <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
                 <button class="edit-all-btn" type="button">Editar Informações</button>
             </a>
         </div>
 
-        <!-- Ações da Conta -->
-        <div class="account-section">
-            <h2 class="section-title">Ações da Conta</h2>
-            <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
-                <div class="button-center">
-                    <button class="action-btn danger" type="submit"
-                            onclick="return confirm('Tem certeza que quer excluir sua conta?')">
-                        Excluir Conta
-                    </button>
-                </div>
-            </form>
+        <div>
+            <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
+                <button class="change-password-btn" type="button">Trocar Senha</button>
+            </a>
         </div>
+
+        <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
+            <div>
+                <button class="action-btn danger" type="submit"
+                        onclick="return confirm('Tem certeza que quer excluir sua conta?')">
+                    Excluir Conta
+                </button>
+            </div>
+        </form>
+
     </div>
 </div>
 

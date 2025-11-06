@@ -628,7 +628,7 @@ a {
     margin-left: 15px;
 }
 
-.edit-all-btn {
+.edit-all-btn, .change-password-btn,  {
     background-color: #007bff;
     color: white;
     border: none;
@@ -639,6 +639,13 @@ a {
     transition: background-color 0.3s;
     margin-top: 15px;
     text-align: center;
+}
+
+.change-password-btn {
+    background-color: #fd7e14;
+}
+.change-password-btn:hover {
+    background-color: #e06c0d;
 }
 
 .edit-all-btn:hover {
