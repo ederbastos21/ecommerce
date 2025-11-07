@@ -76,7 +76,10 @@
                 <div class="product-card">
                     <div class="product-image-placeholder">Product Image</div>
                     <div class="product-name" th:text="${product.name}"></div>
-                    <div class="product-price" th:text="'$' + ${product.price}"></div>
+                    <div class="product-price">
+                        <span class ="product-price" th:text="'R$ ' + ${product.discountPrice}"></span>
+                        <span class="product-price" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 14px;"></span>
+                    </div>
                     <div th:if="${product.lowStock}" class="low-stock">Poucas unidades restantes!</div>
                     <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
                     <div th:if="${product.availableQuantity == 0}" class="badge-out">Indisponível</div>
