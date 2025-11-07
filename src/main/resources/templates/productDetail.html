@@ -62,24 +62,11 @@
             <div class="product-detail-container">
                 <div class="product-images">
                     <div class="product-image-main">
-                        <div
-                            th:if="${product.imageFileName == null}"
-                            class="product-image-placeholder"
-                        >
+                        <div th:if="${product.imageFileName == null}" class="product-image-placeholder">
                             Sem Imagem
                         </div>
 
-                        <img
-                            th:if="${product.imageFileName != null}"
-                            th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
-                            th:alt="${product.name}"
-                            class="product-image-real"
-                            style="
-                                max-width: 100%;
-                                height: auto;
-                                border-radius: 8px;
-                            "
-                        />
+                        <img th:if="${product.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${product.imageFileName})}" th:alt="${product.name}" class="product-image-real" style="max-width: 100%; height: auto;border-radius: 8px;"/>
                     </div>
                 </div>
 
@@ -89,16 +76,10 @@
                     </h1>
 
                     <div class="product-pricing">
-                        <div
-                            class="product-price"
-                            th:text="'R$ ' + ${product.price}"
-                        >
+                        <div class="product-price" th:text="'R$ ' + ${product.price}">
                             R$ 99,99
                         </div>
-                        <div
-                            th:if="${product.discount > 0}"
-                            class="product-discount"
-                        >
+                        <div th:if="${product.discount > 0}" class="product-discount">
                             <span class="discount-label">Desconto:</span>
                             <span th:text="${product.discount} + '%'">10%</span>
                         </div>
@@ -113,61 +94,29 @@
                 Poucas unidades restantes!
             </div>
 
-                    <div
-                        th:if="${product.availableQuantity > 0}"
-                        class="product-availability"
-                    >
+                    <div th:if="${product.availableQuantity > 0}" class="product-availability">
                         <span class="availability-label">Disponível:</span>
-                        <span
-                            class="availability-quantity"
-                            th:text="${product.availableQuantity} + ' unidades'"
-                            >50 unidades</span
-                        >
+                        <span class="availability-quantity" th:text="${product.availableQuantity} + ' unidades'">50 unidades</span>
                     </div>
 
-            <button th:if="${product.availableQuantity == 0}"
-                    class="add-to-cart-btn-main disabled" disabled>
+            <button th:if="${product.availableQuantity == 0}" class="add-to-cart-btn-main disabled" disabled>
                 Indisponível
             </button>
 
                     <div class="product-sold">
                         <span class="sold-label">Vendidos:</span>
-                        <span th:text="${product.ammountSold} + ' unidades'"
-                            >25 unidades</span
-                        >
+                        <span th:text="${product.ammountSold} + ' unidades'">25 unidades</span>
                     </div>
 
-                    <form
-                        th:if="${product.availableQuantity > 0}"
-                        th:action="@{/addToCart/{id}(id=${product.id})}"
-                        method="post"
-                    >
+                    <form th:if="${product.availableQuantity > 0}" th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
                         <div class="quantity-selector">
                             <label for="quantity">Quantidade:</label>
                             <div class="quantity-controls">
-                                <button
-                                    type="button"
-                                    class="quantity-btn decrease"
-                                    onclick="decreaseQuantity()"
-                                >
+                                <button type="button" class="quantity-btn decrease" onclick="decreaseQuantity()">
                                     -
                                 </button>
-                                <input
-                                    type="number"
-                                    id="quantity"
-                                    name="quantity"
-                                    class="quantity-input"
-                                    value="1"
-                                    min="1"
-                                    th:max="${product.availableQuantity}"
-                                />
-                                <button
-                                    type="button"
-                                    class="quantity-btn increase"
-                                    onclick="increaseQuantity()"
-                                >
-                                    +
-                                </button>
+                                <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" th:max="${product.availableQuantity}"/>
+                                <button type="button" class="quantity-btn increase" onclick="increaseQuantity()">+</button>
                             </div>
                         </div>
                         <button type="submit" class="add-to-cart-btn-main">
@@ -190,39 +139,19 @@
                         </div>
 
                         <div
-                            th:if="${!#lists.isEmpty(relatedProducts)}"
-                            class="related-products-scroll-container"
-                        >
+                            th:if="${!#lists.isEmpty(relatedProducts)}" class="related-products-scroll-container">
                             <div
-                                th:each="related : ${relatedProducts}"
-                                class="product-card"
-                            >
-                                <a
-                                    th:href="@{/productDetail/{id}(id=${related.id})}"
-                                    class="product-card-link"
-                                >
-                                    <img
-                                        th:if="${related.imageFileName != null}"
-                                        th:src="@{/uploads/{filename}(filename=${related.imageFileName})}"
-                                        th:alt="${related.name}"
-                                        class="related-product-image"
-                                    />
-                                    <div
-                                        th:if="${related.imageFileName == null}"
-                                        class="product-image-placeholder"
-                                        style="height: 100px; font-size: 12px"
-                                    >
+                                th:each="related : ${relatedProducts}" class="product-card">
+                                <a th:href="@{/productDetail/{id}(id=${related.id})}" class="product-card-link">
+                                    <img th:if="${related.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${related.imageFileName})}" th:alt="${related.name}" class="related-product-image"/>
+                                    <div th:if="${related.imageFileName == null}" class="product-image-placeholder" style="height: 100px; font-size: 12px">
                                         Sem Imagem
                                     </div>
 
                                     <div class="product-info-related">
-                                        <div
-                                            class="product-name"
-                                            th:text="${related.name}"
+                                        <div class="product-name" th:text="${related.name}"
                                         ></div>
-                                        <div
-                                            class="product-price"
-                                            th:text="'R$ ' + ${related.price}"
+                                        <div class="product-price" th:text="'R$ ' + ${related.price}"
                                         ></div>
                                     </div>
                                 </a>
