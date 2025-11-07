@@ -5,6 +5,47 @@
     <title>Minha Conta</title>
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
+    <style>
+        .profile-navigation {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .profile-navigation .nav-link {
+            padding: 15px 20px;
+            background: #1976d2;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .profile-navigation .nav-link:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+
+        .profile-navigation .nav-link.active {
+            background: #0d47a1;
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .profile-navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-navigation {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body class="user-profile-page">
 <header class="header-container">
@@ -55,8 +96,8 @@
     <div class="profile-navigation">
         <a href="/userProfile" class="nav-link active">Informações Pessoais</a>
         <a href="/userProfile/addresses" class="nav-link">Endereços</a>
-        <a href="/userProfile/payments" class="nav-link">Métodos de Pagamento</a>
-        <a th:href="@{/purchaseHistory}" class="nav-link">Histórico de Compras</a>
+        <a href="/userProfile/payments" class="nav-link">Cartões</a>
+        <a href="/purchaseHistory" class="nav-link">Histórico de Compras</a>
     </div>
 
     <div class="account-section">
@@ -96,10 +137,9 @@
                 </button>
             </form>
         </div>
-    </div> <!-- fecha account-section -->
-</div> <!-- fecha main-container -->
+    </div>
+</div>
 
-<!-- Rodapé precisa estar fora de main-container -->
 <div class="footer-container">
     <div class="footer-content">
         <div class="footer-bottom">
