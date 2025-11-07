@@ -16,6 +16,7 @@ public class Product {
 
     private String name;
     private BigDecimal price;
+    private BigDecimal discountPrice;
     private int discount;
     private BigDecimal shippingValue;
 
@@ -141,6 +142,14 @@ public class Product {
 
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
+    }
+
+    public BigDecimal getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(BigDecimal discountPrice) {
+        this.discountPrice = discountPrice;
     }
 
     public boolean isLowStock() {

@@ -236,18 +236,12 @@ public class ProductController {
             "cart"
         );
         if (cart == null || cart.isEmpty()) {
-            redirectAttributes.addFlashAttribute(
-                "errorMessage",
-                "Carrinho vazio!"
-            );
+            redirectAttributes.addFlashAttribute("errorMessage", "Carrinho vazio!");
             return "redirect:/cart";
         }
 
         try {
-            Purchase purchase = purchaseService.createPurchase(
-                loggedUser,
-                cart
-            );
+            Purchase purchase = purchaseService.createPurchase(loggedUser, cart);
 
             for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
                 productService.updateStock(entry.getKey(), entry.getValue());
@@ -255,10 +249,7 @@ public class ProductController {
 
             session.removeAttribute("cart");
 
-            redirectAttributes.addFlashAttribute(
-                "successMessage",
-                "Compra realizada com sucesso! Pedido #" + purchase.getId()
-            );
+            redirectAttributes.addFlashAttribute("successMessage", "Compra realizada com sucesso! Pedido #" + purchase.getId());
             return "redirect:/purchaseHistory";
         } catch (Exception e) {
             e.printStackTrace();
