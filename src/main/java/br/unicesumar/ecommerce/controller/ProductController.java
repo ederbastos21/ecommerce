@@ -222,19 +222,13 @@ public class ProductController {
     private PurchaseService purchaseService;
 
     @PostMapping("/buy")
-    public String processPurchase(
-        HttpSession session,
-        Model model,
-        RedirectAttributes redirectAttributes
-    ) {
+    public String processPurchase(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
 
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
-            "cart"
-        );
+        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         if (cart == null || cart.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Carrinho vazio!");
             return "redirect:/cart";
@@ -253,10 +247,7 @@ public class ProductController {
             return "redirect:/purchaseHistory";
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute(
-                "errorMessage",
-                "Erro ao processar compra: " + e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("errorMessage", "Erro ao processar compra: " + e.getMessage());
             return "redirect:/cart";
         }
     }
