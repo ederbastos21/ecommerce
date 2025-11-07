@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes; // IMPORTADO
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -148,6 +151,14 @@ public class AdminController {
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
         }
+        BigDecimal desconto = new BigDecimal(product.getDiscount());
+        desconto = desconto.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        BigDecimal precoFinal = product.getPrice().subtract(product.getPrice().multiply(desconto));
+        product.setDiscountPrice(precoFinal);
+
+        System.out.println("Preço final com desconto: " + product.getDiscountPrice());
+
 
         // Lógica de Upload de Imagem
         if (imageFile != null && !imageFile.isEmpty()) {
