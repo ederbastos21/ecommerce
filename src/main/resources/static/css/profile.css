@@ -222,3 +222,65 @@ body.user-profile-page {
 .user-profile-page .footer-container {
     margin-top: auto; /* gruda o rodapé no fim */
 }
+
+.account-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* faz todos os filhos terem a mesma altura */
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.account-buttons a,
+.account-buttons form {
+    flex: 1 1 180px;
+    min-width: 180px;
+    max-width: 180px;
+    display: flex;
+    align-items: stretch; /* garante mesma altura */
+}
+
+.account-buttons form button {
+    flex: 1;
+    height: 50px;
+}
+
+.account-buttons button {
+    width: 100%;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Padrão base (verde, como Editar Informações) */
+.edit-all-btn {
+    background-color: #28a745;
+}
+.edit-all-btn:hover {
+    background-color: #218838;
+}
+
+/* Trocar Senha (laranja, mas mesmo estilo) */
+.change-password-btn {
+    background-color: #fd7e14;
+}
+.change-password-btn:hover {
+    background-color: #e06c0d;
+}
+
+/* Excluir Conta (vermelho, mesmo padrão visual) */
+.delete-account-btn {
+    background-color: #dc3545;
+}
+.delete-account-btn:hover {
+    background-color: #b02a37;
+}
