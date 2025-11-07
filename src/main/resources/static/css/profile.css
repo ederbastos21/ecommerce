@@ -208,3 +208,17 @@
         width: 100%;
     }
 }
+
+body.user-profile-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ocupa toda a altura da tela */
+}
+
+.user-profile-page .main-container {
+    flex: 1; /* faz o conteúdo empurrar o rodapé */
+}
+
+.user-profile-page .footer-container {
+    margin-top: auto; /* gruda o rodapé no fim */
+}

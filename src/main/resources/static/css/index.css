@@ -214,6 +214,7 @@ a {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    flex: 1;
 }
 
 .main-container {
@@ -571,7 +572,7 @@ a {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    margin-bottom: 25px;
+    margin-bottom: 80px;
 }
 
 .account-section .section-title {
@@ -669,6 +670,54 @@ a {
 
 .action-btn.danger:hover {
     background-color: #c82333;
+}
+
+.account-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* garante que não quebre em telas pequenas */
+}
+
+.account-buttons a,
+.account-buttons form {
+    flex: 1;
+    max-width: 180px;
+}
+
+.account-buttons button {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+/* cores individuais */
+.edit-all-btn {
+    background-color: #007bff;
+}
+.edit-all-btn:hover {
+    background-color: #0056b3;
+}
+
+.change-password-btn {
+    background-color: #fd7e14;
+}
+.change-password-btn:hover {
+    background-color: #e06c0d;
+}
+
+.delete-account-btn {
+    background-color: #dc3545;
+}
+.delete-account-btn:hover {
+    background-color: #b02a37;
 }
 
 /* Cart Section */
@@ -1094,7 +1143,9 @@ body:has(.auth-container) {
     background-color: #343a40;
     color: #fff;
     padding: 40px 0 20px;
-    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid #495057;
+    margin-top: auto; /* empurra o rodapé para o fim */
 }
 
 .footer-content {

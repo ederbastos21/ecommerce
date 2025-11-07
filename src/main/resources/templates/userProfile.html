@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
 </head>
-<body>
+<body class="user-profile-page">
 <header class="header-container">
     <div class="header-content">
         <a href="/">
@@ -80,29 +80,26 @@
             </div>
         </div>
 
-        <div>
+        <div class="account-buttons">
             <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
                 <button class="edit-all-btn" type="button">Editar Informações</button>
             </a>
-        </div>
 
-        <div>
             <a th:href="@{/edit/{id}(id=${session.loggedUser.id})}">
                 <button class="change-password-btn" type="button">Trocar Senha</button>
             </a>
-        </div>
 
-        <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post">
-            <div>
-                <button class="action-btn danger" type="submit"
+            <form th:action="@{/delete/{id}(id=${session.loggedUser.id})}" method="post" style="display:inline;">
+                <button class="delete-account-btn" type="submit"
                         onclick="return confirm('Tem certeza que quer excluir sua conta?')">
                     Excluir Conta
                 </button>
-            </div>
-        </form>
-    </div>
-</div>
+            </form>
+        </div>
+    </div> <!-- fecha account-section -->
+</div> <!-- fecha main-container -->
 
+<!-- Rodapé precisa estar fora de main-container -->
 <div class="footer-container">
     <div class="footer-content">
         <div class="footer-bottom">
