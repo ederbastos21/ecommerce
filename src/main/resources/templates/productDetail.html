@@ -76,19 +76,12 @@
                     </h1>
 
                     <div class="product-pricing">
-                        <div class="product-price" th:text="'R$ ' + ${product.price}">
-                            R$ 99,99
-                        </div>
-                        <div th:if="${product.discount > 0}" class="product-discount">
-                            <span class="discount-label">Desconto:</span>
-                            <span th:text="${product.discount} + '%'">10%</span>
+                        <div class="product-price">
+                            <span th:text="'R$ ' + ${product.discountPrice}"></span>
+                            <span th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 20px; margin-right: 6px;"></span>
+                            <span th:text="'-' + ${product.discount} + '%'" style="color: red; font-size: 15px;"></span>
                         </div>
                     </div>
-
-            <div th:if="${product.availableQuantity > 0}" class="product-shipping">
-                <span class="shipping-label">Frete:</span>
-                <span class="shipping-value" th:text="'R$ ' + ${product.shippingValue}">R$ 15,00</span>
-            </div>
 
             <div th:if="${product.lowStock}" class="low-stock-detail">
                 Poucas unidades restantes!
