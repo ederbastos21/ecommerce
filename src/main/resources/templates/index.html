@@ -44,23 +44,13 @@
             </div>
             <div class="cart-container">
                 <a href="/cart" class="cart-icon">🛒</a>
-                <span class="cart-count">0</span>
+                <span class="cart-count"
+                      th:text="${session.cartItemCount != null ? session.cartItemCount : 0}">
+                </span>
             </div>
         </div>
     </div>
 </header>
-
-<section class="banner-container">
-    <div class="banner-slide">
-        <img th:src="@{/img/banner1.jpg}" alt="Promoção 1">
-    </div>
-    <div class="banner-slide">
-        <img th:src="@{/img/banner2.jpg}" alt="Promoção 2">
-    </div>
-    <div class="banner-slide">
-        <img th:src="@{/img/banner3.jpg}" alt="Promoção 3">
-    </div>
-</section>
 
 <section class="hero-section">
     <div class="hero-container">
@@ -71,6 +61,18 @@
                 <a href="/products?search=" class="hero-btn primary">Ver Produtos</a>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="banner-container">
+    <div class="banner-slide">
+        <img th:src="@{/img/banner1.jpg}" alt="Promoção 1">
+    </div>
+    <div class="banner-slide">
+        <img th:src="@{/img/banner2.jpg}" alt="Promoção 2">
+    </div>
+    <div class="banner-slide">
+        <img th:src="@{/img/banner3.jpg}" alt="Promoção 3">
     </div>
 </section>
 

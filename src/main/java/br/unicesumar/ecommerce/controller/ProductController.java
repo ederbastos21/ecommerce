@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.Iterator;
 
 @Controller
 public class ProductController {
@@ -112,110 +113,125 @@ public class ProductController {
     //shows cart page
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null || cart.isEmpty()) {
-            model.addAttribute("cartItems", new ArrayList<>());
-            model.addAttribute("totalPrice", BigDecimal.ZERO);
-            return "cart";
-        }
+        List<Map<String, Object>> cart = getCart(session);
 
-        List<CartItemView> cartItems = new ArrayList<>();
         BigDecimal totalPrice = BigDecimal.ZERO;
+        List<CartItemView> cartItems = new ArrayList<>();
 
-        for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
-            Product product = productService.findById(entry.getKey());
+        for (Map<String, Object> item : cart) {
+            Long id = (Long) item.get("productId");
+            int quantity = (int) item.get("quantity");
+
+            Product product = productService.findById(id);
             if (product != null) {
-                CartItemView item = new CartItemView();
-                item.setProduct(product);
-                item.setQuantity(entry.getValue());
-                item.setSubtotal(
-                    product
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(entry.getValue()))
-                );
+                CartItemView view = new CartItemView();
+                view.setProduct(product);
+                view.setQuantity(quantity);
+                view.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
 
-                cartItems.add(item);
-                totalPrice = totalPrice.add(item.getSubtotal());
+                totalPrice = totalPrice.add(view.getSubtotal());
+                cartItems.add(view);
             }
         }
 
-        int totalItems = cart.values().stream().mapToInt(Integer::intValue).sum();
-        model.addAttribute("cartItemCount", totalItems);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("cartItemCount", getCartCount(cart));
         return "cart";
     }
 
-    //adds item to cart
     @PostMapping("/addToCart/{id}")
     public String addToCart(
-        @PathVariable Long id,
-        @RequestParam(defaultValue = "1") int quantity,
-        HttpSession session,
-        Model model,
-        RedirectAttributes redirectAttributes
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "1") int quantity,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
     ) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null) {
-            model.addAttribute(
-                "userNotLoggedError",
-                "Favor logar para acessar o carrinho"
-            );
-            return "/login";
+        Product product = productService.findById(id);
+        if (product == null) {
+            return "redirect:/products";
         }
 
-        if (quantity <= 0) quantity = 1;
+        List<Map<String, Object>> cart = getCart(session);
 
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
+        boolean found = false;
+        for (Map<String, Object> item : cart) {
+            Long itemId = (Long) item.get("productId");
+            if (itemId.equals(id)) {
+                int oldQty = (int) item.get("quantity");
+                item.put("quantity", oldQty + quantity);
+                found = true;
+                break;
+            }
         }
 
-        cart.merge(id, quantity, Integer::sum);
-        session.setAttribute("cart", cart);
+        if (!found) {
+            Map<String, Object> newItem = new HashMap<>();
+            newItem.put("productId", id);
+            newItem.put("name", product.getName());
+            newItem.put("price", product.getPrice());
+            newItem.put("quantity", quantity);
+            cart.add(newItem);
+        }
 
-        int totalItems = cart.values().stream().mapToInt(Integer::intValue).sum();
-        session.setAttribute("cartItemCount", totalItems);
-
-        // Mensagem de sucesso
-        redirectAttributes.addFlashAttribute("successMessage", "Produto adicionado ao carrinho com sucesso!");
-
+        updateCartSession(session, cart);
+        redirectAttributes.addFlashAttribute("successMessage", "Produto adicionado ao carrinho!");
         return "redirect:/productDetail/{id}";
     }
 
-    //removes item from cart
-    @PostMapping("/removeFromCart/{id}")
-    public String removeFromCart(@PathVariable Long id, HttpSession session) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
-            "cart"
-        );
-        if (cart != null) {
-            cart.remove(id);
-            session.setAttribute("cart", cart);
+    @PostMapping("/updateCart/{id}")
+    public String updateCart(@PathVariable Long id, @RequestParam int quantity, HttpSession session) {
+        List<Map<String, Object>> cart = getCart(session);
+
+        Iterator<Map<String, Object>> iterator = cart.iterator();
+        while (iterator.hasNext()) {
+            Map<String, Object> item = iterator.next();
+            Long itemId = (Long) item.get("productId");
+
+            if (itemId.equals(id)) {
+                if (quantity <= 0) {
+                    iterator.remove();
+                } else {
+                    item.put("quantity", quantity);
+                }
+                break;
+            }
         }
+
+        updateCartSession(session, cart);
         return "redirect:/cart";
     }
 
-    //updates item quantity in cart
-    @PostMapping("/updateCart/{id}")
-    public String updateCart(
-        @PathVariable Long id,
-        @RequestParam int quantity,
-        HttpSession session
-    ) {
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute(
-            "cart"
-        );
-        if (cart != null) {
-            if (quantity <= 0) {
-                cart.remove(id);
-            } else {
-                cart.put(id, quantity);
-            }
-            session.setAttribute("cart", cart);
-        }
+    @PostMapping("/removeFromCart/{id}")
+    public String removeFromCart(@PathVariable Long id, HttpSession session) {
+        List<Map<String, Object>> cart = getCart(session);
+        cart.removeIf(item -> item.get("productId").equals(id));
+        updateCartSession(session, cart);
         return "redirect:/cart";
     }
+
+    // ======================== MÉTODOS AUXILIARES ========================
+
+    @SuppressWarnings("unchecked")
+    private List<Map<String, Object>> getCart(HttpSession session) {
+        Object cartObj = session.getAttribute("cart");
+        if (cartObj == null) {
+            List<Map<String, Object>> newCart = new ArrayList<>();
+            session.setAttribute("cart", newCart);
+            return newCart;
+        }
+        return (List<Map<String, Object>>) cartObj;
+    }
+
+    private int getCartCount(List<Map<String, Object>> cart) {
+        return cart.stream().mapToInt(item -> (int) item.get("quantity")).sum();
+    }
+
+    private void updateCartSession(HttpSession session, List<Map<String, Object>> cart) {
+        session.setAttribute("cart", cart);
+        session.setAttribute("cartItemCount", getCartCount(cart));
+    }
+
 
     //processes purchase
     @Autowired

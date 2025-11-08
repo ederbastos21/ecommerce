@@ -21,7 +21,7 @@ a {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 15px 0;
-    margin-bottom: 30px;
+    margin-bottom: 0;
 }
 
 .header-content {
@@ -172,67 +172,49 @@ a {
 .hero-section {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
-    padding: 80px 0;
-    margin-bottom: 60px;
+    padding: 40px 0;
+    margin-bottom: 0;
 }
 
 .hero-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     text-align: center;
 }
 
-.hero-content {
-    max-width: 600px;
-}
-
 .hero-title {
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     line-height: 1.2;
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
+    font-size: 1rem;
+    margin-bottom: 20px;
     opacity: 0.9;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.hero-btn {
-    padding: 12px 30px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
 }
 
 .hero-btn.primary {
     background-color: #28a745;
     color: white;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 .hero-btn.primary:hover {
     background-color: #1e7e34;
     transform: translateY(-2px);
 }
-
 /* Main Content */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    flex: 1;
 }
 
 .main-container {
@@ -590,7 +572,7 @@ a {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    margin-bottom: 25px;
+    margin-bottom: 80px;
 }
 
 .account-section .section-title {
@@ -688,6 +670,54 @@ a {
 
 .action-btn.danger:hover {
     background-color: #c82333;
+}
+
+.account-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* garante que não quebre em telas pequenas */
+}
+
+.account-buttons a,
+.account-buttons form {
+    flex: 1;
+    max-width: 180px;
+}
+
+.account-buttons button {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+/* cores individuais */
+.edit-all-btn {
+    background-color: #007bff;
+}
+.edit-all-btn:hover {
+    background-color: #0056b3;
+}
+
+.change-password-btn {
+    background-color: #fd7e14;
+}
+.change-password-btn:hover {
+    background-color: #e06c0d;
+}
+
+.delete-account-btn {
+    background-color: #dc3545;
+}
+.delete-account-btn:hover {
+    background-color: #b02a37;
 }
 
 /* Cart Section */
@@ -1113,7 +1143,9 @@ body:has(.auth-container) {
     background-color: #343a40;
     color: #fff;
     padding: 40px 0 20px;
-    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid #495057;
+    margin-top: auto; /* empurra o rodapé para o fim */
 }
 
 .footer-content {
