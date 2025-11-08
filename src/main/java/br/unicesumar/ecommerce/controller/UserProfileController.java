@@ -110,5 +110,17 @@ public class UserProfileController {
         }
         return "redirect:/userProfile/addresses";
     }
+
+    @PostMapping("/changeFavoritePayment/{id}")
+    public String changeFavoritePayment(@PathVariable Long id, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user != null) {
+            user.setFavoritePaymentMethodId(id);
+            userRepository.save(user);
+            session.setAttribute("loggedUser", user); // Atualiza a sessão
+        }
+        return "redirect:/userProfile/payments";
+    }
+
 }
 
