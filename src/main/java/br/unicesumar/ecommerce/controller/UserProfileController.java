@@ -85,9 +85,15 @@ public class UserProfileController {
         if (user != null) {
             payment.setUser(user);
             paymentRepository.save(payment);
+
+            if (user.getFavoritePaymentMethodId() == null) {
+                user.setFavoritePaymentMethodId(payment.getId());
+                userRepository.save(user);
+            }
         }
         return "redirect:/userProfile/payments";
     }
+
 
     @PostMapping("/deleteAddress/{id}")
     public String deleteAddress(@PathVariable Long id) {
