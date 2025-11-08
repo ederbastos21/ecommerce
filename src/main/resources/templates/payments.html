@@ -201,14 +201,24 @@
         </form>
 
         <div class="info-grid" th:if="${payments != null and !payments.isEmpty()}">
-            <div class="info-item" th:each="pay : ${payments}">
+            <div class="info-item"
+                 th:each="pay : ${payments}"
+                 th:style="${session.loggedUser.favoritePaymentMethodId == pay.id} ? 'background-color: #d4edda; border: 2px solid #28a745;' : 'background-color: #f0f0f0; border: 1px solid #ccc;'">
+
                 <span class="info-label" th:text="${pay.type}"></span>
                 <span class="info-value" th:text="${pay.cardHolderName}"></span>
+
                 <form th:action="@{/userProfile/deletePayment/{id}(id=${pay.id})}" method="post" style="display:inline;">
                     <button type="submit" class="action-btn danger">Remover</button>
                 </form>
+
+                <form th:action="@{/userProfile/changeFavoritePayment/{id}(id=${pay.id})}" method="post" style="display:inline;">
+                    <button th:if="${session.loggedUser.favoritePaymentMethodId != pay.id}" type="submit" class="change-favorite-btn">Marcar favorito</button>
+                </form>
+
             </div>
         </div>
+
         <div th:if="${payments == null or payments.isEmpty()}" style="text-align:center; margin-top:10px;">
             <em>Nenhum método de pagamento salvo.</em>
         </div>
