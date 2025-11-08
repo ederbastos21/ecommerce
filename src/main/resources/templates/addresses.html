@@ -123,7 +123,7 @@
                     <button type="submit" class="action-btn danger">Remover</button>
                 </form>
                 <form th:action="@{/userProfile/changeFavoriteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
-                    <button th:if="${favoriteAddressId != address.id}" type="submit">Marcar favorito</button>
+                    <button th:if="${session.loggedUser.favoriteAddressId != address.id}" type="submit">Marcar favorito</button>
                 </form>
             </div>
         </div>
