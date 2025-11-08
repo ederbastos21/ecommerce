@@ -100,5 +100,15 @@ public class UserProfileController {
         paymentRepository.deleteById(id);
         return "redirect:/userProfile/payments";
     }
+
+    @PostMapping("/changeFavoriteAddress/{id}")
+    public String changeFavoriteAddress(@PathVariable Long id, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+        if (user != null) {
+            user.setFavoriteAddressId(id);
+            userRepository.save(user);
+        }
+        return "redirect:/userProfile/addresses";
+    }
 }
 
