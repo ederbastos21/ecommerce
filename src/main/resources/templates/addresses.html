@@ -122,6 +122,9 @@
                 <form th:action="@{/userProfile/deleteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
                     <button type="submit" class="action-btn danger">Remover</button>
                 </form>
+                <form th:action="@{/userProfile/changeFavoriteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
+                    <button th:if="${favoriteAddressId != address.id}" type="submit">Marcar favorito</button>
+                </form>
             </div>
         </div>
         <div th:if="${addresses == null or addresses.isEmpty()}" style="text-align:center; margin-top:10px;">
