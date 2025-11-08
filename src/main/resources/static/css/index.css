@@ -609,6 +609,7 @@ a {
     color: #333;
     flex: 1;
     margin-left: 15px;
+    font-size: 12px;
 }
 
 .edit-all-btn, .change-password-btn  {

@@ -13,6 +13,10 @@
             margin-bottom: 30px;
         }
 
+        .info-value {
+            font-size: 14px;
+        }
+
         .profile-navigation .nav-link {
             padding: 15px 20px;
             background: #1976d2;
@@ -116,7 +120,6 @@
         <!-- Lista de endereços -->
         <div class="info-grid" th:if="${addresses != null and !addresses.isEmpty()}">
             <div class="info-item" th:each="address : ${addresses}" th:style="${session.loggedUser.favoriteAddressId == address.id} ? 'background-color: #d4edda; border: 2px solid #28a745;' : 'background-color: #f0f0f0; border: 1px solid #ccc;'">
-                <span class="info-label">Endereço:</span>
                 <span class="info-value"
                       th:text="${address.street} + ', ' + ${address.number} + ' - ' + ${address.city} + ' / ' + ${address.state}"></span>
 
