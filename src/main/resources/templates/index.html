@@ -89,7 +89,7 @@
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price">
                         <span class ="product-price" th:text="'R$ ' + ${product.discountPrice}"></span>
-                        <span class="product-price" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 14px;"></span>
+                        <span th:if="${product.discount >=1}" class="product-price" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 14px;"></span>
                     </div>
                     <div th:text="${product.ammountSold} + ' vendidos' " style="color: grey"></div>
                     <div th:if="${product.availableQuantity == 0}" class="badge-out">
