@@ -115,18 +115,22 @@
 
         <!-- Lista de endereços -->
         <div class="info-grid" th:if="${addresses != null and !addresses.isEmpty()}">
-            <div class="info-item" th:each="address : ${addresses}">
+            <div class="info-item" th:each="address : ${addresses}" th:style="${session.loggedUser.favoriteAddressId == address.id} ? 'background-color: #d4edda; border: 2px solid #28a745;' : 'background-color: #f0f0f0; border: 1px solid #ccc;'">
                 <span class="info-label">Endereço:</span>
                 <span class="info-value"
                       th:text="${address.street} + ', ' + ${address.number} + ' - ' + ${address.city} + ' / ' + ${address.state}"></span>
+
                 <form th:action="@{/userProfile/deleteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
                     <button type="submit" class="action-btn danger">Remover</button>
                 </form>
+
                 <form th:action="@{/userProfile/changeFavoriteAddress/{id}(id=${address.id})}" method="post" style="display:inline;">
                     <button th:if="${session.loggedUser.favoriteAddressId != address.id}" type="submit" class="change-favorite-btn">Marcar favorito</button>
                 </form>
             </div>
+
         </div>
+
         <div th:if="${addresses == null or addresses.isEmpty()}" style="text-align:center; margin-top:10px;">
             <em>Nenhum endereço salvo.</em>
         </div>
