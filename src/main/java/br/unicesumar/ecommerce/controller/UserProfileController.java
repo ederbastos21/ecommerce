@@ -5,6 +5,8 @@ import br.unicesumar.ecommerce.model.PaymentMethod;
 import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.repository.AddressRepository;
 import br.unicesumar.ecommerce.repository.PaymentMethodRepository;
+import br.unicesumar.ecommerce.repository.UserRepository;
+import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,12 @@ public class UserProfileController {
 
     private final AddressRepository addressRepository;
     private final PaymentMethodRepository paymentRepository;
+    private final UserRepository userRepository;
 
-    public UserProfileController(AddressRepository addressRepository, PaymentMethodRepository paymentRepository) {
+    public UserProfileController(AddressRepository addressRepository, PaymentMethodRepository paymentRepository, UserRepository userRepository) {
         this.addressRepository = addressRepository;
         this.paymentRepository = paymentRepository;
+        this.userRepository = userRepository;
     }
 
     // Página principal do perfil
@@ -65,7 +69,12 @@ public class UserProfileController {
         User user = (User) session.getAttribute("loggedUser");
         if (user != null) {
             address.setUser(user);
-            addressRepository.save(address);
+            addressRepository.save(address); // id é gerado aqui
+
+            if (user.getFavoriteAddressId() == null) {
+                user.setFavoriteAddressId(address.getId());
+                userRepository.save(user);
+            }
         }
         return "redirect:/userProfile/addresses";
     }
