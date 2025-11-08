@@ -639,7 +639,7 @@ a {
     text-align: center;
 }
 
-.action-btn {
+.action-btn, .change-favorite-btn {
     padding: 12px 20px;
     border: none;
     border-radius: 6px;
@@ -663,13 +663,22 @@ a {
     background-color: #0056b3;
 }
 
-.action-btn.danger {
+.action-btn.danger{
     background-color: #dc3545;
     color: white;
 }
 
 .action-btn.danger:hover {
     background-color: #c82333;
+}
+
+.change-favorite-btn{
+    background-color: #fd7e14;
+    color: white;
+}
+
+.change-favorite-btn:hover{
+    background-color: #e06c0d;
 }
 
 .account-buttons {
@@ -872,7 +881,7 @@ tbody td {
 }
 
 .edit-btn,
-.delete-btn, .see-btn {
+.delete-btn, .see-btn{
     padding: 6px 12px;
     border: none;
     border-radius: 5px;
@@ -890,7 +899,7 @@ tbody td {
     background-color: #218838;
 }
 
-.see-btn {
+.see-btn{
     background-color: #fd7e14;
 }
 
