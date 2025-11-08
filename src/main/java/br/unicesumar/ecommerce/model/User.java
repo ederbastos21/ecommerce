@@ -28,6 +28,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Address> addresses;
 
+    private Long favoriteAddressId;
+
+    private Long favoritePaymentMethodId;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<PaymentMethod> paymentMethods;
 
@@ -128,5 +132,21 @@ public class User {
 
     public void setPaymentMethods(java.util.List<PaymentMethod> paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    public Long getFavoriteAddressId() {
+        return favoriteAddressId;
+    }
+
+    public void setFavoriteAddressId(Long favoriteAddressId) {
+        this.favoriteAddressId = favoriteAddressId;
+    }
+
+    public Long getFavoritePaymentMethodId() {
+        return favoritePaymentMethodId;
+    }
+
+    public void setFavoritePaymentMethodId(Long favoritePaymentMethodId) {
+        this.favoritePaymentMethodId = favoritePaymentMethodId;
     }
 }
