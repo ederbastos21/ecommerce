@@ -78,8 +78,8 @@
                     <div class="product-pricing">
                         <div class="product-price">
                             <span th:text="'R$ ' + ${product.discountPrice}"></span>
-                            <span th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 20px; margin-right: 6px;"></span>
-                            <span th:text="'-' + ${product.discount} + '%'" style="color: red; font-size: 15px;"></span>
+                            <span th:if="${product.discount >=1}" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 20px; margin-right: 6px;"></span>
+                            <span th:if="${product.discount >=1}" th:text="'-' + ${product.discount} + '%'" style="color: red; font-size: 15px;"></span>
                         </div>
                     </div>
 
