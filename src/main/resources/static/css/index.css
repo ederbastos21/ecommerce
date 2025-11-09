@@ -1475,3 +1475,53 @@ body:has(.auth-container) {
 .product-info-related .product-price {
     font-size: 16px;
 }
+
+.message-container {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 20px 25px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Alertas */
+.alert {
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    word-wrap: break-word; /* garante quebra de linha se a mensagem for longa */
+}
+
+/* Erro */
+.alert.error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+/* Sucesso */
+.alert.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/* Botão */
+.back-btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}
+
+
