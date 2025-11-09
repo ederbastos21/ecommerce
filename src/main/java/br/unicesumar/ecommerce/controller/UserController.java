@@ -50,7 +50,11 @@ public class UserController {
 
     //login
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser != null){
+            return "redirect:/";
+        }
         return "login";
     }
 
