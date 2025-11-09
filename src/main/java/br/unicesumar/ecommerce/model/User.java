@@ -2,6 +2,7 @@ package br.unicesumar.ecommerce.model;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class User {
     private String password;
     private String role;
     private int token;
+    private Date attemptTime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Purchase> purchases = new ArrayList<>();
@@ -157,5 +159,13 @@ public class User {
 
     public void setToken(int token) {
         this.token = token;
+    }
+
+    public Date getAttemptTime() {
+        return attemptTime;
+    }
+
+    public void setAttemptTime(Date attemptTime) {
+        this.attemptTime = attemptTime;
     }
 }
