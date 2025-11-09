@@ -1,6 +1,7 @@
 package br.unicesumar.ecommerce.controller;
 
 import br.unicesumar.ecommerce.model.User;
+import br.unicesumar.ecommerce.repository.UserRepository;
 import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import br.unicesumar.ecommerce.model.Purchase;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -196,4 +198,54 @@ public class UserController {
     
         return "purchaseHistory";
     }
+
+    @GetMapping("/passwordChange")
+    public String returnPasswordChangePage(){
+        return "passwordChange";
+    }
+
+    @PostMapping("changePasswordFromToken")
+    public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model){
+        User user = userService.findByEmail(email);
+        if (user == null) return "passwordChangeResult";
+
+        boolean canPass = true;
+        Date dateNow = new Date();
+        Date attemptTime = user.getLastAttemptDate();
+
+        if (attemptTime != null) {
+            long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
+            long fifteenMinutes = 15 * 60 * 1000;
+            if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
+                canPass = false;
+            }
+        }
+
+        if (!canPass) {
+            model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+            model.addAttribute("success", ".");
+            return "passwordChangeResult";
+        }
+
+        if (Integer.toString(user.getToken()).equals(token)) {
+            user.setPassword(newPassword);
+            user.setLastAttemptDate(null);
+            user.setFailedAttempts(0);
+            userService.saveUser(user);
+            model.addAttribute("success", "Senha trocada com sucesso!");
+            model.addAttribute("error", ".");
+            return "login";
+        } else {
+            int failedAttempts = user.getFailedAttempts() + 1;
+            user.setFailedAttempts(failedAttempts);
+            if (user.getFailedAttempts()>=3){
+                user.setLastAttemptDate(new Date());
+                model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+                model.addAttribute("success", ".");
+            }
+            userService.saveUser(user);
+            return "passwordChange";
+        }
+    }
+
 }
