@@ -204,7 +204,7 @@ public class UserController {
         return "passwordChange";
     }
 
-    @PostMapping("changePasswordFromToken")
+    @PostMapping("changePassword")
     public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model, HttpSession session){
         User user = userService.findByEmail(email);
         if (user == null) return "passwordChange";
