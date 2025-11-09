@@ -23,7 +23,8 @@ public class User {
     private String password;
     private String role;
     private int token;
-    private Date attemptTime;
+    private int failedAttempts;
+    private Date lastAttemptDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Purchase> purchases = new ArrayList<>();
@@ -161,11 +162,19 @@ public class User {
         this.token = token;
     }
 
-    public Date getAttemptTime() {
-        return attemptTime;
+    public int getFailedAttempts() {
+        return failedAttempts;
     }
 
-    public void setAttemptTime(Date attemptTime) {
-        this.attemptTime = attemptTime;
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public Date getLastAttemptDate() {
+        return lastAttemptDate;
+    }
+
+    public void setLastAttemptDate(Date lastAttemptDate) {
+        this.lastAttemptDate = lastAttemptDate;
     }
 }
