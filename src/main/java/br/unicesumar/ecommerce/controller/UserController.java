@@ -215,15 +215,21 @@ public class UserController {
 
         if (attemptTime != null) {
             long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
-            long fifteenMinutes = 15 * 60 * 1000;
+            long fifteenMinutes = 1 * 60 * 1000;
             if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
                 canPass = false;
+            }
+
+            //resets attempts after 15 minutes have elapsed
+            if (differenceMilliseconds > fifteenMinutes){
+                canPass = true;
+                user.setFailedAttempts(0);
+                userService.saveUser(user);
             }
         }
 
         if (!canPass) {
             model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
-            model.addAttribute("success", ".");
             return "passwordChangeResult";
         }
 
@@ -233,7 +239,6 @@ public class UserController {
             user.setFailedAttempts(0);
             userService.saveUser(user);
             model.addAttribute("success", "Senha trocada com sucesso!");
-            model.addAttribute("error", ".");
             return "login";
         } else {
             int failedAttempts = user.getFailedAttempts() + 1;
@@ -241,7 +246,6 @@ public class UserController {
             if (user.getFailedAttempts()>=3){
                 user.setLastAttemptDate(new Date());
                 model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
-                model.addAttribute("success", ".");
             }
             userService.saveUser(user);
             return "passwordChange";
