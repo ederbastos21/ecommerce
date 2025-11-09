@@ -207,7 +207,7 @@ public class UserController {
     @PostMapping("changePasswordFromToken")
     public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model){
         User user = userService.findByEmail(email);
-        if (user == null) return "passwordChangeResult";
+        if (user == null) return "passwordChange";
 
         boolean canPass = true;
         Date dateNow = new Date();
@@ -230,7 +230,7 @@ public class UserController {
 
         if (!canPass) {
             model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
-            return "passwordChangeResult";
+            return "passwordChange";
         }
 
         if (Integer.toString(user.getToken()).equals(token)) {
