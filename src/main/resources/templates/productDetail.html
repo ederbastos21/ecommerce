@@ -101,6 +101,11 @@
                         <span th:text="${product.ammountSold} + ' unidades'">25 unidades</span>
                     </div>
 
+                    <div th:if="${loggedUser != null}" class="product-sold">
+                        <span class="sold-label">Frete:</span>
+                        <span th:text="'R$' + ${freightCost}"></span>
+                    </div>
+
                     <form th:if="${product.availableQuantity > 0}" th:action="@{/addToCart/{id}(id=${product.id})}" method="post">
                         <div class="quantity-selector">
                             <label for="quantity">Quantidade:</label>

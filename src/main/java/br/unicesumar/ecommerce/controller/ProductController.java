@@ -1,8 +1,10 @@
 package br.unicesumar.ecommerce.controller;
 
+import br.unicesumar.ecommerce.model.Address;
 import br.unicesumar.ecommerce.model.Product;
 import br.unicesumar.ecommerce.model.Purchase;
 import br.unicesumar.ecommerce.model.User;
+import br.unicesumar.ecommerce.repository.AddressRepository;
 import br.unicesumar.ecommerce.service.ProductService;
 import br.unicesumar.ecommerce.service.PurchaseService;
 import jakarta.servlet.http.HttpSession;
@@ -11,7 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Iterator;
 
@@ -28,9 +34,11 @@ import java.util.Iterator;
 public class ProductController {
 
     private final ProductService productService;
+    private final AddressRepository addressRepository;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, AddressRepository addressRepository) {
         this.productService = productService;
+        this.addressRepository = addressRepository;
     }
 
     //home loader
@@ -91,19 +99,41 @@ public class ProductController {
 
     //shows product detail individual page
     @GetMapping("/productDetail/{id}")
-    public String ShowProductDetail(Model model,
-                                    @PathVariable Long id,
-                                    @ModelAttribute("successMessage") String successMessage)  {
+    public String ShowProductDetail(Model model, @PathVariable Long id, @ModelAttribute("successMessage") String successMessage, HttpSession session)  {
         System.out.println(">>> Entrou em ShowProductDetail");
         Product product = productService.findById(id);
         model.addAttribute("product",  product);
 
-        // produtos relacionados
         List<Product> relatedProducts = productService.findRelatedProducts(
             product.getCategory(),
             product.getId()
         );
+
+        User loggedUser = (User) session.getAttribute("loggedUser");
+
+        double freight = 0.0;
+        if (loggedUser != null){
+            Long favId = loggedUser.getFavoriteAddressId();
+            Address favoriteAddress = null;
+
+            String state = "";
+
+            if (favId != null) {
+                favoriteAddress = addressRepository.findById(favId).orElse(null);
+                state = favoriteAddress.getState();
+            }
+
+            String url = String.format("http://localhost:8080/api/calculate?state=%s",state);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            freight = restTemplate.getForObject(url, Double.class);
+        }
+
         model.addAttribute("relatedProducts", relatedProducts);
+        model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("freightCost", freight);
+
 
         return "productDetail";
     }
