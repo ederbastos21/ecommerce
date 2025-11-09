@@ -16,6 +16,9 @@
             </div>
         </a>
         <p th:text="${success}"></p>
+        <p th:if="${successToken}" class="info" style="color: purple; text-align: center; font-size: 1.1em;">
+            Conta criada com sucesso. Guarde este código de recuperação, aparecera uma vez apenas: <span th:text="${successToken}"></span>
+        </p>
         <h2 class="auth-title">Entre na sua conta</h2>
         <p class="error" th:text="${userNotLoggedError}" style="color: blue;"></p>
         <p class="error" th:text="${loginNotFound}" style="color: red;"></p>

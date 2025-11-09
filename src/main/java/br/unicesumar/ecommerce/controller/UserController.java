@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String processRegisterForm(@ModelAttribute User user, Model model) {
+    public String processRegisterForm(@ModelAttribute User user, Model model, RedirectAttributes redirectAttributes) {
         user.setRole("USER");
         int number = (int) (Math.random() * 10000);
         user.setToken(number);
@@ -44,6 +44,9 @@ public class UserController {
             model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
             return "register";
         }
+
+        redirectAttributes.addFlashAttribute("successToken", number);
+
         userService.saveUser(user);
         return "redirect:/login";
     }
