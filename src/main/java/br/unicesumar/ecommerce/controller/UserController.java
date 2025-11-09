@@ -205,7 +205,7 @@ public class UserController {
     }
 
     @PostMapping("changePasswordFromToken")
-    public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model){
+    public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model, HttpSession session){
         User user = userService.findByEmail(email);
         if (user == null) return "passwordChange";
 
@@ -215,13 +215,13 @@ public class UserController {
 
         if (attemptTime != null) {
             long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
-            long fifteenMinutes = 1 * 60 * 1000;
+            long fifteenMinutes = 15 * 60 * 1000;
             if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
                 canPass = false;
             }
 
             //resets attempts after 15 minutes have elapsed
-            if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts()>=3){
+            if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts() >= 3){
                 canPass = true;
                 user.setFailedAttempts(0);
                 userService.saveUser(user);
@@ -239,10 +239,12 @@ public class UserController {
             user.setFailedAttempts(0);
             userService.saveUser(user);
             model.addAttribute("success", "Senha trocada com sucesso!");
-            return "login";
+            return "passwordChange";
         } else {
             int failedAttempts = user.getFailedAttempts() + 1;
             user.setFailedAttempts(failedAttempts);
+            String message = (3-(user.getFailedAttempts()) + " tentativas restantes");
+            model.addAttribute("error", message);
             if (user.getFailedAttempts()>=3){
                 user.setLastAttemptDate(new Date());
                 model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
