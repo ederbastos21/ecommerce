@@ -21,6 +21,7 @@ public class User {
     private String address;
     private String password;
     private String role;
+    private int token;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Purchase> purchases = new ArrayList<>();
@@ -148,5 +149,13 @@ public class User {
 
     public void setFavoritePaymentMethodId(Long favoritePaymentMethodId) {
         this.favoritePaymentMethodId = favoritePaymentMethodId;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
     }
 }

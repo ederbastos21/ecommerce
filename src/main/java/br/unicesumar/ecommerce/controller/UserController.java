@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Controller
 public class UserController {
@@ -35,6 +36,8 @@ public class UserController {
     @PostMapping("/register")
     public String processRegisterForm(@ModelAttribute User user, Model model) {
         user.setRole("USER");
+        int number = (int) (Math.random() * 10000);
+        user.setToken(number);
         if (userService.findByEmail(user.getEmail()) != null ){
             model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
             return "register";
