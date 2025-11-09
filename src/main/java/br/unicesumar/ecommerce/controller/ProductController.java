@@ -112,7 +112,7 @@ public class ProductController {
         User loggedUser = (User) session.getAttribute("loggedUser");
 
         double freight = 0.0;
-        if (loggedUser != null){
+        if (loggedUser != null && loggedUser.getFavoriteAddressId()!=null){
             Long favId = loggedUser.getFavoriteAddressId();
             Address favoriteAddress = null;
 

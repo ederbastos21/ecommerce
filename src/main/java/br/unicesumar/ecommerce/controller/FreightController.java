@@ -9,8 +9,8 @@ public class FreightController {
     @GetMapping("/calculate")
     public double calculate(@RequestParam String state) {
 
-        double baseValue = 10;
-        double valuePerKm = 10;
+        double baseValue = 20;
+        double valuePerKm = 0.02;
 
         switch (state.toUpperCase()) { // aceita siglas em maiúsculo
             case "AC": // Acre
