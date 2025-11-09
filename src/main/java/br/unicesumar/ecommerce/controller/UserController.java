@@ -205,53 +205,73 @@ public class UserController {
     }
 
     @PostMapping("changePassword")
-    public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String newPassword, Model model, HttpSession session){
+    public String changePassword(@RequestParam String email, @RequestParam String token, @RequestParam String oldPassword, @RequestParam String newPassword, Model model, HttpSession session) {
         User user = userService.findByEmail(email);
-        if (user == null) return "passwordChange";
+        if (user == null) {
+            model.addAttribute("error", "email nao corresponde a uma conta existente");
+            return "passwordChange";
+        }
 
-        boolean canPass = true;
-        Date dateNow = new Date();
-        Date attemptTime = user.getLastAttemptDate();
+        User loggedUser = (User) session.getAttribute("loggedUser");
 
-        if (attemptTime != null) {
-            long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
-            long fifteenMinutes = 15 * 60 * 1000;
-            if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
-                canPass = false;
+        if (loggedUser == null) { //token only when not logged in
+
+            boolean canPass = true;
+            Date dateNow = new Date();
+            Date attemptTime = user.getLastAttemptDate();
+
+            if (attemptTime != null) {
+                long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
+                long fifteenMinutes = 15 * 60 * 1000;
+                if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
+                    canPass = false;
+                }
+
+                //resets attempts after 15 minutes have elapsed
+                if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts() >= 3) {
+                    canPass = true;
+                    user.setFailedAttempts(0);
+                    userService.saveUser(user);
+                }
             }
 
-            //resets attempts after 15 minutes have elapsed
-            if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts() >= 3){
-                canPass = true;
+            if (!canPass) {
+                model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+                return "passwordChange";
+            }
+
+            if (Integer.toString(user.getToken()).equals(token)) {
+                user.setPassword(newPassword);
+                user.setLastAttemptDate(null);
                 user.setFailedAttempts(0);
                 userService.saveUser(user);
+                model.addAttribute("success", "Senha trocada com sucesso!");
+                return "passwordChange";
+            } else {
+                int failedAttempts = user.getFailedAttempts() + 1;
+                user.setFailedAttempts(failedAttempts);
+                String message = (3 - (user.getFailedAttempts()) + " tentativas restantes");
+                model.addAttribute("error", message);
+                if (user.getFailedAttempts() >= 3) {
+                    user.setLastAttemptDate(new Date());
+                    model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+                }
+                userService.saveUser(user);
+                return "passwordChange";
             }
-        }
-
-        if (!canPass) {
-            model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
-            return "passwordChange";
-        }
-
-        if (Integer.toString(user.getToken()).equals(token)) {
-            user.setPassword(newPassword);
-            user.setLastAttemptDate(null);
-            user.setFailedAttempts(0);
-            userService.saveUser(user);
-            model.addAttribute("success", "Senha trocada com sucesso!");
-            return "passwordChange";
-        } else {
-            int failedAttempts = user.getFailedAttempts() + 1;
-            user.setFailedAttempts(failedAttempts);
-            String message = (3-(user.getFailedAttempts()) + " tentativas restantes");
-            model.addAttribute("error", message);
-            if (user.getFailedAttempts()>=3){
-                user.setLastAttemptDate(new Date());
-                model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+        } else {//when logged in
+            model.addAttribute("loggedUser",loggedUser);
+            if (user.getPassword().equals(oldPassword)){
+                user.setPassword(newPassword);
+                userService.saveUser(user);
+                session.invalidate();
+                model.addAttribute("success", "senha alterada com sucesso");
+                model.addAttribute("justChangedPassword", ".");
+                return "passwordChange";
+            } else {
+                model.addAttribute("error","email ou senha errados");
+                return "passwordChange";
             }
-            userService.saveUser(user);
-            return "passwordChange";
         }
     }
-
 }
