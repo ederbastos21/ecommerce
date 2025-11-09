@@ -221,7 +221,7 @@ public class UserController {
             }
 
             //resets attempts after 15 minutes have elapsed
-            if (differenceMilliseconds > fifteenMinutes){
+            if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts()>=3){
                 canPass = true;
                 user.setFailedAttempts(0);
                 userService.saveUser(user);
