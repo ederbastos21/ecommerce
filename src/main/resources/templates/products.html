@@ -74,6 +74,11 @@
                th:href="@{/productDetail/{id}(id=${product.id})}"
                class="product-card-link">
                 <div class="product-card">
+
+                    <div class="discount-badge" th:if="${product.discount >= 1}">
+                        <span th:text="'-' + ${product.discount} + '%'"></span>
+                    </div>
+
                     <div th:if="${product.imageFileName == null}" class="product-image-placeholder">
                         Sem Imagem
                     </div>

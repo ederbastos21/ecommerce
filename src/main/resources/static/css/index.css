@@ -1497,6 +1497,32 @@ body:has(.auth-container) {
   box-sizing: border-box;
 }
 
+.product-card {
+    position: relative; /* Importante para o badge ficar posicionado sobre a imagem */
+    overflow: hidden;   /* Para não ultrapassar bordas arredondadas */
+    border-radius: 8px;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #FF6F3C; /* Laranja moderno */
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.discount-badge span {
+    display: block;
+}
+
+
 }
 
 

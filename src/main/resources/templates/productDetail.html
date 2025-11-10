@@ -235,6 +235,11 @@
             <div th:if="${!#lists.isEmpty(relatedProducts)}" class="related-products-scroll-container">
                 <div th:each="related : ${relatedProducts}" class="product-card">
                     <a th:href="@{/productDetail/{id}(id=${related.id})}" class="product-card-link">
+
+                        <div class="discount-badge" th:if="${related.discount >= 1}">
+                            <span th:text="'-' + ${related.discount} + '%'"></span>
+                        </div>
+
                         <img th:if="${related.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${related.imageFileName})}" th:alt="${related.name}" class="related-product-image"/>
                         <div th:if="${related.imageFileName == null}" class="product-image-placeholder" style="height: 100px; font-size: 12px">
                             Sem Imagem
