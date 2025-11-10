@@ -206,7 +206,10 @@
                  th:each="pay : ${payments}"
                  th:style="${session.loggedUser.favoritePaymentMethodId == pay.id} ? 'background-color: #d4edda; border: 2px solid #28a745;' : 'background-color: #f0f0f0; border: 1px solid #ccc;'">
 
-                <span class="info-label" th:text="${pay.type}"></span>
+                <span class="info-value"
+                      th:text="'**** **** **** ' + ${#strings.substring(#strings.replace(pay.cardNumber, ' ', ''), 12, 16)}">
+                </span>
+                
                 <span class="info-value" th:text="${pay.cardHolderName}"></span>
 
                 <form th:action="@{/userProfile/deletePayment/{id}(id=${pay.id})}" method="post" style="display:inline;">
