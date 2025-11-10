@@ -336,17 +336,6 @@ a {
     margin-bottom: 12px;
 }
 
-/* Product Detail */
-.product-detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
 .product-images {
     display: flex;
     flex-direction: column;
@@ -516,7 +505,6 @@ a {
 
 .product-description {
     background-color: #f8f9fa;
-    padding: 20px;
     border-radius: 8px;
     margin-top: 20px;
 }
@@ -1475,5 +1463,44 @@ body:has(.auth-container) {
 .product-info-related .product-price {
     font-size: 16px;
 }
+
+/* ---------- LARGURA UNIFORME E CENTRALIZADA ---------- */
+.main-content > .product-detail-container,
+.main-content > .product-description-block,
+.main-content > .related-products-block {
+  max-width: 1200px;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ---------- BLOCO 1: DETALHES DO PRODUTO ---------- */
+.product-detail-container {
+  display: grid;                   /* mantém o layout interno */
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+
+  background-color: #fff;          /* volta o fundo branco */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ---------- BLOCOS 2 e 3: OPICIONAL (para aparência igual) ---------- */
+.product-description-block,
+.related-products-block {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+}
+
+
+
+
 
 
