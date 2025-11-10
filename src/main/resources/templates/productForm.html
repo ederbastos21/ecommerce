@@ -65,7 +65,25 @@
 
         <div class="form-group">
             <label class="form-label" for="category">Category</label>
-            <input class="form-input" type="text" th:field="*{category}" id="category" required/>
+            <select class="form-input" th:field="*{category}" id="category" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="processors">Processadores (CPUs)</option>
+                <option value="motherboards">Placas-Mãe</option>
+                <option value="graphics-cards">Placas de Vídeo (GPUs)</option>
+                <option value="memory">Memória (RAM)</option>
+                <option value="storage-ssd">Armazenamento - SSD</option>
+                <option value="storage-hdd">Armazenamento - HDD</option>
+                <option value="cooling">Sistemas de Refrigeração</option>
+                <option value="power-supplies">Fontes de Alimentação</option>
+                <option value="cases">Gabinetes</option>
+                <option value="monitors">Monitores</option>
+                <option value="keyboards">Teclados</option>
+                <option value="mice">Mouses</option>
+                <option value="headsets">Headsets e Áudio</option>
+                <option value="networking">Redes e Conectividade</option>
+                <option value="peripherals">Outros Periféricos</option>
+                <option value="cables">Cabos e Adaptadores</option>
+            </select>
         </div>
 
         <div class="form-buttons">
