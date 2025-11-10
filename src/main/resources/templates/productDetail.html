@@ -245,10 +245,12 @@
                             Sem Imagem
                         </div>
 
-                        <div class="product-info-related">
-                            <div class="product-name" th:text="${related.name}"></div>
-                            <div class="product-price" th:text="'R$ ' + ${related.price}"></div>
+                        <div class="product-name" th:text="${product.name}"></div>
+                        <div class="product-price">
+                            <span class ="product-price" th:text="'R$ ' + ${product.discountPrice}"></span>
+                            <span th:if="${product.discount >=1}" class="product-price" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 14px;"></span>
                         </div>
+                        
                     </a>
                 </div>
             </div>
