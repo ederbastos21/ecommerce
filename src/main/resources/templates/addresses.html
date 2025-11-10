@@ -187,7 +187,7 @@
           }
 
           if (input === streetInput) {
-            const ok = /^[A-Za-zÀ-ÿ\s]{1,200}$/.test(value);
+            const ok = /^[A-Za-zÀ-ÿ0-9\s]{1,200}$/.test(value);
             input.setCustomValidity(ok ? '' : 'Rua inválida.');
             setIconState(icon, ok ? 'valid' : 'invalid');
             return;
