@@ -74,7 +74,12 @@
                th:href="@{/productDetail/{id}(id=${product.id})}"
                class="product-card-link">
                 <div class="product-card">
-                    <div class="product-image-placeholder">Product Image</div>
+                    <div th:if="${product.imageFileName == null}" class="product-image-placeholder">
+                        Sem Imagem
+                    </div>
+
+                    <img th:if="${product.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${product.imageFileName})}" th:alt="${product.name}" class="product-card-image"/>
+
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price">
                         <span class ="product-price" th:text="'R$ ' + ${product.discountPrice}"></span>
