@@ -45,6 +45,11 @@ public class UserController {
             return "register";
         }
 
+        if (userService.findByCpf(user.getCpf()) != null){
+            model.addAttribute ("cpfAlreadyRegisteredError", "Ja existe uma conta com esse cpf");
+            return "register";
+        }
+
         redirectAttributes.addFlashAttribute("successToken", number);
 
         userService.saveUser(user);

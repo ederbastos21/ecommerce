@@ -32,5 +32,8 @@ public class UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+    public User findByCpf(String cpf){
+        return userRepository.findByCpf(cpf).orElse(null);
+    }
 
 }
