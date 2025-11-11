@@ -65,26 +65,40 @@
                     </tbody>
                 </table>
 
-                <table th:if="${activeTable == 'products'}">
+                <table th:if="${activeTable == 'products'}" class="admin-products-table">
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Imagem</th>
                         <th>Nome</th>
                         <th>Preço</th>
                         <th>Desconto</th>
-                        <th>Disponivel</th>
-                        <th>Quantidade Vendida</th>
+                        <th>Disponível</th>
+                        <th>Vendidos</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="product : ${products}">
                         <td th:text="${product.id}"></td>
+
+                        <!-- Coluna de imagem -->
+                        <td class="product-image-cell">
+                            <div th:if="${product.imageFileName == null}" class="product-image-placeholder small-placeholder">
+                                Sem Imagem
+                            </div>
+                            <img th:if="${product.imageFileName != null}"
+                                 th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
+                                 th:alt="${product.name}"
+                                 class="admin-product-image"/>
+                        </td>
+
                         <td th:text="${product.name}"></td>
                         <td th:text="'R$' + ${product.price}"></td>
                         <td th:text="${product.discount} + '%' "></td>
-                        <td th:text="${product.availableQuantity} + 'un' "></td>
-                        <td th:text="${product.ammountSold} + 'un'"></td>
+                        <td th:text="${product.availableQuantity}"></td>
+                        <td th:text="${product.ammountSold}"></td>
+
                         <td>
                             <a th:href="@{/productDetail/{id}(id=${product.id})}">
                                 <button class="see-btn" type="button">Ver</button>
