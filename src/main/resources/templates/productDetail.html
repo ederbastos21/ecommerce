@@ -240,17 +240,27 @@
                             <span th:text="'-' + ${related.discount} + '%'"></span>
                         </div>
 
-                        <img th:if="${related.imageFileName != null}" th:src="@{/uploads/{filename}(filename=${related.imageFileName})}" th:alt="${related.name}" class="related-product-image"/>
-                        <div th:if="${related.imageFileName == null}" class="product-image-placeholder" style="height: 100px; font-size: 12px">
+                        <img th:if="${related.imageFileName != null}"
+                             th:src="@{/uploads/{filename}(filename=${related.imageFileName})}"
+                             th:alt="${related.name}"
+                             class="related-product-image"/>
+
+                        <div th:if="${related.imageFileName == null}"
+                             class="product-image-placeholder"
+                             style="height: 100px; font-size: 12px">
                             Sem Imagem
                         </div>
 
-                        <div class="product-name" th:text="${product.name}"></div>
+                        <div class="product-name" th:text="${related.name}"></div>
                         <div class="product-price">
-                            <span class ="product-price" th:text="'R$ ' + ${product.discountPrice}"></span>
-                            <span th:if="${product.discount >=1}" class="product-price" th:text="'R$ ' + ${product.price}" style="text-decoration: line-through; color: gray; font-size: 14px;"></span>
+                            <span class="product-price" th:text="'R$ ' + ${related.discountPrice}"></span>
+                            <span th:if="${related.discount >=1}"
+                                  class="product-price"
+                                  th:text="'R$ ' + ${related.price}"
+                                  style="text-decoration: line-through; color: gray; font-size: 14px;">
+            </span>
                         </div>
-                        
+
                     </a>
                 </div>
             </div>

@@ -817,6 +817,31 @@ a {
     gap: 20px;
 }
 
+.admin-products-table img.admin-product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+
+.product-image-placeholder.small-placeholder {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f0f0;
+    color: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.product-image-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
 .table-sidebar {
     min-width: 200px;
     background: #fff;
@@ -903,6 +928,24 @@ tbody td {
 .delete-btn:hover {
     background-color: #c82333;
 }
+
+.table-content td form,
+.table-content td a {
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.table-content td button {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+.table-content td:last-child {
+    padding: 8px;
+}
+
 
 .admin-form-container {
     background: #fff;

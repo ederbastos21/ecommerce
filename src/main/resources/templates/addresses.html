@@ -111,7 +111,7 @@
         <form th:action="@{/userProfile/addAddress}" method="post" class="form-inline">
             <input type="text" name="zipCode" placeholder="CEP" required>
             <input type="text" name="city" placeholder="Cidade" required>
-            <input type="text" name="state" placeholder="Estado" required>
+            <input type="text" name="state" placeholder="Estado (UF)" required>
             <input type="text" name="street" placeholder="Rua" required>
             <input type="text" name="number" placeholder="Número" required>
             <button type="submit" class="action-btn">Adicionar Endereço</button>
@@ -151,17 +151,78 @@
 <script>
     (function () {
       const form = document.querySelector('.form-inline');
-      const streetInput = form.querySelector('input[name="street"]');
-      const numberInput = form.querySelector('input[name="number"]');
+
       const cepInput = form.querySelector('input[name="zipCode"]');
       const cityInput = form.querySelector('input[name="city"]');
       const stateInput = form.querySelector('input[name="state"]');
+      const streetInput = form.querySelector('input[name="street"]');
+      const numberInput = form.querySelector('input[name="number"]');
 
-      // Bloquear edição de cidade e estado
-      cityInput.readOnly = true;
-      stateInput.readOnly = true;
+      const validStates = [
+        "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA",
+        "PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"
+      ];
 
-      const fields = [streetInput, numberInput, cepInput];
+      /* ==== Layout: botão pequeno ao lado do CEP ==== */
+      cepInput.style.width = "calc(70% - 5px)";
+      cepInput.style.display = "inline-block";
+      cepInput.style.marginRight = "5px";
+
+      const cepWrapper = document.createElement("div");
+      cepWrapper.style.display = "flex";
+      cepWrapper.style.alignItems = "center";
+      cepWrapper.style.gap = "6px";
+
+      cepInput.parentElement.insertBefore(cepWrapper, cepInput);
+      cepWrapper.appendChild(cepInput);
+
+      // Botão de verificação
+      const checkCepBtn = document.createElement('button');
+      checkCepBtn.type = 'button';
+      checkCepBtn.textContent = 'Verificar';
+      checkCepBtn.classList.add('action-btn');
+      checkCepBtn.style.padding = "8px 12px";
+      checkCepBtn.style.fontSize = "13px";
+      checkCepBtn.style.backgroundColor = "#1976d2";
+      checkCepBtn.style.color = "white";
+      checkCepBtn.style.borderRadius = "6px";
+      checkCepBtn.style.border = "none";
+      checkCepBtn.style.cursor = "pointer";
+      checkCepBtn.style.whiteSpace = "nowrap";
+      cepWrapper.appendChild(checkCepBtn);
+
+      // Spinner (rodinha)
+      const spinner = document.createElement("div");
+      spinner.style.display = "none";
+      spinner.style.width = "18px";
+      spinner.style.height = "18px";
+      spinner.style.border = "2px solid #ccc";
+      spinner.style.borderTop = "2px solid #1976d2";
+      spinner.style.borderRadius = "50%";
+      spinner.style.animation = "spin 1s linear infinite";
+      spinner.style.marginLeft = "5px";
+      cepWrapper.appendChild(spinner);
+
+      // Mensagem de status
+      const statusMsg = document.createElement("div");
+      statusMsg.style.fontSize = "13px";
+      statusMsg.style.marginTop = "4px";
+      statusMsg.style.color = "#d50000";
+      statusMsg.style.display = "none";
+      cepWrapper.parentElement.appendChild(statusMsg);
+
+      // CSS da animação
+      const style = document.createElement("style");
+      style.innerHTML = `
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      /* ==== Ícones de validação visuais ==== */
+      const fields = [cepInput, cityInput, stateInput, streetInput, numberInput];
 
       fields.forEach(input => {
         const parent = input.parentElement;
@@ -172,66 +233,124 @@
         icon.innerHTML = getIconSVG('neutral');
         input.insertAdjacentElement('afterend', icon);
 
-        // Input event
-        input.addEventListener('input', async () => {
-          const value = input.value.trim();
-
-          if (!value) {
-            input.setCustomValidity('');
-            setIconState(icon, 'neutral');
-            if(input === cepInput) {
-              cityInput.value = '';
-              stateInput.value = '';
-            }
-            return;
-          }
-
-          if (input === streetInput) {
-            const ok = /^[A-Za-zÀ-ÿ0-9\s]{1,200}$/.test(value);
-            input.setCustomValidity(ok ? '' : 'Rua inválida.');
-            setIconState(icon, ok ? 'valid' : 'invalid');
-            return;
-          }
-
-          if (input === numberInput) {
-            const ok = /^\d{1,4}$/.test(value);
-            input.setCustomValidity(ok ? '' : 'Número inválido.');
-            setIconState(icon, ok ? 'valid' : 'invalid');
-            return;
-          }
-
-          if (input === cepInput) {
-            // Apenas números
-            const digits = onlyDigits(value).slice(0,8);
-            let formatted = digits;
-            if(digits.length > 5) formatted = digits.slice(0,5) + '-' + digits.slice(5);
-            input.value = formatted;
-
-            if(digits.length === 8) {
-              try {
-                const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
-                const data = await res.json();
-                if(data.erro) throw new Error('CEP inválido');
-                cityInput.value = data.localidade;
-                stateInput.value = data.uf;
-                setIconState(icon, 'valid');
-                input.setCustomValidity('');
-              } catch(e) {
-                cityInput.value = '';
-                stateInput.value = '';
-                setIconState(icon, 'invalid');
-                input.setCustomValidity('CEP inválido.');
-              }
-            } else {
-              cityInput.value = '';
-              stateInput.value = '';
-              setIconState(icon, 'neutral');
-              input.setCustomValidity('CEP incompleto.');
-            }
-          }
-        });
+        input.addEventListener('input', () => validateField(input, icon));
       });
 
+      /* ==== Máscara de CEP (12345-678) ==== */
+      cepInput.addEventListener('input', () => {
+        let digits = onlyDigits(cepInput.value);
+        if (digits.length > 8) digits = digits.slice(0, 8);
+        if (digits.length > 5) {
+          cepInput.value = digits.slice(0, 5) + '-' + digits.slice(5);
+        } else {
+          cepInput.value = digits;
+        }
+      });
+
+      /* ==== Clique no botão "Verificar" ==== */
+      checkCepBtn.addEventListener('click', async () => {
+        const digits = onlyDigits(cepInput.value); // só números
+        const icon = cepInput.nextElementSibling;
+
+        // Limpa mensagens
+        statusMsg.style.display = "none";
+        statusMsg.textContent = "";
+
+        // O CEP precisa ter 8 dígitos (sem importar o traço)
+        if (digits.length !== 8) {
+          setIconState(icon, 'invalid');
+          statusMsg.style.display = "block";
+          statusMsg.textContent = "O CEP deve conter exatamente 8 números.";
+          return;
+        }
+
+        // Mostra spinner e bloqueia botão
+        spinner.style.display = "inline-block";
+        checkCepBtn.disabled = true;
+
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 5000);
+          const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`, { signal: controller.signal });
+          clearTimeout(timeout);
+
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+
+          if (data.erro) throw new Error();
+
+          cityInput.value = data.localidade;
+          stateInput.value = data.uf.toUpperCase();
+          setIconState(icon, 'valid');
+          validateField(cityInput, cityInput.nextElementSibling);
+          validateField(stateInput, stateInput.nextElementSibling);
+
+          statusMsg.style.display = "block";
+          statusMsg.style.color = "#00c853";
+          setTimeout(() => statusMsg.style.display = "none", 4000);
+
+        } catch (e) {
+          // API falhou — apenas mostra aviso
+          setIconState(icon, 'valid'); // CEP ainda é válido se tem 8 dígitos
+          statusMsg.style.display = "block";
+          statusMsg.style.color = "#d50000";
+          statusMsg.textContent = "Não foi possível verificar o CEP. Preencha cidade e estado manualmente.";
+          setTimeout(() => statusMsg.style.display = "none", 5000);
+        } finally {
+          spinner.style.display = "none";
+          checkCepBtn.disabled = false;
+        }
+      });
+
+      /* ==== Validação dos campos ==== */
+      function validateField(input, icon) {
+        const value = input.value.trim();
+
+        if (!value) {
+          input.setCustomValidity('');
+          setIconState(icon, 'neutral');
+          return;
+        }
+
+        if (input === cepInput) {
+          const digits = onlyDigits(value);
+          const ok = /^\d{8}$/.test(digits);
+          input.setCustomValidity('');
+          setIconState(icon, ok ? 'valid' : 'invalid');
+          return;
+        }
+
+        if (input === cityInput) {
+          const ok = /^[A-Za-zÀ-ÿ\s]{1,100}$/.test(value);
+          input.setCustomValidity(ok ? '' : 'Cidade inválida.');
+          setIconState(icon, ok ? 'valid' : 'invalid');
+          return;
+        }
+
+        if (input === stateInput) {
+          input.value = input.value.toUpperCase().slice(0, 2);
+          const ok = validStates.includes(input.value);
+          input.setCustomValidity(ok ? '' : 'Estado inválido.');
+          setIconState(icon, ok ? 'valid' : 'invalid');
+          return;
+        }
+
+        if (input === streetInput) {
+          const ok = /^[A-Za-zÀ-ÿ\s]{1,200}$/.test(value);
+          input.setCustomValidity(ok ? '' : 'Rua inválida.');
+          setIconState(icon, ok ? 'valid' : 'invalid');
+          return;
+        }
+
+        if (input === numberInput) {
+          const ok = /^\d{1,10}$/.test(value);
+          input.setCustomValidity(ok ? '' : 'Número inválido.');
+          setIconState(icon, ok ? 'valid' : 'invalid');
+          return;
+        }
+      }
+
+      /* ==== Utilitários ==== */
       function onlyDigits(s) {
         return String(s || '').replace(/\D/g, '');
       }
@@ -264,9 +383,10 @@
             <line x1="8" y1="12" x2="16" y2="12"></line>
           </svg>`;
       }
-
     })();
 </script>
+
+
 
 </body>
 </html>
