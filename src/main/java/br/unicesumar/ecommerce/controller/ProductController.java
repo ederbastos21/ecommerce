@@ -2,33 +2,23 @@ package br.unicesumar.ecommerce.controller;
 
 import br.unicesumar.ecommerce.model.Address;
 import br.unicesumar.ecommerce.model.Product;
-import br.unicesumar.ecommerce.model.Purchase;
 import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.repository.AddressRepository;
 import br.unicesumar.ecommerce.service.ProductService;
-import br.unicesumar.ecommerce.service.PurchaseService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Iterator;
 
 @Controller
 public class ProductController {
@@ -36,12 +26,14 @@ public class ProductController {
     private final ProductService productService;
     private final AddressRepository addressRepository;
 
-    public ProductController(ProductService productService, AddressRepository addressRepository) {
+    public ProductController(
+        ProductService productService,
+        AddressRepository addressRepository
+    ) {
         this.productService = productService;
         this.addressRepository = addressRepository;
     }
 
-    //home loader
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
@@ -55,9 +47,6 @@ public class ProductController {
         return "index";
     }
 
-    //=============== PRODUCTS ===============
-
-    //shows products in products page using sort
     @GetMapping("/products")
     public String index(
         @RequestParam(required = false) String search,
@@ -97,12 +86,16 @@ public class ProductController {
         return "products";
     }
 
-    //shows product detail individual page
     @GetMapping("/productDetail/{id}")
-    public String ShowProductDetail(Model model, @PathVariable Long id, @ModelAttribute("successMessage") String successMessage, HttpSession session)  {
+    public String ShowProductDetail(
+        Model model,
+        @PathVariable Long id,
+        @ModelAttribute("successMessage") String successMessage,
+        HttpSession session
+    ) {
         System.out.println(">>> Entrou em ShowProductDetail");
         Product product = productService.findById(id);
-        model.addAttribute("product",  product);
+        model.addAttribute("product", product);
 
         List<Product> relatedProducts = productService.findRelatedProducts(
             product.getCategory(),
@@ -112,18 +105,23 @@ public class ProductController {
         User loggedUser = (User) session.getAttribute("loggedUser");
 
         double freight = 0.0;
-        if (loggedUser != null && loggedUser.getFavoriteAddressId()!=null){
+        if (loggedUser != null && loggedUser.getFavoriteAddressId() != null) {
             Long favId = loggedUser.getFavoriteAddressId();
             Address favoriteAddress = null;
 
             String state = "";
 
             if (favId != null) {
-                favoriteAddress = addressRepository.findById(favId).orElse(null);
+                favoriteAddress = addressRepository
+                    .findById(favId)
+                    .orElse(null);
                 state = favoriteAddress.getState();
             }
 
-            String url = String.format("http://localhost:8080/api/calculate?state=%s",state);
+            String url = String.format(
+                "http://localhost:8080/api/calculate?state=%s",
+                state
+            );
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -134,13 +132,9 @@ public class ProductController {
         model.addAttribute("loggedUser", loggedUser);
         model.addAttribute("freightCost", freight);
 
-
         return "productDetail";
     }
 
-    //=============== CART ===============
-
-    //shows cart page
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model) {
         List<Map<String, Object>> cart = getCart(session);
@@ -157,7 +151,9 @@ public class ProductController {
                 CartItemView view = new CartItemView();
                 view.setProduct(product);
                 view.setQuantity(quantity);
-                view.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+                view.setSubtotal(
+                    product.getPrice().multiply(BigDecimal.valueOf(quantity))
+                );
 
                 totalPrice = totalPrice.add(view.getSubtotal());
                 cartItems.add(view);
@@ -172,10 +168,10 @@ public class ProductController {
 
     @PostMapping("/addToCart/{id}")
     public String addToCart(
-            @PathVariable Long id,
-            @RequestParam(defaultValue = "1") int quantity,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
+        @PathVariable Long id,
+        @RequestParam(defaultValue = "1") int quantity,
+        HttpSession session,
+        RedirectAttributes redirectAttributes
     ) {
         Product product = productService.findById(id);
         if (product == null) {
@@ -205,12 +201,19 @@ public class ProductController {
         }
 
         updateCartSession(session, cart);
-        redirectAttributes.addFlashAttribute("successMessage", "Produto adicionado ao carrinho!");
+        redirectAttributes.addFlashAttribute(
+            "successMessage",
+            "Produto adicionado ao carrinho!"
+        );
         return "redirect:/productDetail/{id}";
     }
 
     @PostMapping("/updateCart/{id}")
-    public String updateCart(@PathVariable Long id, @RequestParam int quantity, HttpSession session) {
+    public String updateCart(
+        @PathVariable Long id,
+        @RequestParam int quantity,
+        HttpSession session
+    ) {
         List<Map<String, Object>> cart = getCart(session);
 
         Iterator<Map<String, Object>> iterator = cart.iterator();
@@ -240,8 +243,6 @@ public class ProductController {
         return "redirect:/cart";
     }
 
-    // ======================== MÉTODOS AUXILIARES ========================
-
     @SuppressWarnings("unchecked")
     private List<Map<String, Object>> getCart(HttpSession session) {
         Object cartObj = session.getAttribute("cart");
@@ -254,51 +255,20 @@ public class ProductController {
     }
 
     private int getCartCount(List<Map<String, Object>> cart) {
-        return cart.stream().mapToInt(item -> (int) item.get("quantity")).sum();
+        return cart
+            .stream()
+            .mapToInt(item -> (int) item.get("quantity"))
+            .sum();
     }
 
-    private void updateCartSession(HttpSession session, List<Map<String, Object>> cart) {
+    private void updateCartSession(
+        HttpSession session,
+        List<Map<String, Object>> cart
+    ) {
         session.setAttribute("cart", cart);
         session.setAttribute("cartItemCount", getCartCount(cart));
     }
 
-
-    //processes purchase
-    @Autowired
-    private PurchaseService purchaseService;
-
-    @PostMapping("/buy")
-    public String processPurchase(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser == null) {
-            return "redirect:/login";
-        }
-
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null || cart.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Carrinho vazio!");
-            return "redirect:/cart";
-        }
-
-        try {
-            Purchase purchase = purchaseService.createPurchase(loggedUser, cart);
-
-            for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
-                productService.updateStock(entry.getKey(), entry.getValue());
-            }
-
-            session.removeAttribute("cart");
-
-            redirectAttributes.addFlashAttribute("successMessage", "Compra realizada com sucesso! Pedido #" + purchase.getId());
-            return "redirect:/purchaseHistory";
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Erro ao processar compra: " + e.getMessage());
-            return "redirect:/cart";
-        }
-    }
-
-    //inner class for cart display
     public static class CartItemView {
 
         private Product product;

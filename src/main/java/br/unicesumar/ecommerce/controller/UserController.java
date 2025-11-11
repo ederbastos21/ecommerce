@@ -1,31 +1,28 @@
 package br.unicesumar.ecommerce.controller;
 
+import br.unicesumar.ecommerce.model.Purchase;
 import br.unicesumar.ecommerce.model.User;
 import br.unicesumar.ecommerce.repository.UserRepository;
+import br.unicesumar.ecommerce.service.PurchaseService;
 import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import br.unicesumar.ecommerce.service.PurchaseService;
-import br.unicesumar.ecommerce.model.Purchase;
-
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -36,12 +33,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String processRegisterForm(@ModelAttribute User user, Model model, RedirectAttributes redirectAttributes) {
+    public String processRegisterForm(
+        @ModelAttribute User user,
+        Model model,
+        RedirectAttributes redirectAttributes
+    ) {
         user.setRole("USER");
         int number = (int) (Math.random() * 10000);
         user.setToken(number);
-        if (userService.findByEmail(user.getEmail()) != null ){
-            model.addAttribute("emailAlreadyRegisteredError", "Já existe uma conta com esse email");
+        if (userService.findByEmail(user.getEmail()) != null) {
+            model.addAttribute(
+                "emailAlreadyRegisteredError",
+                "Já existe uma conta com esse email"
+            );
             return "register";
         }
 
@@ -55,14 +59,19 @@ public class UserController {
     @GetMapping("/login")
     public String showLoginPage(HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
-        if (loggedUser != null){
+        if (loggedUser != null) {
             return "redirect:/";
         }
         return "login";
     }
 
     @PostMapping("/login")
-    public String processLoginPage(@RequestParam String email, @RequestParam String password, HttpSession session, Model model) {
+    public String processLoginPage(
+        @RequestParam String email,
+        @RequestParam String password,
+        HttpSession session,
+        Model model
+    ) {
         User user = userService.findByEmail(email);
 
         if (user != null && user.getPassword().equals(password)) {
@@ -81,17 +90,13 @@ public class UserController {
         return "redirect:/";
     }
 
-//    //show user profile get
-//    @GetMapping("/userProfile")
-//    public String showUserProfile(HttpSession session, Model model) {
-//        User loggedUser = (User) session.getAttribute("loggedUser");
-//        model.addAttribute("loggedUser",loggedUser);
-//        return "userProfile";
-//    }
-
     //account management functions
     @GetMapping("/edit/{id}")
-    public String editUserForm(@PathVariable Long id, Model model, HttpSession session) {
+    public String editUserForm(
+        @PathVariable Long id,
+        Model model,
+        HttpSession session
+    ) {
         try {
             User loggedUser = (User) session.getAttribute("loggedUser");
             if (!(loggedUser.getId().equals(id))) {
@@ -108,10 +113,11 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute User userForm, HttpSession session) {
-
         User loggedUser = (User) session.getAttribute("loggedUser");
 
-        if (loggedUser == null || !loggedUser.getId().equals(userForm.getId())) {
+        if (
+            loggedUser == null || !loggedUser.getId().equals(userForm.getId())
+        ) {
             return "redirect:/userProfile";
         }
 
@@ -135,10 +141,12 @@ public class UserController {
         return "redirect:/userProfile";
     }
 
-
-
     @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id, @ModelAttribute User user, HttpSession session) {
+    public String deleteUser(
+        @PathVariable Long id,
+        @ModelAttribute User user,
+        HttpSession session
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !loggedUser.getId().equals(user.getId())) {
             return "redirect:/userProfile";
@@ -148,46 +156,8 @@ public class UserController {
         return "redirect:/";
     }
 
-    //cart functions
-/*    @PostMapping("/buy")
-    public String buy(HttpSession session){
-        session.removeAttribute("cart");
-        return "redirect:/cart";
-    }*/
-
     @Autowired
     private PurchaseService purchaseService;
-
-/*    @PostMapping("/purchase")
-    public String createPurchase(HttpSession session, RedirectAttributes redirectAttributes) {
-        System.out.println("=== Purchase endpoint called ===");
-        
-        User user = (User) session.getAttribute("loggedUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        @SuppressWarnings("unchecked")
-        Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-    
-        if (cart == null || cart.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Carrinho vazio!");
-            return "redirect:/cart";
-        }
-
-        try {
-            Purchase purchase = purchaseService.createPurchase(user, cart);
-            System.out.println("Purchase created successfully with ID: " + purchase.getId());
-            session.removeAttribute("cart"); // Limpa o carrinho após a compra
-            redirectAttributes.addFlashAttribute("success", "Compra realizada com sucesso! Pedido #" + purchase.getId());
-            return "redirect:/purchaseHistory";
-        } catch (Exception e) {
-            System.err.println("Error creating purchase: " + e.getMessage());
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Erro ao processar compra: " + e.getMessage());
-            return "redirect:/cart";
-        }
-    }*/
 
     @GetMapping("/purchaseHistory")
     public String purchaseHistory(HttpSession session, Model model) {
@@ -196,18 +166,20 @@ public class UserController {
             return "redirect:/login";
         }
 
-        List<Purchase> purchases = purchaseService.getUserPurchasesById(user.getId());
+        List<Purchase> purchases = purchaseService.getUserPurchasesById(
+            user.getId()
+        );
         System.out.println("User ID: " + user.getId());
         System.out.println("Number of purchases found: " + purchases.size());
-        
+
         model.addAttribute("purchases", purchases);
         model.addAttribute("user", user);
-    
+
         return "purchaseHistory";
     }
 
     @GetMapping("/passwordChange")
-    public String returnPasswordChangePage(HttpSession session, Model model){
+    public String returnPasswordChangePage(HttpSession session, Model model) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/passwordReset";
@@ -217,19 +189,24 @@ public class UserController {
     }
 
     @GetMapping("/passwordReset")
-    public String returnPasswordResetPage(Model model){
+    public String returnPasswordResetPage(Model model) {
         return "passwordReset";
     }
 
     @PostMapping("/changePasswordAnon")
-    public String changePasswordAnon(@RequestParam String email,
-                                     @RequestParam String token,
-                                     @RequestParam String newPassword,
-                                     Model model,
-                                     HttpSession session) {
+    public String changePasswordAnon(
+        @RequestParam String email,
+        @RequestParam String token,
+        @RequestParam String newPassword,
+        Model model,
+        HttpSession session
+    ) {
         User user = userService.findByEmail(email);
         if (user == null) {
-            model.addAttribute("error", "email nao corresponde a uma conta existente");
+            model.addAttribute(
+                "error",
+                "email nao corresponde a uma conta existente"
+            );
             return "passwordReset";
         }
 
@@ -238,14 +215,20 @@ public class UserController {
         Date attemptTime = user.getLastAttemptDate();
 
         if (attemptTime != null) {
-            long differenceMilliseconds = dateNow.getTime() - attemptTime.getTime();
+            long differenceMilliseconds =
+                dateNow.getTime() - attemptTime.getTime();
             long fifteenMinutes = 15 * 60 * 1000;
-            if (differenceMilliseconds < fifteenMinutes || user.getFailedAttempts() >= 3) {
+            if (
+                differenceMilliseconds < fifteenMinutes ||
+                user.getFailedAttempts() >= 3
+            ) {
                 canPass = false;
             }
 
-            // resets attempts after 15 minutes have elapsed
-            if (differenceMilliseconds > fifteenMinutes && user.getFailedAttempts() >= 3) {
+            if (
+                differenceMilliseconds > fifteenMinutes &&
+                user.getFailedAttempts() >= 3
+            ) {
                 canPass = true;
                 user.setFailedAttempts(0);
                 userService.saveUser(user);
@@ -253,7 +236,10 @@ public class UserController {
         }
 
         if (!canPass) {
-            model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+            model.addAttribute(
+                "error",
+                "Bloqueado por excesso de tentativas, tente novamente em 15 minutos"
+            );
             return "passwordReset";
         }
 
@@ -267,11 +253,16 @@ public class UserController {
         } else {
             int failedAttempts = user.getFailedAttempts() + 1;
             user.setFailedAttempts(failedAttempts);
-            String message = (3 - (user.getFailedAttempts()) + " tentativas restantes");
+            String message = (3 -
+                (user.getFailedAttempts()) +
+                " tentativas restantes");
             model.addAttribute("error", message);
             if (user.getFailedAttempts() >= 3) {
                 user.setLastAttemptDate(new Date());
-                model.addAttribute("error", "Bloqueado por excesso de tentativas, tente novamente em 15 minutos");
+                model.addAttribute(
+                    "error",
+                    "Bloqueado por excesso de tentativas, tente novamente em 15 minutos"
+                );
             }
             userService.saveUser(user);
             return "passwordReset";
@@ -279,11 +270,13 @@ public class UserController {
     }
 
     @PostMapping("/changePasswordLogged")
-    public String changePasswordLogged(@RequestParam(required = false) String email,
-                                       @RequestParam(required = false) String oldPassword,
-                                       @RequestParam String newPassword,
-                                       Model model,
-                                       HttpSession session) {
+    public String changePasswordLogged(
+        @RequestParam(required = false) String email,
+        @RequestParam(required = false) String oldPassword,
+        @RequestParam String newPassword,
+        Model model,
+        HttpSession session
+    ) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/passwordReset";
@@ -291,7 +284,10 @@ public class UserController {
 
         User user = userService.findByEmail(email);
         if (user == null) {
-            model.addAttribute("error", "email nao corresponde a uma conta existente");
+            model.addAttribute(
+                "error",
+                "email nao corresponde a uma conta existente"
+            );
             model.addAttribute("loggedUser", loggedUser);
             return "passwordChangeLogged";
         }
@@ -306,10 +302,9 @@ public class UserController {
             model.addAttribute("justChangedPassword", ".");
             return "login";
         } else {
-            model.addAttribute("error","email ou senha errados");
+            model.addAttribute("error", "email ou senha errados");
             model.addAttribute("loggedUser", loggedUser);
             return "passwordChangeLogged";
         }
     }
-
 }

@@ -20,17 +20,12 @@ public class Product {
     private int discount;
     private BigDecimal shippingValue;
 
-    // Coloquei a anotação de volta para garantir que descrições longas funcionem
     @Column(length = 1000)
     private String description;
 
     private String category;
     private int availableQuantity;
     private int ammountSold;
-
-    // ===================================
-    // CAMPO FALTANTE ADICIONADO AQUI
-    // ===================================
     private String imageFileName;
 
     public Product() {}
@@ -45,7 +40,7 @@ public class Product {
         String category,
         int availableQuantity,
         int ammountSold,
-        String imageFileName // Adicionado ao construtor
+        String imageFileName
     ) {
         this.id = id;
         this.name = name;
@@ -56,10 +51,8 @@ public class Product {
         this.category = category;
         this.availableQuantity = availableQuantity;
         this.ammountSold = ammountSold;
-        this.imageFileName = imageFileName; // Adicionado
+        this.imageFileName = imageFileName;
     }
-
-    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -133,9 +126,6 @@ public class Product {
         this.category = category;
     }
 
-    // ===================================
-    // GETTER E SETTER FALTANTES
-    // ===================================
     public String getImageFileName() {
         return imageFileName;
     }

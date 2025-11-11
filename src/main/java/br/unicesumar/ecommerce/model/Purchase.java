@@ -1,15 +1,16 @@
 package br.unicesumar.ecommerce.model;
 
+import br.unicesumar.ecommerce.model.User;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import br.unicesumar.ecommerce.model.User;
 
 @Entity
 @Table(name = "purchases")
 public class Purchase {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,12 +19,17 @@ public class Purchase {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "purchase",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<PurchaseItem> items = new ArrayList<>();
 
     private LocalDateTime purchaseDate;
     private BigDecimal totalAmount;
     private String status;
+    private Integer installments;
 
     public Long getId() {
         return id;
@@ -76,5 +82,13 @@ public class Purchase {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getInstallments() {
+        return installments;
+    }
+
+    public void setInstallments(Integer installments) {
+        this.installments = installments;
     }
 }

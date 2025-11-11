@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "purchase_items")
 public class PurchaseItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +20,7 @@ public class PurchaseItem {
     private Product product;
 
     private Integer quantity;
-    private BigDecimal priceAtPurchase; // Preço do produto no momento da compra
+    private BigDecimal priceAtPurchase;
 
     public Long getId() {
         return id;
