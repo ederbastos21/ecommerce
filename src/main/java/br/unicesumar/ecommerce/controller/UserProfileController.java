@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Controller
 @RequestMapping("/userProfile")
 public class UserProfileController {
@@ -96,7 +98,15 @@ public class UserProfileController {
 
 
     @PostMapping("/deleteAddress/{id}")
-    public String deleteAddress(@PathVariable Long id) {
+    public String deleteAddress(@PathVariable Long id, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        Address address = addressRepository.findById(id).orElse(null);
+
+        if (address.getId().equals(loggedUser.getFavoriteAddressId())){
+            loggedUser.setFavoriteAddressId(null);
+            userRepository.save(loggedUser);
+        }
+
         addressRepository.deleteById(id);
         return "redirect:/userProfile/addresses";
     }
