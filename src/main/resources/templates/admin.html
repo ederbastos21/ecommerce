@@ -87,23 +87,26 @@
                             <div th:if="${product.imageFileName == null}" class="product-image-placeholder small-placeholder">
                                 Sem Imagem
                             </div>
-                            <img th:if="${product.imageFileName != null}"
-                                 th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
-                                 th:alt="${product.name}"
-                                 class="admin-product-image"/>
+                            <a th:if="${product.imageFileName != null}"
+                               th:href="@{/productDetail/{id}(id=${product.id})}">
+                                <img th:src="@{/uploads/{filename}(filename=${product.imageFileName})}"
+                                     th:alt="${product.name}"
+                                     class="admin-product-image"/>
+                            </a>
                         </td>
 
-                        <td th:text="${product.name}"></td>
+                        <td>
+                            <a th:href="@{/productDetail/{id}(id=${product.id})}" class="product-name-link" style="color: black;">
+                                <span th:text="${product.name}"></span>
+                            </a>
+                        </td>
+
                         <td th:text="'R$' + ${product.price}"></td>
                         <td th:text="${product.discount} + '%' "></td>
                         <td th:text="${product.availableQuantity}"></td>
                         <td th:text="${product.ammountSold}"></td>
 
                         <td>
-                            <a th:href="@{/productDetail/{id}(id=${product.id})}">
-                                <button class="see-btn" type="button">Ver</button>
-                            </a>
-
                             <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">
                                 <button class="edit-btn" type="button">Editar</button>
                             </a>
