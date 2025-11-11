@@ -72,7 +72,7 @@ public class CheckoutController {
                 }
             }
         }
-        return BigDecimal.ZERO;
+        return null;
     }
 
     @GetMapping
@@ -114,14 +114,16 @@ public class CheckoutController {
             }
         }
         
-        BigDecimal baseFreight = calculateFreight(user);
-        BigDecimal finalFreightCost = baseFreight;
-        
-        if (subtotalPrice.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
+        BigDecimal finalFreightCost = calculateFreight(user);
+
+        if (finalFreightCost != null && subtotalPrice.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
             finalFreightCost = BigDecimal.ZERO;
         }
 
-        BigDecimal finalTotal = subtotalPrice.add(finalFreightCost);
+        BigDecimal finalTotal = subtotalPrice;
+        if (finalFreightCost != null) {
+            finalTotal = subtotalPrice.add(finalFreightCost);
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("favoriteAddress", favoriteAddress);
@@ -171,11 +173,15 @@ public class CheckoutController {
             }
         }
 
-        BigDecimal baseFreight = calculateFreight(user);
-        BigDecimal finalFreightCost = baseFreight;
+        BigDecimal finalFreightCost = calculateFreight(user);
 
-        if (subtotalPrice.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
+        if (finalFreightCost != null && subtotalPrice.compareTo(FREE_SHIPPING_THRESHOLD) > 0) {
             finalFreightCost = BigDecimal.ZERO;
+        }
+
+        if (finalFreightCost == null) {
+             model.addAttribute("checkoutError", "Não foi possível calcular o frete. Verifique seu endereço.");
+            return showCheckoutPage(session, model);
         }
 
         try {

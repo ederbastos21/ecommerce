@@ -190,7 +190,7 @@
                 <p><strong>Cartão:</strong> **** **** **** <span th:text="${#strings.substring(favoritePayment.cardNumber, 12, 16)}"></span></p>
             </div>
             <div th:unless="${favoritePayment}">
-                <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escol-her Pagamento</a></p>
+                <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escolher Pagamento</a></p>
             </div>
         </div>
     </div>
@@ -215,12 +215,18 @@
             
             <div class="total-summary">
                 Frete:
-                <span th:text="${'R$ ' + #numbers.formatDecimal(freightCost, 1, 2)}">R$ 0,00</span>
-                <span th:if="${freightCost.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+                <span th:if="${freightCost == null}" style="color: #cc0000; font-weight: normal;">
+                    Informe um endereço
+                </span>
+                
+                <span th:if="${freightCost != null}">
+                    <span th:text="${'R$ ' + #numbers.formatDecimal(freightCost, 1, 2)}">R$ 0,00</span>
+                    <span th:if="${freightCost.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+                </span>
             </div>
 
             <div class="final-total" style="margin-bottom: 20px;">
-                Total (sem juros):
+                Total:
                 <span th:text="${'R$ ' + #numbers.formatDecimal(finalTotal, 1, 2)}">R$ 0,00</span>
             </div>
 
@@ -231,7 +237,8 @@
                             th:with="
                                 totalComJuros5Percent=${finalTotal.multiply(1.05).setScale(2, T(java.math.RoundingMode).HALF_UP)},
                                 totalComJuros10Percent=${finalTotal.multiply(1.10).setScale(2, T(java.math.RoundingMode).HALF_UP)}
-                            ">
+                            "
+                            th:disabled="${favoriteAddress == null}">
                         
                         <option value="1" th:data-total="${finalTotal}" th:text="|1x de R$ ${#numbers.formatDecimal(finalTotal, 1, 2)} (Sem juros)|"></option>
                         
