@@ -5,11 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Compras</title>
     <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}" /> 
     <style>
+        .profile-navigation {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .profile-navigation .nav-link {
+            padding: 15px 20px;
+            background: #1976d2;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .profile-navigation .nav-link:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+
+        .profile-navigation .nav-link.active {
+            background: #0d47a1;
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .profile-navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-navigation {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .purchase-history {
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
+            min-height: calc(100vh - 280px);
         }
         
         .purchase-card {
@@ -60,9 +102,38 @@
             background-color: #f8d7da;
             color: #721c24;
         }
-        
+
+        .purchase-body {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
         .purchase-items {
-            margin: 15px 0;
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .purchase-details {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 14px;
+        }
+        
+        .purchase-details h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .purchase-details p {
+            margin: 5px 0;
+            line-height: 1.4;
         }
         
         .item-row {
@@ -132,15 +203,67 @@
     </style>
 </head>
 <body>
-    <div class="purchase-history">
-        <a th:href="@{/userProfile}" class="back-button">← Voltar ao Perfil</a>
+
+<header class="header-container">
+    <div class="header-content">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <span class="store-name">UniWare</span>
+            </div>
+        </a>
+
+        <div class="search-container">
+            <form action="/products" method="get">
+                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
+                <button class="search-button" type="submit">🔍</button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != null}">
+                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
+                    </span>
+                </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Registrar</a>
+                </div>
+            </div>
+            <div class="cart-container">
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count"
+                      th:text="${session.cartItemCount != null ? session.cartItemCount : 0}">
+                </span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+
+    <div class="profile-navigation">
+        <a href="/userProfile" class="nav-link">Informações Pessoais</a>
+        <a href="/userProfile/addresses" class="nav-link">Endereços</a>
+        <a href="/userProfile/payments" class="nav-link">Cartões</a>
+        <a href="/purchaseHistory" class="nav-link active">Histórico de Compras</a>
+    </div>
+
+    <div class="purchase-history" style="margin: 0; padding: 0;">
         
-        <h1>Histórico de Compras</h1>
+        <h1 style="margin-top: 0;">Histórico de Compras</h1>
         
         <div th:if="${purchases.isEmpty()}" class="empty-history">
             <h2>Você ainda não realizou nenhuma compra</h2>
             <p>Explore nossa loja e encontre produtos incríveis!</p>
-            <a th:href="@{/products}" class="back-button">Ver Produtos</a>
+            <a th:href="@{/products}" class="back-button" style="background-color: #1976d2;">Ver Produtos</a>
         </div>
         
         <div th:each="purchase : ${purchases}" class="purchase-card">
@@ -158,26 +281,71 @@
                 </div>
             </div>
             
-            <div class="purchase-items">
-                <div th:each="item : ${purchase.items}" class="item-row">
-                    <div class="item-details">
-                        <div class="item-name" th:text="${item.product.name}">Nome do Produto</div>
-                        <div class="item-quantity">
-                            Quantidade: <span th:text="${item.quantity}">1</span> x 
-                            R$ <span th:text="${#numbers.formatDecimal(item.priceAtPurchase, 1, 2)}">0.00</span>
+            <div class="purchase-body">
+                <div class="purchase-items">
+                    <div th:each="item : ${purchase.items}" class="item-row">
+                        <div class="item-details">
+                            <div class="item-name" th:text="${item.product.name}">Nome do Produto</div>
+                            <div class="item-quantity">
+                                Quantidade: <span th:text="${item.quantity}">1</span> x 
+                                R$ <span th:text="${#numbers.formatDecimal(item.priceAtPurchase, 1, 2)}">0.00</span>
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            R$ <span th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)}">0.00</span>
                         </div>
                     </div>
-                    <div class="item-price">
-                        R$ <span th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)}">0.00</span>
+                </div>
+
+                <div class="purchase-details">
+                    <h4>Detalhes do Pedido</h4>
+                    
+                    <div th:if="${purchase.shippingAddress}">
+                        <strong>Entregue em:</strong>
+                        <p>
+                            <span th:text="${purchase.shippingAddress.street}"></span>, <span th:text="${purchase.shippingAddress.number}"></span><br/>
+                            <span th:text="${purchase.shippingAddress.city}"></span> - <span th:text="${purchase.shippingAddress.state}"></span><br/>
+                            CEP: <span th:text="${purchase.shippingAddress.zipCode}"></span>
+                        </p>
+                    </div>
+
+                    <div th:if="${purchase.paymentMethod}" style="margin-top: 10px;">
+                        <strong>Pago com:</strong>
+                        <p>
+                            <span>Cartão de crédito</span><br/>
+                            **** **** **** <span th:text="${#strings.substring(purchase.paymentMethod.cardNumber, 12, 16)}"></span>
+                        </p>
+                    </div>
+
+                     <div style="margin-top: 10px;">
+                        <strong>Pagamento:</strong>
+                        <p>
+                            Frete: R$ <span th:text="${purchase.freightAmount != null ? #numbers.formatDecimal(purchase.freightAmount, 1, 2) : 'N/A'}">0.00</span>
+                            
+                            <span th:if="${purchase.freightAmount != null && purchase.freightAmount.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+                            
+                            <br/>
+                            Parcelas: <span th:text="${purchase.installments}">1</span>x
+                        </p>
                     </div>
                 </div>
             </div>
-            
+
             <div class="purchase-total">
                 <span class="total-label">Total: </span>
                 <span class="total-amount">R$ <span th:text="${#numbers.formatDecimal(purchase.totalAmount, 1, 2)}">0.00</span></span>
             </div>
         </div>
     </div>
+</div>
+
+<div class="footer-container">
+    <div class="footer-content">
+        <div class="footer-bottom">
+            © 2025 Loja Online. Todos os direitos reservados.
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

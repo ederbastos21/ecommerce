@@ -1,6 +1,5 @@
 package br.unicesumar.ecommerce.model;
 
-import br.unicesumar.ecommerce.model.User;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,7 +9,6 @@ import java.util.List;
 @Entity
 @Table(name = "purchases")
 public class Purchase {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,17 +17,22 @@ public class Purchase {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(
-        mappedBy = "purchase",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItem> items = new ArrayList<>();
 
     private LocalDateTime purchaseDate;
     private BigDecimal totalAmount;
     private String status;
     private Integer installments;
+    private BigDecimal freightAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "shipping_address_id")
+    private Address shippingAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_method_id")
+    private PaymentMethod paymentMethod;
 
     public Long getId() {
         return id;
@@ -90,5 +93,29 @@ public class Purchase {
 
     public void setInstallments(Integer installments) {
         this.installments = installments;
+    }
+
+    public BigDecimal getFreightAmount() {
+        return freightAmount;
+    }
+
+    public void setFreightAmount(BigDecimal freightAmount) {
+        this.freightAmount = freightAmount;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

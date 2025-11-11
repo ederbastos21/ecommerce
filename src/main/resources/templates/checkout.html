@@ -1,386 +1,297 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Finalizar Pagamento</title>
-        <link rel="stylesheet" th:href="@{/css/index.css}" />
-        <style>
-            .checkout-container {
-                max-width: 1000px;
-                margin: 40px auto;
-                padding: 20px;
-                display: flex;
-                gap: 30px;
-                flex-wrap: wrap;
-            }
-            .checkout-main {
-                flex: 2;
-                min-width: 400px;
-            }
-            .checkout-sidebar {
-                flex: 1;
-                min-width: 300px;
-            }
-            .checkout-section {
-                background: #fff;
-                border-radius: 8px;
-                padding: 25px;
-                margin-bottom: 20px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .checkout-section h2 {
-                margin-top: 0;
-                border-bottom: 2px solid #f0f0f0;
-                padding-bottom: 10px;
-                margin-bottom: 20px;
-            }
-            .info-box {
-                background-color: #f9f9f9;
-                border: 1px solid #eee;
-                border-radius: 5px;
-                padding: 15px;
-            }
-            .info-box p {
-                margin: 5px 0;
-            }
-            .item-summary {
-                font-size: 14px;
-                color: #555;
-                margin-bottom: 10px;
-            }
-            .form-group {
-                margin-bottom: 20px;
-            }
-            .form-group label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 8px;
-            }
-            .form-group select {
-                width: 100%;
-                padding: 10px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                font-size: 16px;
-            }
-            .total-summary {
-                font-size: 20px;
-                font-weight: bold;
-                color: #333;
-                text-align: right;
-            }
-            .total-summary span {
-                font-size: 24px;
-                color: #27ae60;
-            }
-            .complete-btn {
-                width: 100%;
-                padding: 15px;
-                font-size: 18px;
-                font-weight: bold;
-                background-color: #28a745;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.2s;
-            }
-            .complete-btn:hover {
-                background-color: #218838;
-            }
-            .alert-error {
-                background-color: #f8d7da;
-                color: #721c24;
-                padding: 15px;
-                border-radius: 5px;
-                margin-bottom: 20px;
-                border: 1px solid #f5c6cb;
-            }
-            .change-link {
-                font-size: 12px;
-                margin-left: 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <header class="header-container">
-            <div class="header-content">
-                <a href="/">
-                    <div class="store-logo">
-                        <div class="store-logo-icon">U</div>
-                        <span class="store-name">UniWare</span>
-                    </div>
-                </a>
+<head>
+    <meta charset="UTF-8" />
+    <title>Finalizar Pagamento</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
+    <style>
+        .checkout-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .checkout-main {
+            flex: 2;
+            min-width: 400px;
+        }
+        .checkout-sidebar {
+            flex: 1;
+            min-width: 300px;
+        }
+        .checkout-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .checkout-section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .info-box p {
+            margin: 5px 0;
+        }
+        .item-summary {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .total-summary {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .total-summary span {
+            color: #555;
+            font-weight: normal;
+        }
+        .final-total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            text-align: right;
+        }
+        .final-total span {
+            font-size: 24px;
+            color: #27ae60;
+        }
 
-                <div class="search-container">
-                    <form action="/products" method="get">
-                        <input
-                            type="text"
-                            class="search-input"
-                            name="search"
-                            placeholder="Procure por produtos..."
-                        />
-                        <button class="search-button" type="submit">🔍</button>
-                    </form>
+        .complete-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .complete-btn:hover {
+            background-color: #218838;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+        .change-link {
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header-container">
+    <div class="header-content">
+        <a href="/">
+            <div class="store-logo">
+                <div class="store-logo-icon">U</div>
+                <span class="store-name">UniWare</span>
+            </div>
+        </a>
+
+        <div class="search-container">
+            <form action="/products" method="get">
+                <input type="text" class="search-input" name="search" placeholder="Procure por produtos..." />
+                <button class="search-button" type="submit">🔍</button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="auth-links">
+                <div th:if="${session.loggedUser != null}">
+                    <span>Olá, <span th:text="${session.loggedUser.name}"></span></span>
+                    <a href="/logout" class="auth-link">Logout</a>
+                    <span th:if="${session.loggedUser.role == 'ADMIN'}">
+                        | <a href="/admin" class="auth-link">Área Adminstrador</a>
+                    </span>
+                    <span th:if="${session.loggedUser.role != NULL}">
+                        | <a href="/userProfile" class="auth-link">Minha Conta</a>
+                    </span>
                 </div>
-
-                <div class="header-actions">
-                    <div class="auth-links">
-                        <div th:if="${session.loggedUser != null}">
-                            <span
-                                >Olá,
-                                <span
-                                    th:text="${session.loggedUser.name}"
-                                ></span
-                            ></span>
-                            <a href="/logout" class="auth-link">Logout</a>
-                            <span th:if="${session.loggedUser.role == 'ADMIN'}">
-                                |
-                                <a href="/admin" class="auth-link"
-                                    >Área Adminstrador</a
-                                >
-                            </span>
-                            <span th:if="${session.loggedUser.role != NULL}">
-                                |
-                                <a href="/userProfile" class="auth-link"
-                                    >Minha Conta</a
-                                >
-                            </span>
-                        </div>
-                        <div th:unless="${session.loggedUser != null}">
-                            <a href="/login" class="auth-link">Login</a>
-                            <a href="/register" class="auth-link register-link"
-                                >Registrar</a
-                            >
-                        </div>
-                    </div>
-                    <div class="cart-container">
-                        <a href="/cart" class="cart-icon">🛒</a>
-                        <span
-                            class="cart-count"
-                            th:text="${session.cartItemCount != null ? session.cartItemCount : 0}"
-                        >
-                        </span>
-                    </div>
+                <div th:unless="${session.loggedUser != null}">
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link register-link">Registrar</a>
                 </div>
             </div>
-        </header>
-
-        <div class="checkout-container">
-            <div class="checkout-main">
-                <div class="checkout-section">
-                    <h2>
-                        Endereço de Entrega
-                        <a
-                            th:href="@{/userProfile/addresses}"
-                            class="change-link"
-                            >(Alterar)</a
-                        >
-                    </h2>
-                    <div th:if="${favoriteAddress}" class="info-box">
-                        <p>
-                            <strong>Rua:</strong>
-                            <span th:text="${favoriteAddress.street}"></span>,
-                            <span th:text="${favoriteAddress.number}"></span>
-                        </p>
-                        <p>
-                            <strong>Cidade:</strong>
-                            <span th:text="${favoriteAddress.city}"></span> -
-                            <span th:text="${favoriteAddress.state}"></span>
-                        </p>
-                        <p>
-                            <strong>CEP:</strong>
-                            <span th:text="${favoriteAddress.zipCode}"></span>
-                        </p>
-                    </div>
-                    <div th:unless="${favoriteAddress}">
-                        <p>
-                            Você não selecionou um endereço favorito.
-                            <a th:href="@{/userProfile/addresses}"
-                                >Adicionar/Escolher Endereço</a
-                            >
-                        </p>
-                    </div>
-                </div>
-
-                <div class="checkout-section">
-                    <h2>
-                        Forma de Pagamento
-                        <a
-                            th:href="@{/userProfile/payments}"
-                            class="change-link"
-                            >(Alterar)</a
-                        >
-                    </h2>
-                    <div th:if="${favoritePayment}" class="info-box">
-                        <p>
-                            <strong>Tipo:</strong>
-                            <span th:text="${favoritePayment.type}"
-                                >Cartão de crédito</span
-                            >
-                        </p>
-                        <p>
-                            <strong>Titular:</strong>
-                            <span
-                                th:text="${favoritePayment.cardHolderName}"
-                            ></span>
-                        </p>
-                        <p>
-                            <strong>Cartão:</strong> **** **** ****
-                            <span
-                                th:text="${#strings.substring(favoritePayment.cardNumber, 12, 16)}"
-                            ></span>
-                        </p>
-                    </div>
-                    <div th:unless="${favoritePayment}">
-                        <p>
-                            Você não selecionou um método de pagamento favorito.
-                            <a th:href="@{/userProfile/payments}"
-                                >Adicionar/Escol-her Pagamento</a
-                            >
-                        </p>
-                    </div>
-                </div>
+            <div class="cart-container">
+                <a href="/cart" class="cart-icon">🛒</a>
+                <span class="cart-count"
+                      th:text="${session.cartItemCount != null ? session.cartItemCount : 0}">
+                </span>
             </div>
+        </div>
+    </div>
+</header>
 
-            <div class="checkout-sidebar">
-                <div class="checkout-section">
-                    <h2>Resumo do Pedido</h2>
+<div class="checkout-container">
 
-                    <div
-                        th:if="${checkoutError}"
-                        class="alert-error"
-                        th:text="${checkoutError}"
-                    ></div>
-
-                    <div th:each="item : ${cartItems}" class="item-summary">
-                        <span
-                            th:text="${item.quantity} + 'x ' + ${item.product.name}"
-                        ></span>
-                    </div>
-
-                    <hr style="border: 1px solid #f0f0f0; margin: 20px 0" />
-
-                    <div class="total-summary">
-                        Total (sem juros):
-                        <span
-                            th:text="${'R$ ' + #numbers.formatDecimal(totalPrice, 1, 2)}"
-                            >R$ 0,00</span
-                        >
-                    </div>
-
-                    <form
-                        th:action="@{/checkout/complete}"
-                        method="post"
-                        style="margin-top: 20px"
-                    >
-                        <div class="form-group">
-                            <label for="installments">Parcelamento</label>
-                            <select
-                                id="installments"
-                                name="installments"
-                                class="form-control"
-                                onchange="updateInstallmentInfo(this)"
-                            >
-                                <option value="1" th:data-total="${totalPrice}">
-                                    1x de R$
-                                    [[${#numbers.formatDecimal(totalPrice, 1,
-                                    2)}]] (Sem juros)
-                                </option>
-
-                                <option
-                                    th:with="totalComJuros=${totalPrice.multiply(1.05)}"
-                                    th:value="2"
-                                    th:data-total="${totalComJuros}"
-                                >
-                                    2x de R$
-                                    [[${#numbers.formatDecimal(totalComJuros /
-                                    2, 1, 2)}]] (Total R$
-                                    [[${#numbers.formatDecimal(totalComJuros, 1,
-                                    2)}]] c/ juros)
-                                </option>
-                                <option
-                                    th:with="totalComJuros=${totalPrice.multiply(1.05)}"
-                                    th:value="3"
-                                    th:data-total="${totalComJuros}"
-                                >
-                                    3x de R$
-                                    [[${#numbers.formatDecimal(totalComJuros /
-                                    3, 1, 2)}]] (Total R$
-                                    [[${#numbers.formatDecimal(totalComJuros, 1,
-                                    2)}]] c/ juros)
-                                </option>
-                                <option
-                                    th:with="totalComJuros=${totalPrice.multiply(1.05)}"
-                                    th:value="6"
-                                    th:data-total="${totalComJuros}"
-                                >
-                                    6x de R$
-                                    [[${#numbers.formatDecimal(totalComJuros /
-                                    6, 1, 2)}]] (Total R$
-                                    [[${#numbers.formatDecimal(totalComJuros, 1,
-                                    2)}]] c/ juros)
-                                </option>
-
-                                <option
-                                    th:with="totalComJuros=${totalPrice.multiply(1.10)}"
-                                    th:value="12"
-                                    th:data-total="${totalComJuros}"
-                                >
-                                    12x de R$
-                                    [[${#numbers.formatDecimal(totalComJuros /
-                                    12, 1, 2)}]] (Total R$
-                                    [[${#numbers.formatDecimal(totalComJuros, 1,
-                                    2)}]] c/ juros)
-                                </option>
-                            </select>
-                        </div>
-
-                        <h3
-                            id="total-display"
-                            style="
-                                text-align: right;
-                                margin: 20px 0;
-                                color: #27ae60;
-                            "
-                        >
-                            Total: R$ [[${#numbers.formatDecimal(totalPrice, 1,
-                            2)}]]
-                        </h3>
-
-                        <button
-                            type="submit"
-                            class="complete-btn"
-                            th:disabled="${favoriteAddress == null || favoritePayment == null}"
-                        >
-                            Concluir Compra
-                        </button>
-                        <p
-                            th:if="${favoriteAddress == null || favoritePayment == null}"
-                            style="
-                                color: red;
-                                font-size: 12px;
-                                text-align: center;
-                                margin-top: 10px;
-                            "
-                        >
-                            É necessário selecionar um endereço e pagamento
-                            favoritos para continuar.
-                        </p>
-                    </form>
-                </div>
+    <div class="checkout-main">
+        <div class="checkout-section">
+            <h2>
+                Endereço de Entrega
+                <a th:href="@{/userProfile/addresses}" class="change-link">(Alterar)</a>
+            </h2>
+            <div th:if="${favoriteAddress}" class="info-box">
+                <p><strong>Rua:</strong> <span th:text="${favoriteAddress.street}"></span>, <span th:text="${favoriteAddress.number}"></span></p>
+                <p><strong>Cidade:</strong> <span th:text="${favoriteAddress.city}"></span> - <span th:text="${favoriteAddress.state}"></span></p>
+                <p><strong>CEP:</strong> <span th:text="${favoriteAddress.zipCode}"></span></p>
+            </div>
+            <div th:unless="${favoriteAddress}">
+                <p>Você não selecionou um endereço favorito. <a th:href="@{/userProfile/addresses}">Adicionar/Escolher Endereço</a></p>
             </div>
         </div>
 
-        <script>
-            function updateInstallmentInfo(select) {
-                var selectedOption = select.options[select.selectedIndex];
-                var total = parseFloat(
-                    selectedOption.getAttribute("data-total"),
-                ).toFixed(2);
-                document.getElementById("total-display").innerText =
-                    "Total: R$ " + total.replace(".", ",");
-            }
-        </script>
-    </body>
+        <div class="checkout-section">
+            <h2>
+                Forma de Pagamento
+                <a th:href="@{/userProfile/payments}" class="change-link">(Alterar)</a>
+            </h2>
+            <div th:if="${favoritePayment}" class="info-box">
+                <p><strong>Tipo:</strong> <span>Cartão de crédito</span></p>
+                <p><strong>Titular:</strong> <span th:text="${favoritePayment.cardHolderName}"></span></p>
+                <p><strong>Cartão:</strong> **** **** **** <span th:text="${#strings.substring(favoritePayment.cardNumber, 12, 16)}"></span></p>
+            </div>
+            <div th:unless="${favoritePayment}">
+                <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escol-her Pagamento</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout-sidebar">
+        <div class="checkout-section">
+            <h2>Resumo do Pedido</h2>
+            
+            <div th:if="${checkoutError}" class="alert-error" th:text="${checkoutError}"></div>
+
+            <div th:each="item : ${cartItems}" class="item-summary">
+                <span><span th:text="${item.quantity} + 'x '"></span> <span th:text="${item.product.name}"></span></span>
+                <span th:text="${'R$ ' + #numbers.formatDecimal(item.subtotal, 1, 2)}"></span>
+            </div>
+
+            <hr style="border: 1px solid #f0f0f0; margin: 20px 0;">
+
+            <div class="total-summary">
+                Subtotal:
+                <span th:text="${'R$ ' + #numbers.formatDecimal(subtotalPrice, 1, 2)}">R$ 0,00</span>
+            </div>
+            
+            <div class="total-summary">
+                Frete:
+                <span th:text="${'R$ ' + #numbers.formatDecimal(freightCost, 1, 2)}">R$ 0,00</span>
+                <span th:if="${freightCost.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+            </div>
+
+            <div class="final-total" style="margin-bottom: 20px;">
+                Total (sem juros):
+                <span th:text="${'R$ ' + #numbers.formatDecimal(finalTotal, 1, 2)}">R$ 0,00</span>
+            </div>
+
+            <form th:action="@{/checkout/complete}" method="post">
+                <div class="form-group">
+                    <label for="installments">Parcelamento</label>
+                    <select id="installments" name="installments" class="form-control" onchange="updateInstallmentInfo(this)"
+                            th:with="
+                                totalComJuros5Percent=${finalTotal.multiply(1.05).setScale(2, T(java.math.RoundingMode).HALF_UP)},
+                                totalComJuros10Percent=${finalTotal.multiply(1.10).setScale(2, T(java.math.RoundingMode).HALF_UP)}
+                            ">
+                        
+                        <option value="1" th:data-total="${finalTotal}" th:text="|1x de R$ ${#numbers.formatDecimal(finalTotal, 1, 2)} (Sem juros)|"></option>
+                        
+                        <option th:with="
+                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(2L), 2, T(java.math.RoundingMode).HALF_UP)},
+                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(2L))}"
+                                th:value="2"
+                                th:data-total="${totalFinalCliente}"
+                                th:text="|2x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                        </option>
+                        
+                        <option th:with="
+                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(3L), 2, T(java.math.RoundingMode).HALF_UP)},
+                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(3L))}"
+                                th:value="3"
+                                th:data-total="${totalFinalCliente}"
+                                th:text="|3x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                        </option>
+
+                        <option th:with="
+                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(6L), 2, T(java.math.RoundingMode).HALF_UP)},
+                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(6L))}"
+                                th:value="6"
+                                th:data-total="${totalFinalCliente}"
+                                th:text="|6x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                        </option>
+
+                        <option th:with="
+                                    parcela=${totalComJuros10Percent.divide(T(java.math.BigDecimal).valueOf(12L), 2, T(java.math.RoundingMode).HALF_UP)},
+                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(12L))}"
+                                th:value="12"
+                                th:data-total="${totalFinalCliente}"
+                                th:text="|12x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                        </option>
+                    </select>
+                </div>
+                
+                <h3 id="total-display" style="text-align: right; margin: 20px 0; color: #27ae60;">
+                    Total: R$ [[${#numbers.formatDecimal(finalTotal, 1, 2)}]]
+                </h3>
+                
+                <button type="submit" class="complete-btn" 
+                        th:disabled="${favoriteAddress == null || favoritePayment == null}">
+                    Concluir Compra
+                </button>
+                <p th:if="${favoriteAddress == null || favoritePayment == null}" style="color: red; font-size: 12px; text-align: center; margin-top: 10px;">
+                    É necessário selecionar um endereço e pagamento favoritos para continuar.
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateInstallmentInfo(select) {
+        var selectedOption = select.options[select.selectedIndex];
+        var total = parseFloat(selectedOption.getAttribute('data-total')).toFixed(2);
+        document.getElementById('total-display').innerText = 'Total: R$ ' + total.replace('.', ',');
+    }
+</script>
+
+</body>
 </html>
