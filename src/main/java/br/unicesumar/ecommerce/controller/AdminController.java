@@ -129,30 +129,18 @@ public class AdminController {
     }
 
     @PostMapping("/products/save")
-    public String saveProduct(
-        @ModelAttribute Product product,
-        @RequestParam("imageFile") MultipartFile imageFile,
-        HttpSession session
-    ) {
+    public String saveProduct(@ModelAttribute Product product, @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (loggedUser == null || !"ADMIN".equals(loggedUser.getRole())) {
             return "redirect:/";
         }
         BigDecimal desconto = new BigDecimal(product.getDiscount());
-        desconto = desconto.divide(
-            BigDecimal.valueOf(100),
-            2,
-            RoundingMode.HALF_UP
-        );
+        desconto = desconto.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-        BigDecimal precoFinal = product
-            .getPrice()
-            .subtract(product.getPrice().multiply(desconto));
+        BigDecimal precoFinal = product.getPrice().subtract(product.getPrice().multiply(desconto));
         product.setDiscountPrice(precoFinal);
 
-        System.out.println(
-            "Preço final com desconto: " + product.getDiscountPrice()
-        );
+        System.out.println("Preço final com desconto: " + product.getDiscountPrice());
 
         if (imageFile != null && !imageFile.isEmpty()) {
             String fileName = fileStorageService.storeFile(imageFile);
@@ -161,6 +149,7 @@ public class AdminController {
             try {
                 Product oldProduct = productService.findById(product.getId());
                 product.setImageFileName(oldProduct.getImageFileName());
+                product.setAmmountSold(oldProduct.getAmmountSold());
             } catch (Exception e) {
                 // e
             }
