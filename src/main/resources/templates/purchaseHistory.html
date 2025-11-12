@@ -313,7 +313,8 @@
                         <strong>Pago com:</strong>
                         <p>
                             <span>Cartão de crédito</span><br/>
-                            **** **** **** <span th:text="${#strings.substring(purchase.paymentMethod.cardNumber, 12, 16)}"></span>
+                            **** **** ****
+                            <span th:text="${#strings.substring(#strings.replace(purchase.paymentMethod.cardNumber, ' ', ''), 12, 16)}"></span>
                         </p>
                     </div>
 

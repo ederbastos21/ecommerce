@@ -187,7 +187,10 @@
             <div th:if="${favoritePayment}" class="info-box">
                 <p><strong>Tipo:</strong> <span>Cartão de crédito</span></p>
                 <p><strong>Titular:</strong> <span th:text="${favoritePayment.cardHolderName}"></span></p>
-                <p><strong>Cartão:</strong> **** **** **** <span th:text="${#strings.substring(favoritePayment.cardNumber, 12, 16)}"></span></p>
+                <p><strong>Cartão:</strong> **** **** ****
+                    <span th:text="${#strings.substring(#strings.replace(favoritePayment.cardNumber, ' ', ''), 12, 16)}"></span>
+                </p>
+
             </div>
             <div th:unless="${favoritePayment}">
                 <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escol-her Pagamento</a></p>
