@@ -78,7 +78,8 @@
 
 <main class="main-content">
     <section class="products-section">
-        <h1 class="products-title">Produtos em Destaque:</h1>
+        <br>
+        <h1 class="products-title">Produtos Mais Vendidos:</h1>
         <div class="products-grid">
             <a th:each="product : ${products}" th:href="@{/productDetail/{id}(id=${product.id})}" class="product-card-link">
                 <div class="product-card">
@@ -104,34 +105,6 @@
                     </div>
                 </div>
             </a>
-        </div>
-    </section>
-
-    <section class="benefits-section">
-        <div class="main-content">
-            <h2 class="section-title">Por que escolher nossa loja?</h2>
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">🚚</div>
-                    <h4>Entrega Rápida</h4>
-                    <p>Receba seus produtos em até 2 dias úteis</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">🔒</div>
-                    <h4>Compra Segura</h4>
-                    <p>Seus dados protegidos com criptografia</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">↩️</div>
-                    <h4>Troca Fácil</h4>
-                    <p>30 dias para trocar ou devolver</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">💳</div>
-                    <h4>Pagamento Flexível</h4>
-                    <p>Parcelamento em até 12x sem juros</p>
-                </div>
-            </div>
         </div>
     </section>
 </main>
