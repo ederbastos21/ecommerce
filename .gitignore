@@ -22,6 +22,7 @@ idea
 .settings
 .springBeans
 .sts4-cache
+.backup_ecommerce_db.sql
 
 ### NetBeans ###
 /nbproject/private/
