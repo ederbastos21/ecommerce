@@ -131,9 +131,35 @@ public class UserProfileController {
         return "redirect:/userProfile/addresses";
     }
 
+    @Transactional
     @PostMapping("/deletePayment/{id}")
-    public String deletePayment(@PathVariable Long id) {
-        paymentRepository.deleteById(id);
+    public String deletePayment(@PathVariable Long id, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+
+        PaymentMethod payment = paymentRepository.findById(id).orElse(null);
+        if (payment == null || !Objects.equals(payment.getUser().getId(), loggedUser.getId())) {
+            return "redirect:/userProfile/payments"; // segurança extra: só pode deletar o próprio
+        }
+
+        if (Objects.equals(payment.getId(), loggedUser.getFavoritePaymentMethodId())) {
+            loggedUser.setFavoritePaymentMethodId(null);
+            userRepository.save(loggedUser);
+        }
+
+        paymentRepository.delete(payment);
+
+        List<PaymentMethod> remaining = paymentRepository.findByUserId(loggedUser.getId());
+
+        if (loggedUser.getFavoritePaymentMethodId() == null && !remaining.isEmpty()) {
+            loggedUser.setFavoritePaymentMethodId(remaining.get(0).getId());
+            userRepository.save(loggedUser);
+        }
+
+        session.setAttribute("loggedUser", userRepository.findById(loggedUser.getId()).get());
+
         return "redirect:/userProfile/payments";
     }
 
