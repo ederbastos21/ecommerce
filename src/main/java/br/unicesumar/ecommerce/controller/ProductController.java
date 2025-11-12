@@ -58,13 +58,13 @@ public class ProductController {
             sortParameter = "relevance";
         }
         if (sortParameter.equals("priceAsc")) {
-            Sort sort = Sort.by("price").ascending();
+            Sort sort = Sort.by("discountPrice").ascending();
             model.addAttribute(
                 "products",
                 productService.findByNameContainingIgnoreCase(search, sort)
             );
         } else if (sortParameter.equals("priceDesc")) {
-            Sort sort = Sort.by("price").descending();
+            Sort sort = Sort.by("discountPrice").descending();
             model.addAttribute(
                 "products",
                 productService.findByNameContainingIgnoreCase(search, sort)
