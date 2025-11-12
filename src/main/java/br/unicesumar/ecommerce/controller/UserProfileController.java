@@ -9,8 +9,10 @@ import br.unicesumar.ecommerce.repository.UserRepository;
 import br.unicesumar.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import java.util.Objects;
 
@@ -97,17 +99,35 @@ public class UserProfileController {
     }
 
 
+    @Transactional
     @PostMapping("/deleteAddress/{id}")
     public String deleteAddress(@PathVariable Long id, HttpSession session) {
         User loggedUser = (User) session.getAttribute("loggedUser");
-        Address address = addressRepository.findById(id).orElse(null);
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
 
-        if (address.getId().equals(loggedUser.getFavoriteAddressId())){
+        Address address = addressRepository.findById(id).orElse(null);
+        if (address == null || !Objects.equals(address.getUser().getId(), loggedUser.getId())) {
+            return "redirect:/userProfile/addresses"; // segurança: não deixa deletar de outro user
+        }
+
+        if (Objects.equals(address.getId(), loggedUser.getFavoriteAddressId())) {
             loggedUser.setFavoriteAddressId(null);
             userRepository.save(loggedUser);
         }
 
-        addressRepository.deleteById(id);
+        addressRepository.delete(address);
+
+        List<Address> remaining = addressRepository.findByUserId(loggedUser.getId());
+
+        if (loggedUser.getFavoriteAddressId() == null && !remaining.isEmpty()) {
+            loggedUser.setFavoriteAddressId(remaining.get(0).getId());
+            userRepository.save(loggedUser);
+        }
+
+        session.setAttribute("loggedUser", userRepository.findById(loggedUser.getId()).get());
+
         return "redirect:/userProfile/addresses";
     }
 
