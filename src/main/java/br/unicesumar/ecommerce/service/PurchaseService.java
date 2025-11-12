@@ -62,10 +62,12 @@ public class PurchaseService {
         BigDecimal totalBeforeInterest = subtotal.add(freightCost);
 
         BigDecimal finalTotal = totalBeforeInterest;
-        if (installments > 1 && installments <= 6) {
-            finalTotal = totalBeforeInterest.multiply(new BigDecimal("1.05")).setScale(2, RoundingMode.HALF_UP);
-        } else if (installments > 6) {
-            finalTotal = totalBeforeInterest.multiply(new BigDecimal("1.10")).setScale(2, RoundingMode.HALF_UP);
+
+        if (installments > 1) {
+            BigDecimal monthlyInterest = new BigDecimal("0.02");
+            BigDecimal totalInterest = monthlyInterest.multiply(BigDecimal.valueOf(installments));
+            finalTotal = totalBeforeInterest.multiply(BigDecimal.ONE.add(totalInterest))
+                    .setScale(2, RoundingMode.HALF_UP);
         }
 
         purchase.setTotalAmount(finalTotal); 

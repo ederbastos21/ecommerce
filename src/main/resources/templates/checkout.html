@@ -228,56 +228,38 @@
                 <div class="form-group">
                     <label for="installments">Parcelamento</label>
                     <select id="installments" name="installments" class="form-control" onchange="updateInstallmentInfo(this)"
-                            th:with="
-                                totalComJuros5Percent=${finalTotal.multiply(1.05).setScale(2, T(java.math.RoundingMode).HALF_UP)},
-                                totalComJuros10Percent=${finalTotal.multiply(1.10).setScale(2, T(java.math.RoundingMode).HALF_UP)}
-                            ">
-                        
-                        <option value="1" th:data-total="${finalTotal}" th:text="|1x de R$ ${#numbers.formatDecimal(finalTotal, 1, 2)} (Sem juros)|"></option>
-                        
-                        <option th:with="
-                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(2L), 2, T(java.math.RoundingMode).HALF_UP)},
-                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(2L))}"
-                                th:value="2"
-                                th:data-total="${totalFinalCliente}"
-                                th:text="|2x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
-                        </option>
-                        
-                        <option th:with="
-                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(3L), 2, T(java.math.RoundingMode).HALF_UP)},
-                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(3L))}"
-                                th:value="3"
-                                th:data-total="${totalFinalCliente}"
-                                th:text="|3x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                            th:with="jurosMensal=${0.02}">
+
+                        <!-- Pagamento à vista -->
+                        <option value="1"
+                                th:data-total="${finalTotal}"
+                                th:text="|1x de R$ ${#numbers.formatDecimal(finalTotal, 1, 2)} (Sem juros)|">
                         </option>
 
-                        <option th:with="
-                                    parcela=${totalComJuros5Percent.divide(T(java.math.BigDecimal).valueOf(6L), 2, T(java.math.RoundingMode).HALF_UP)},
-                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(6L))}"
-                                th:value="6"
-                                th:data-total="${totalFinalCliente}"
-                                th:text="|6x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
-                        </option>
-
-                        <option th:with="
-                                    parcela=${totalComJuros10Percent.divide(T(java.math.BigDecimal).valueOf(12L), 2, T(java.math.RoundingMode).HALF_UP)},
-                                    totalFinalCliente=${parcela.multiply(T(java.math.BigDecimal).valueOf(12L))}"
-                                th:value="12"
-                                th:data-total="${totalFinalCliente}"
-                                th:text="|12x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinalCliente, 1, 2)} c/ juros)|">
+                        <!-- Parcelamento de 2x a 12x com juros simples -->
+                        <option th:each="n : ${#numbers.sequence(2, 12)}"
+                                th:with="
+                        fatorJuros=${1 + (jurosMensal * n)},
+                        totalFinal=${finalTotal.multiply(new java.math.BigDecimal(fatorJuros)).setScale(2, T(java.math.RoundingMode).HALF_UP)},
+                        parcela=${totalFinal.divide(new java.math.BigDecimal(n), 2, T(java.math.RoundingMode).HALF_UP)}
+                    "
+                                th:value="${n}"
+                                th:data-total="${totalFinal}"
+                                th:text="|${n}x de R$ ${#numbers.formatDecimal(parcela, 1, 2)} (Total R$ ${#numbers.formatDecimal(totalFinal, 1, 2)} c/ juros)|">
                         </option>
                     </select>
                 </div>
-                
+
                 <h3 id="total-display" style="text-align: right; margin: 20px 0; color: #27ae60;">
                     Total: R$ [[${#numbers.formatDecimal(finalTotal, 1, 2)}]]
                 </h3>
-                
-                <button type="submit" class="complete-btn" 
+
+                <button type="submit" class="complete-btn"
                         th:disabled="${favoriteAddress == null || favoritePayment == null}">
                     Concluir Compra
                 </button>
-                <p th:if="${favoriteAddress == null || favoritePayment == null}" style="color: red; font-size: 12px; text-align: center; margin-top: 10px;">
+                <p th:if="${favoriteAddress == null || favoritePayment == null}"
+                   style="color: red; font-size: 12px; text-align: center; margin-top: 10px;">
                     É necessário selecionar um endereço e pagamento favoritos para continuar.
                 </p>
             </form>
