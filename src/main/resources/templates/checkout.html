@@ -193,7 +193,7 @@
 
             </div>
             <div th:unless="${favoritePayment}">
-                <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escol-her Pagamento</a></p>
+                <p>Você não selecionou um método de pagamento favorito. <a th:href="@{/userProfile/payments}">Adicionar/Escolher Pagamento</a></p>
             </div>
         </div>
     </div>
@@ -218,8 +218,14 @@
             
             <div class="total-summary">
                 Frete:
-                <span th:text="${'R$ ' + #numbers.formatDecimal(freightCost, 1, 2)}">R$ 0,00</span>
-                <span th:if="${freightCost.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+                <span th:if="${freightCost == null}" style="color: #cc0000; font-weight: normal;">
+                    Informe um endereço
+                </span>
+
+                <span th:if="${freightCost != null}">
+                    <span th:text="${'R$ ' + #numbers.formatDecimal(freightCost, 1, 2)}">R$ 0,00</span>
+                    <span th:if="${freightCost.compareTo(T(java.math.BigDecimal).ZERO) == 0}" style="color: #27ae60; font-weight: bold; margin-left: 5px;">(Grátis)</span>
+                </span>
             </div>
 
             <div class="final-total" style="margin-bottom: 20px;">
